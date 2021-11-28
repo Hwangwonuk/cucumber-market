@@ -1,0 +1,13 @@
+package com.cucumber.market.cucumbermarket;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class CucumberMarketApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(CucumberMarketApplication.class, args);
+	}
+
+}

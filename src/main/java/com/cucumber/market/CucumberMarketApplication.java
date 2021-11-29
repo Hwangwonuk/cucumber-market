@@ -1,4 +1,4 @@
-package com.cucumber.market.cucumbermarket;
+package com.cucumber.market;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

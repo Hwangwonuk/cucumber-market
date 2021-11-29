@@ -19,14 +19,22 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-cache'
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	//implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0'
-	compileOnly 'org.projectlombok:lombok'
+
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0' // SQL Mapper인 MyBatis로 DB와 Java의 POJO를 SQL로 연결(Mapping)
+
+	implementation 'io.springfox:springfox-boot-starter:3.0.0' // API 문서화 및 테스트를 가능케 해주는 프레임워크
+
+	implementation 'org.springframework.boot:spring-boot-starter-validation' // bean validation 사용
+
 	runtimeOnly 'mysql:mysql-connector-java'
+
+	compileOnly 'org.projectlombok:lombok' // Lombok으로 반복적인 코드를 어노테이션을 적용하여 간소화
 	annotationProcessor 'org.projectlombok:lombok'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+
 }
 
 test {

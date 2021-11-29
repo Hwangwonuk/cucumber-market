@@ -16,4 +16,17 @@
         WHERE member_id = #{member_id}
     </select>
 
+    <select id="findByMemberId" resultType="com.cucumber.market.model.member.MemberDTO">
+        SELECT member_id, password, name, phone, address, isactive, isadmin
+        FROM member
+        WHERE member_id = #{member_id}
+    </select>
+
+    <update id="inactivateMember" parameterType="com.cucumber.market.controller.dto.MemberInactivateRequest">
+        UPDATE member
+        SET isactive = 'n'
+        WHERE member_id = #{member_id}
+        AND password = #{password}
+    </update>
+
 </mapper>

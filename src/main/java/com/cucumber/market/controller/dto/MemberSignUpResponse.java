@@ -5,6 +5,6 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class MemberSignUpResponse implements MemberSignUp {
+public class MemberSignUpResponse {
     private String redirectUrl;
 }

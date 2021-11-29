@@ -1,6 +1,5 @@
 package com.cucumber.market.controller.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -9,7 +8,7 @@ import javax.validation.constraints.Pattern;
 
 @Getter
 @Builder
-public class MemberSignUpRequest implements MemberSignUp {
+public class MemberSignUpRequest {
 
     @NotBlank(message = "아이디를 입력해주세요.")
     private String member_id;

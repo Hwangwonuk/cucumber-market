@@ -1,5 +1,7 @@
 package com.cucumber.market.controller;
 
+import com.cucumber.market.controller.dto.MemberInactivateRequest;
+import com.cucumber.market.controller.dto.MemberInactivateResponse;
 import com.cucumber.market.controller.dto.MemberSignUpResponse;
 import com.cucumber.market.controller.dto.MemberSignUpRequest;
 import com.cucumber.market.service.MemberService;
@@ -24,14 +26,25 @@ public class MemberController {
     @Value("${cucumber.login.url}")
     private String loginUrl;
 
-    // 회원가입 요청
+    // 회원가입
     @PostMapping("")
-    public ResponseEntity<MemberSignUpResponse> signUpMember(@Valid @RequestBody MemberSignUpRequest memberSignUpRequest) {
-        memberService.isDuplicateMemberId(memberSignUpRequest.getMember_id());
-        memberService.singUpMember(memberSignUpRequest);
+    public ResponseEntity<MemberSignUpResponse> signUpMember(@Valid @RequestBody MemberSignUpRequest request) {
+        memberService.isDuplicateMemberId(request.getMember_id());
+        memberService.signUpMember(request);
         MemberSignUpResponse response = MemberSignUpResponse.builder()
                 .redirectUrl(loginUrl)
                 .build();
         return new ResponseEntity<>(response, HttpStatus.FOUND);
     }
+
+    // 회원탈퇴(비활성화)
+    @PatchMapping
+    public ResponseEntity<MemberInactivateResponse> inactivateMember(@RequestBody MemberInactivateRequest request) {
+        memberService.inactivateMember(request);
+        MemberInactivateResponse response = MemberInactivateResponse.builder()
+                .redirectUrl(loginUrl)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 }

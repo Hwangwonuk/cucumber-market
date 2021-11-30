@@ -1,7 +1,8 @@
 package com.cucumber.market.mapper;
 
-import com.cucumber.market.controller.dto.MemberInactivateRequest;
+import com.cucumber.market.controller.dto.MemberIdPasswordRequest;
 import com.cucumber.market.controller.dto.MemberSignUpRequest;
+import com.cucumber.market.controller.dto.MemberUpdateInfoRequest;
 import com.cucumber.market.model.member.MemberDTO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -13,5 +14,7 @@ public interface MemberMapper {
 
     MemberDTO findByMemberId(String member_id);
 
-    void inactivateMember(MemberInactivateRequest memberSignUpRequest);
+    void inactivateMember(MemberIdPasswordRequest memberSignUpRequest);
+
+    void updateMemberInfo(MemberUpdateInfoRequest memberUpdateInfoRequest);
 }

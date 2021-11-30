@@ -1,13 +1,17 @@
 package com.cucumber.market.service;
 
-import com.cucumber.market.controller.dto.MemberInactivateRequest;
-import com.cucumber.market.controller.dto.MemberSignUpRequest;
+import com.cucumber.market.controller.dto.*;
+import com.cucumber.market.model.member.MemberDTO;
 
 public interface MemberService {
 
-    void signUpMember(MemberSignUpRequest memberSignUpRequest);
+    MemberSignUpResponse signUpMember(MemberSignUpRequest memberSignUpRequest);
 
     void isDuplicateMemberId(String member_id);
 
-    void inactivateMember(MemberInactivateRequest memberInactivateRequest);
+    MemberInactivateResponse inactivateMember(MemberIdPasswordRequest memberInactivateRequest);
+
+    MemberUpdateInfoResponse updateMemberInfo(MemberUpdateInfoRequest memberUpdateInfoRequest);
+
+    MemberDTO findMemberInfo(MemberIdPasswordRequest memberIdPasswordRequest);
 }

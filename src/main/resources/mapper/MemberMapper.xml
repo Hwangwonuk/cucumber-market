@@ -22,13 +22,6 @@
         WHERE member_id = #{member_id}
     </select>
 
-    <update id="inactivateMember" parameterType="com.cucumber.market.controller.dto.MemberIdPasswordRequest">
-        UPDATE member
-        SET isactive = 'n'
-        WHERE member_id = #{member_id}
-        AND password = #{password}
-    </update>
-
     <update id="updateMemberInfo" parameterType="com.cucumber.market.controller.dto.MemberUpdateInfoRequest">
         UPDATE member
         SET password = #{newPassword},
@@ -39,4 +32,10 @@
         AND password = #{oldPassword}
     </update>
 
+    <update id="inactivateMember" parameterType="com.cucumber.market.controller.dto.MemberIdPasswordRequest">
+        UPDATE member
+        SET isactive = 'n'
+        WHERE member_id = #{member_id}
+        AND password = #{password}
+    </update>
 </mapper>

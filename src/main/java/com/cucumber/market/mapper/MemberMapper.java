@@ -1,6 +1,7 @@
 package com.cucumber.market.mapper;
 
 import com.cucumber.market.controller.dto.MemberIdPasswordRequest;
+import com.cucumber.market.controller.dto.MemberSignInResponse;
 import com.cucumber.market.controller.dto.MemberSignUpRequest;
 import com.cucumber.market.controller.dto.MemberUpdateInfoRequest;
 import com.cucumber.market.model.member.MemberDTO;
@@ -14,7 +15,9 @@ public interface MemberMapper {
 
     MemberDTO findByMemberId(String member_id);
 
-    void inactivateMember(MemberIdPasswordRequest memberSignUpRequest);
-
     void updateMemberInfo(MemberUpdateInfoRequest memberUpdateInfoRequest);
+
+    void inactivateMember(MemberIdPasswordRequest memberIdPasswordRequest);
+
+    MemberSignInResponse findByMemberIdAndPassword(MemberIdPasswordRequest memberIdPasswordRequest);
 }

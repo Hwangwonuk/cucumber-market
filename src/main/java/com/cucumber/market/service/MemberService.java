@@ -9,9 +9,11 @@ public interface MemberService {
 
     void isDuplicateMemberId(String member_id);
 
-    MemberInactivateResponse inactivateMember(MemberIdPasswordRequest memberInactivateRequest);
-
     MemberUpdateInfoResponse updateMemberInfo(MemberUpdateInfoRequest memberUpdateInfoRequest);
 
-    MemberDTO findMemberInfo(MemberIdPasswordRequest memberIdPasswordRequest);
+    MemberInactivateResponse inactivateMember(MemberIdPasswordRequest memberInactivateRequest);
+
+    MemberDTO findMemberInfo(MemberMyInfoRequest memberMyInfoRequest);
+
+    MemberSignInResponse signInMember(MemberIdPasswordRequest memberIdPasswordRequest);
 }

@@ -1,10 +1,10 @@
 package com.cucumber.market.service.impl;
 
-import com.cucumber.market.controller.dto.*;
+import com.cucumber.market.dto.*;
 import com.cucumber.market.exception.MemberNotFoundException;
 import com.cucumber.market.exception.PasswordMismatchException;
 import com.cucumber.market.mapper.MemberMapper;
-import com.cucumber.market.model.member.MemberDTO;
+import com.cucumber.market.dto.MemberDTO;
 import com.cucumber.market.service.MemberService;
 import com.cucumber.market.util.SHA256Util;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,7 @@
 package com.cucumber.market.controller;
 
-import com.cucumber.market.controller.dto.*;
-import com.cucumber.market.model.member.MemberDTO;
+import com.cucumber.market.dto.*;
+import com.cucumber.market.dto.MemberDTO;
 import com.cucumber.market.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,10 +1,10 @@
 package com.cucumber.market.mapper;
 
-import com.cucumber.market.controller.dto.MemberIdPasswordRequest;
-import com.cucumber.market.controller.dto.MemberSignInResponse;
-import com.cucumber.market.controller.dto.MemberSignUpRequest;
-import com.cucumber.market.controller.dto.MemberUpdateInfoRequest;
-import com.cucumber.market.model.member.MemberDTO;
+import com.cucumber.market.dto.MemberIdPasswordRequest;
+import com.cucumber.market.dto.MemberSignInResponse;
+import com.cucumber.market.dto.MemberSignUpRequest;
+import com.cucumber.market.dto.MemberUpdateInfoRequest;
+import com.cucumber.market.dto.MemberDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

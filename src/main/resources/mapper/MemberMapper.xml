@@ -5,7 +5,7 @@
 
 <mapper namespace="com.cucumber.market.mapper.MemberMapper">
 
-    <insert id="insertMember" parameterType="com.cucumber.market.controller.dto.MemberSignUpRequest">
+    <insert id="insertMember" parameterType="com.cucumber.market.dto.MemberSignUpRequest">
         INSERT INTO member (member_id, password, name, phone, address)
         VALUES (#{member_id}, #{password}, #{name}, #{phone}, #{address})
     </insert>
@@ -16,19 +16,19 @@
         WHERE member_id = #{member_id}
     </select>
 
-    <select id="findByMemberId" resultType="com.cucumber.market.model.member.MemberDTO">
+    <select id="findByMemberId" resultType="com.cucumber.market.dto.MemberDTO">
         SELECT member_id, password, name, phone, address, isactive, isadmin
         FROM member
         WHERE member_id = #{member_id}
     </select>
 
-    <update id="updateMemberInfo" parameterType="com.cucumber.market.controller.dto.MemberUpdateInfoRequest">
+    <update id="updateMemberInfo" parameterType="com.cucumber.market.dto.MemberUpdateInfoRequest">
         UPDATE member
         SET password = #{newPassword}, name = #{name}, phone = #{phone}, address = #{address}
         WHERE member_id = #{member_id}
     </update>
 
-    <update id="inactivateMember" parameterType="com.cucumber.market.controller.dto.MemberIdPasswordRequest">
+    <update id="inactivateMember" parameterType="com.cucumber.market.dto.MemberIdPasswordRequest">
         UPDATE member
         SET isactive = 'n'
         WHERE member_id = #{member_id}
@@ -36,8 +36,8 @@
     </update>
 
     <select id="findByMemberIdAndPassword"
-            parameterType="com.cucumber.market.controller.dto.MemberIdPasswordRequest"
-            resultType="com.cucumber.market.controller.dto.MemberSignInResponse">
+            parameterType="com.cucumber.market.dto.MemberIdPasswordRequest"
+            resultType="com.cucumber.market.dto.MemberSignInResponse">
         SELECT member_id, name
         FROM member
         WHERE member_id = #{member_id}

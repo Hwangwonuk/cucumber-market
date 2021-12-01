@@ -1,7 +1,7 @@
 package com.cucumber.market.service;
 
-import com.cucumber.market.controller.dto.*;
-import com.cucumber.market.model.member.MemberDTO;
+import com.cucumber.market.dto.*;
+import com.cucumber.market.dto.MemberDTO;
 
 public interface MemberService {
 

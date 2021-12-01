@@ -1,4 +1,4 @@
-package com.cucumber.market.controller.dto;
+package com.cucumber.market.dto;
 
 
 import lombok.*;

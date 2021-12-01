@@ -1,4 +1,4 @@
-package com.cucumber.market.model.member;
+package com.cucumber.market.dto;
 
 import lombok.Builder;
 import lombok.Getter;

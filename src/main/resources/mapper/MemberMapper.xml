@@ -24,12 +24,8 @@
 
     <update id="updateMemberInfo" parameterType="com.cucumber.market.controller.dto.MemberUpdateInfoRequest">
         UPDATE member
-        SET password = #{newPassword},
-        name = #{name},
-        phone = #{phone},
-        address = #{address}
+        SET password = #{newPassword}, name = #{name}, phone = #{phone}, address = #{address}
         WHERE member_id = #{member_id}
-        AND password = #{oldPassword}
     </update>
 
     <update id="inactivateMember" parameterType="com.cucumber.market.controller.dto.MemberIdPasswordRequest">
@@ -38,4 +34,13 @@
         WHERE member_id = #{member_id}
         AND password = #{password}
     </update>
+
+    <select id="findByMemberIdAndPassword"
+            parameterType="com.cucumber.market.controller.dto.MemberIdPasswordRequest"
+            resultType="com.cucumber.market.controller.dto.MemberSignInResponse">
+        SELECT member_id, name
+        FROM member
+        WHERE member_id = #{member_id}
+        AND password = #{password}
+    </select>
 </mapper>

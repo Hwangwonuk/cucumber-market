@@ -63,20 +63,21 @@ public class MemberServiceImpl implements MemberService {
 
     /**
      * 회원조회(회원정보) 메소드
-     * @param memberIdPasswordRequest 회원조회시 필요한 정보
+     * @param memberMyInfoRequest 회원조회시 필요한 정보
      */
     @Override
-    public MemberDTO findMemberInfo(MemberIdPasswordRequest memberIdPasswordRequest) {
-        MemberDTO memberDTO = memberMapper.findByMemberId(memberIdPasswordRequest.getMember_id());
+    public MemberDTO findMemberInfo(MemberMyInfoRequest memberMyInfoRequest) {
+        MemberDTO memberDTO = memberMapper.findByMemberId(memberMyInfoRequest.getMember_id());
         if(memberDTO == null) {
             throw new MemberNotFoundException("회원을 찾을 수 없습니다.");
         }
 
-        String encryptedPassword = SHA256Util.encryptSHA256(memberIdPasswordRequest.getPassword());
+        String encryptedPassword = SHA256Util.encryptSHA256(memberMyInfoRequest.getPassword());
         if(!memberDTO.getPassword().equals(encryptedPassword)) {
             throw new PasswordMismatchException("비밀번호가 일치하지 않습니다.");
         }
 
+        // Password를 넘겨주지 않게 하기 위해 새로운 MemberDTO를 Builder 생성자로 생성
         return MemberDTO.builder()
                 .member_id(memberDTO.getMember_id())
                 .name(memberDTO.getName())
@@ -86,6 +87,7 @@ public class MemberServiceImpl implements MemberService {
                 .isadmin(memberDTO.getIsadmin())
                 .build();
     }
+
 
     /**
      * 회원정보 수정 메소드
@@ -105,15 +107,16 @@ public class MemberServiceImpl implements MemberService {
 
         String encryptedNewPassword = SHA256Util.encryptSHA256(memberUpdateInfoRequest.getNewPassword());
 
-        memberMapper.updateMemberInfo(
-                MemberUpdateInfoRequest.builder()
-                        .member_id(memberUpdateInfoRequest.getMember_id())
-                        .newPassword(encryptedNewPassword)
-                        .name(memberUpdateInfoRequest.getName())
-                        .address(memberUpdateInfoRequest.getAddress())
-                        .phone(memberUpdateInfoRequest.getPhone())
-                        .build()
-        );
+
+        MemberUpdateInfoRequest updatedMemberInfo = MemberUpdateInfoRequest.builder()
+                .member_id(memberUpdateInfoRequest.getMember_id())
+                .newPassword(encryptedNewPassword)
+                .name(memberUpdateInfoRequest.getName())
+                .address(memberUpdateInfoRequest.getAddress())
+                .phone(memberUpdateInfoRequest.getPhone())
+                .build();
+
+        memberMapper.updateMemberInfo(updatedMemberInfo);
 
         return MemberUpdateInfoResponse.builder()
                 .redirectUrl(myInfoUrl)
@@ -148,5 +151,19 @@ public class MemberServiceImpl implements MemberService {
                 .build();
     }
 
+    /**
+     * 로그인 메소드
+     * @param memberIdPasswordRequest 로그인시 필요한 회원정보
+     */
+    @Override
+    public MemberSignInResponse signInMember(MemberIdPasswordRequest memberIdPasswordRequest) {
+        String encryptedPassword = SHA256Util.encryptSHA256(memberIdPasswordRequest.getPassword());
+        return memberMapper.findByMemberIdAndPassword(
+                MemberIdPasswordRequest.builder()
+                        .member_id(memberIdPasswordRequest.getMember_id())
+                        .password(encryptedPassword)
+                        .build()
+        );
+    }
 }
 

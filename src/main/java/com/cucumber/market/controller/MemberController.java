@@ -10,13 +10,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
-/**
- * @Slf4j
- * @RestController
- * @RequiredArgsConstructor
- * @RequestMapping("/members")
+/*
+@RestController
+ - @Controller에 @ResponseBody가 추가된 어노테이션
+   @RequestMapping 메소드를 처리할 때 @ResponseBody가 기본적으로 붙으면서 처리됨
+
+@RequestMapping
+ - 요청 URL을 처리할 클래스나 메소드에 연결시키는 어노테이션
+
+@Valid
+ - 클래스에 정의된 제약조건을 바탕으로 지정된 아규먼트에 대한 유효성 검사 실시
+   build.gradle 의존관계 추가가 필요
+   @Validated 는 스프링 전용 검증 애노테이션이고, @Valid 는 자바 표준 검증 애노테이션이다. 둘중
+   아무거나 사용해도 동일하게 작동하지만, @Validated 는 내부에 groups 라는 기능을 포함하고 있다.
  */
 
 @Slf4j
@@ -28,6 +37,7 @@ public class MemberController {
     // TODO: 2021-12-01 HandlerMethodArgumentResolver를 사용해서 특정 Request 객체에 대해 처리 (예 : 패스워드 암호화)
 
     private final MemberService memberService;
+
     /**
      * @ModelAttribute 는 필드 단위로 정교하게 바인딩이 적용된다. 특정 필드가 바인딩 되지 않아도 나머지
      * 필드는 정상 바인딩 되고, Validator를 사용한 검증도 적용할 수 있다.
@@ -48,7 +58,7 @@ public class MemberController {
 
     // 회원조회(회원정보)
     @GetMapping("/myInfo")
-    public ResponseEntity<MemberDTO> findMemberInfo(@Valid MemberIdPasswordRequest request) {
+    public ResponseEntity<MemberDTO> findMemberInfo(@Valid MemberMyInfoRequest request) {
         return new ResponseEntity<>(memberService.findMemberInfo(request), HttpStatus.OK);
     }
 
@@ -64,4 +74,19 @@ public class MemberController {
         return new ResponseEntity<>(memberService.inactivateMember(request), HttpStatus.FOUND);
     }
 
+    // 로그인
+    @PostMapping("/signIn")
+    public ResponseEntity<MemberSignInResponse> signInMember(@Valid @RequestBody MemberIdPasswordRequest request, HttpSession httpSession) {
+        MemberSignInResponse response = memberService.signInMember(request);
+
+        // TODO: 2021-12-02 Controller에서 getAttribute, setAttribute를 직접 해주는건 좋지 않은 구조일까?
+//        if(httpSession.getAttribute("signIn") != null) {
+//            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+//        } else {
+//            httpSession.setAttribute("signIn", response);
+//            return new ResponseEntity<>(response, HttpStatus.OK);
+//        }
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

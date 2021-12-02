@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cucumber.market.mapper.CategoryMapper">
+
+    <insert id="registerBigCategory" useGeneratedKeys="true" parameterType="com.cucumber.market.dto.BigCategoryRequest">
+        INSERT INTO big_category (big_category_name)
+        VALUES (#{bigCategoryName})
+    </insert>
+
+    <select id="findBigCategoryNameCount" resultType="Integer">
+        SELECT COUNT(big_category_name)
+        FROM big_category
+        WHERE big_category_name = #{bigCategoryName}
+    </select>
+
+    <insert id="registerSmallCategory" useGeneratedKeys="true" parameterType="com.cucumber.market.dto.BigCategoryRequest">
+        INSERT INTO small_category (small_category_name, big_category_name)
+        VALUES (#{smallCategoryName}, #{bigCategoryName})
+    </insert>
+
+    <select id="findSmallCategoryNameCount" resultType="Integer">
+        SELECT COUNT(small_category_name)
+        FROM small_category
+        WHERE small_category_name = #{smallCategoryName}
+    </select>
+
+</mapper>

@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface CategoryService {
 
-    BigCategoryRegisterResponse registerBigCategory(BigCategoryRegisterRequest bigCategoryRegisterRequest);
+    CategoryResponse registerBigCategory(BigCategoryRegisterRequest bigCategoryRegisterRequest);
 
-    SmallCategoryRegisterResponse registerSmallCategory(SmallCategoryRegisterRequest smallCategoryRegisterRequest);
+    CategoryResponse registerSmallCategory(SmallCategoryRegisterRequest smallCategoryRegisterRequest);
 
     void isDuplicateBigCategoryName(String bigCategoryName);
 
@@ -19,9 +19,9 @@ public interface CategoryService {
 
     void isDuplicateSmallCategoryName(String smallCategoryName);
 
-    BigCategoryUpdateResponse updateBigCategory(BigCategoryUpdateRequest bigCategoryUpdateRequest);
+    CategoryResponse updateBigCategory(BigCategoryUpdateRequest bigCategoryUpdateRequest);
 
-    SmallCategoryUpdateResponse updateSmallCategory(SmallCategoryUpdateRequest smallCategoryUpdateRequest);
+    CategoryResponse updateSmallCategory(SmallCategoryUpdateRequest smallCategoryUpdateRequest);
 
     List<CategoryDTO> findCategoryNames(CategoryNamesRequest categoryNamesRequest);
 

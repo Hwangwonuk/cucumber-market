@@ -46,6 +46,7 @@
         SELECT small_category_name
         FROM small_category
         WHERE big_category_name = #{bigCategoryName}
+        ORDER BY BINARY(small_category_name)
     </select>
 
 </mapper>

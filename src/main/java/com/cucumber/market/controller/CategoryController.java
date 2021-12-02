@@ -19,7 +19,7 @@ public class CategoryController {
 
     // 대분류(카테고리) 등록
     @PostMapping("/big")
-    public ResponseEntity<BigCategoryRegisterResponse> registerBigCategory(@Valid @RequestBody BigCategoryRegisterRequest request) {
+    public ResponseEntity<CategoryResponse> registerBigCategory(@Valid @RequestBody BigCategoryRegisterRequest request) {
         categoryService.isDuplicateBigCategoryName(request.getBigCategoryName());
         return new ResponseEntity<>(categoryService.registerBigCategory(request), HttpStatus.FOUND);
     }
@@ -32,14 +32,14 @@ public class CategoryController {
 
     // 대분류(카테고리) 이름 수정
     @PatchMapping("/big")
-    public ResponseEntity<BigCategoryUpdateResponse> updateBigCategory(@Valid @RequestBody BigCategoryUpdateRequest request) {
+    public ResponseEntity<CategoryResponse> updateBigCategory(@Valid @RequestBody BigCategoryUpdateRequest request) {
         categoryService.findByBigCategoryName(request.getOldBigCategoryName());
         return new ResponseEntity<>(categoryService.updateBigCategory(request), HttpStatus.FOUND);
     }
 
     // 소분류(카테고리) 등록
     @PostMapping("/small")
-    public ResponseEntity<SmallCategoryRegisterResponse> signUpMember(@Valid @RequestBody SmallCategoryRegisterRequest request) {
+    public ResponseEntity<CategoryResponse> signUpMember(@Valid @RequestBody SmallCategoryRegisterRequest request) {
         categoryService.findByBigCategoryName(request.getBigCategoryName());
         categoryService.isDuplicateSmallCategoryName(request.getSmallCategoryName());
         return new ResponseEntity<>(categoryService.registerSmallCategory(request), HttpStatus.FOUND);
@@ -47,9 +47,10 @@ public class CategoryController {
 
     // 소분류(카테고리) 이름 수정
     @PatchMapping("/small")
-    public ResponseEntity<SmallCategoryUpdateResponse> updateBigCategory(@Valid @RequestBody SmallCategoryUpdateRequest request) {
+    public ResponseEntity<CategoryResponse> updateBigCategory(@Valid @RequestBody SmallCategoryUpdateRequest request) {
         categoryService.findByBigCategoryName(request.getBigCategoryName());
         categoryService.findBySmallCategoryName(request.getOldSmallCategoryName());
+        categoryService.isDuplicateSmallCategoryName(request.getNewSmallCategoryName());
         return new ResponseEntity<>(categoryService.updateSmallCategory(request), HttpStatus.FOUND);
     }
 }

@@ -26,10 +26,10 @@ public class CategoryServiceImpl implements CategoryService {
      * @param bigCategoryRegisterRequest 대분류 등록 시 저장할 이름
      */
     @Override
-    public BigCategoryRegisterResponse registerBigCategory(BigCategoryRegisterRequest bigCategoryRegisterRequest) {
+    public CategoryResponse registerBigCategory(BigCategoryRegisterRequest bigCategoryRegisterRequest) {
         categoryMapper.registerBigCategory(bigCategoryRegisterRequest);
 
-        return BigCategoryRegisterResponse.builder()
+        return CategoryResponse.builder()
                 .redirectUrl(categoryUrl)
                 .build();
     }
@@ -50,21 +50,9 @@ public class CategoryServiceImpl implements CategoryService {
      * @param bigCategoryUpdateRequest 원래 대분류명, 변경할 대분류명
      */
     @Override
-    public BigCategoryUpdateResponse updateBigCategory(BigCategoryUpdateRequest bigCategoryUpdateRequest) {
+    public CategoryResponse updateBigCategory(BigCategoryUpdateRequest bigCategoryUpdateRequest) {
         categoryMapper.updateBigCategory(bigCategoryUpdateRequest);
-        return BigCategoryUpdateResponse.builder()
-                .redirectUrl(categoryUrl)
-                .build();
-    }
-
-    /**
-     * 소분류 이름 수정 메소드
-     * @param smallCategoryUpdateRequest 대분류명, 원래 소분류명, 변경할 소분류명
-     */
-    @Override
-    public SmallCategoryUpdateResponse updateSmallCategory(SmallCategoryUpdateRequest smallCategoryUpdateRequest) {
-        categoryMapper.updateSmallCategory(smallCategoryUpdateRequest);
-        return SmallCategoryUpdateResponse.builder()
+        return CategoryResponse.builder()
                 .redirectUrl(categoryUrl)
                 .build();
     }
@@ -74,10 +62,22 @@ public class CategoryServiceImpl implements CategoryService {
      * @param smallCategoryRegisterRequest 소분류 등록 시 저장할 이름
      */
     @Override
-    public SmallCategoryRegisterResponse registerSmallCategory(SmallCategoryRegisterRequest smallCategoryRegisterRequest) {
+    public CategoryResponse registerSmallCategory(SmallCategoryRegisterRequest smallCategoryRegisterRequest) {
         categoryMapper.registerSmallCategory(smallCategoryRegisterRequest);
 
-        return SmallCategoryRegisterResponse.builder()
+        return CategoryResponse.builder()
+                .redirectUrl(categoryUrl)
+                .build();
+    }
+
+    /**
+     * 소분류 이름 수정 메소드
+     * @param smallCategoryUpdateRequest 대분류명, 원래 소분류명, 변경할 소분류명
+     */
+    @Override
+    public CategoryResponse updateSmallCategory(SmallCategoryUpdateRequest smallCategoryUpdateRequest) {
+        categoryMapper.updateSmallCategory(smallCategoryUpdateRequest);
+        return CategoryResponse.builder()
                 .redirectUrl(categoryUrl)
                 .build();
     }

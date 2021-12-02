@@ -20,13 +20,4 @@ public interface CategoryMapper {
     void updateSmallCategory(SmallCategoryUpdateRequest smallCategoryUpdateRequest);
 
     List<CategoryDTO> findCategoryNames(String bigCategoryName);
-/*    int registerSmallCategory(SmallCategoryDTO smallCategoryDTO);
-
-    void updateBigCategory(BigCategoryDTO bigCategoryDTO);
-
-    void updateSmallCategory(SmallCategoryDTO smallCategoryDTO);
-
-    void deleteBigCategory(int bigCategoryId);
-
-    void deleteSmallCategory(int smallCategoryId);*/
 }

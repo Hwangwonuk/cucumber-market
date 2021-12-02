@@ -59,24 +59,31 @@ public class MemberController {
     // 회원조회(회원정보)
     @GetMapping("/myInfo")
     public ResponseEntity<MemberDTO> findMemberInfo(@Valid MemberMyInfoRequest request) {
+        memberService.findMemberIdCount(request.getMember_id());
         return new ResponseEntity<>(memberService.findMemberInfo(request), HttpStatus.OK);
     }
 
     // 회원정보 수정(이름, 비밀번호, 전화번호, 주소)
     @PatchMapping("/myInfo")
     public ResponseEntity<MemberUpdateInfoResponse> updateMemberInfo(@Valid @RequestBody MemberUpdateInfoRequest request) {
+        memberService.findMemberIdCount(request.getMember_id());
+        memberService.isMatchIdAndPassword(request.getMember_id(), request.getOldPassword());
         return new ResponseEntity<>(memberService.updateMemberInfo(request), HttpStatus.FOUND);
     }
 
     // 회원탈퇴(비활성화)
     @PatchMapping("/inactivate")
     public ResponseEntity<MemberInactivateResponse> inactivateMember(@Valid @RequestBody MemberIdPasswordRequest request) {
+        memberService.findMemberIdCount(request.getMember_id());
+        memberService.isMatchIdAndPassword(request.getMember_id(), request.getPassword());
         return new ResponseEntity<>(memberService.inactivateMember(request), HttpStatus.FOUND);
     }
 
     // 로그인
     @PostMapping("/signIn")
     public ResponseEntity<MemberSignInResponse> signInMember(@Valid @RequestBody MemberIdPasswordRequest request, HttpSession httpSession) {
+        memberService.findMemberIdCount(request.getMember_id());
+        memberService.isMatchIdAndPassword(request.getMember_id(), request.getPassword());
         MemberSignInResponse response = memberService.signInMember(request);
 
         // TODO: 2021-12-02 Controller에서 getAttribute, setAttribute를 직접 해주는건 좋지 않은 구조일까?

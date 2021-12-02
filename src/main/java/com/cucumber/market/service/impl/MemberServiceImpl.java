@@ -68,15 +68,6 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberDTO findMemberInfo(MemberMyInfoRequest memberMyInfoRequest) {
         MemberDTO memberDTO = memberMapper.findByMemberId(memberMyInfoRequest.getMember_id());
-        if(memberDTO == null) {
-            throw new MemberNotFoundException("회원을 찾을 수 없습니다.");
-        }
-
-        String encryptedPassword = SHA256Util.encryptSHA256(memberMyInfoRequest.getPassword());
-        if(!memberDTO.getPassword().equals(encryptedPassword)) {
-            throw new PasswordMismatchException("비밀번호가 일치하지 않습니다.");
-        }
-
         // Password를 넘겨주지 않게 하기 위해 새로운 MemberDTO를 Builder 생성자로 생성
         return MemberDTO.builder()
                 .member_id(memberDTO.getMember_id())
@@ -88,6 +79,30 @@ public class MemberServiceImpl implements MemberService {
                 .build();
     }
 
+    /**
+     * 회원아이디 존재여부 검사 메소드
+     * @param member_id 중복 검사할 회원 아이디
+     */
+    @Override
+    public void findMemberIdCount(String member_id) {
+        if (memberMapper.findMemberIdCount(member_id) == 0) {
+            throw new MemberNotFoundException("입력한 아이디의 회원이 존재하지 않습니다.");
+        }
+    }
+
+    /**
+     * 아이디 비밀번호 일치여부 검사 메소드
+     * @param member_id 입력한 아이디
+     * @param password 입력한 패스워드
+     */
+
+    @Override
+    public void isMatchIdAndPassword(String member_id, String password) {
+        String encryptedPassword = SHA256Util.encryptSHA256(password);
+        if (memberMapper.isMatchIdAndPassword(member_id, encryptedPassword) == 0) {
+            throw new PasswordMismatchException("입력한 아이디와 비밀번호가 일치하지 않습니다.");
+        }
+    }
 
     /**
      * 회원정보 수정 메소드
@@ -96,18 +111,8 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberUpdateInfoResponse updateMemberInfo(MemberUpdateInfoRequest memberUpdateInfoRequest) {
         MemberDTO memberDTO = memberMapper.findByMemberId(memberUpdateInfoRequest.getMember_id());
-        if(memberDTO == null) {
-            throw new MemberNotFoundException("회원을 찾을 수 없습니다.");
-        }
-
-        String encryptedOldPassword = SHA256Util.encryptSHA256(memberUpdateInfoRequest.getOldPassword());
-        if(!memberDTO.getPassword().equals(encryptedOldPassword)) {
-            throw new PasswordMismatchException("비밀번호가 일치하지 않습니다.");
-        }
 
         String encryptedNewPassword = SHA256Util.encryptSHA256(memberUpdateInfoRequest.getNewPassword());
-
-
         MemberUpdateInfoRequest updatedMemberInfo = MemberUpdateInfoRequest.builder()
                 .member_id(memberUpdateInfoRequest.getMember_id())
                 .newPassword(encryptedNewPassword)
@@ -130,15 +135,8 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberInactivateResponse inactivateMember(MemberIdPasswordRequest memberIdPasswordRequest) {
         MemberDTO memberDTO = memberMapper.findByMemberId(memberIdPasswordRequest.getMember_id());
-        if(memberDTO == null) {
-            throw new MemberNotFoundException("회원을 찾을 수 없습니다.");
-        }
 
         String encryptedPassword = SHA256Util.encryptSHA256(memberIdPasswordRequest.getPassword());
-        if(!memberDTO.getPassword().equals(encryptedPassword)) {
-            throw new PasswordMismatchException("비밀번호가 일치하지 않습니다.");
-        }
-
         memberMapper.inactivateMember(
                 MemberIdPasswordRequest.builder()
                         .member_id(memberIdPasswordRequest.getMember_id())

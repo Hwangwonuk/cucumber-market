@@ -9,6 +9,10 @@ public interface MemberService {
 
     void isDuplicateMemberId(String member_id);
 
+    void findMemberIdCount(String member_id);
+
+    void isMatchIdAndPassword(String member_id, String password);
+
     MemberUpdateInfoResponse updateMemberInfo(MemberUpdateInfoRequest memberUpdateInfoRequest);
 
     MemberInactivateResponse inactivateMember(MemberIdPasswordRequest memberInactivateRequest);

@@ -16,6 +16,13 @@
         WHERE member_id = #{member_id}
     </select>
 
+    <select id="isMatchIdAndPassword" resultType="Integer">
+        SELECT COUNT(name)
+        FROM member
+        WHERE member_id = #{member_id}
+        AND password = #{password}
+    </select>
+
     <select id="findByMemberId" resultType="com.cucumber.market.dto.MemberDTO">
         SELECT member_id, password, name, phone, address, isactive, isadmin
         FROM member
@@ -43,4 +50,6 @@
         WHERE member_id = #{member_id}
         AND password = #{password}
     </select>
+
+
 </mapper>

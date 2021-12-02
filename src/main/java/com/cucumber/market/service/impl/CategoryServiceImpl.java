@@ -58,6 +58,18 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     /**
+     * 소분류 이름 수정 메소드
+     * @param smallCategoryUpdateRequest 대분류명, 원래 소분류명, 변경할 소분류명
+     */
+    @Override
+    public CategoryResponse updateSmallCategory(SmallCategoryUpdateRequest smallCategoryUpdateRequest) {
+        categoryMapper.updateSmallCategory(smallCategoryUpdateRequest);
+        return CategoryResponse.builder()
+                .redirectUrl(categoryUrl)
+                .build();
+    }
+
+    /**
      * 소분류 등록 메소드
      * @param smallCategoryRegisterRequest 소분류 등록 시 저장할 이름
      */
@@ -65,18 +77,6 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryResponse registerSmallCategory(SmallCategoryRegisterRequest smallCategoryRegisterRequest) {
         categoryMapper.registerSmallCategory(smallCategoryRegisterRequest);
 
-        return CategoryResponse.builder()
-                .redirectUrl(categoryUrl)
-                .build();
-    }
-
-    /**
-     * 소분류 이름 수정 메소드
-     * @param smallCategoryUpdateRequest 대분류명, 원래 소분류명, 변경할 소분류명
-     */
-    @Override
-    public CategoryResponse updateSmallCategory(SmallCategoryUpdateRequest smallCategoryUpdateRequest) {
-        categoryMapper.updateSmallCategory(smallCategoryUpdateRequest);
         return CategoryResponse.builder()
                 .redirectUrl(categoryUrl)
                 .build();

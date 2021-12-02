@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import java.net.URLDecoder;
 import java.util.List;
 
 @Service
@@ -89,7 +88,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void findByBigCategoryName(String bigCategoryName) {
         if (categoryMapper.findBigCategoryNameCount(bigCategoryName) == 0) {
-            throw new DataIntegrityViolationException("입력한 대분류명은 존재하지 않습니다.");
+            throw new CategoryNameNotFoundException("입력한 대분류명은 존재하지 않습니다.");
         }
     }
 
@@ -122,9 +121,7 @@ public class CategoryServiceImpl implements CategoryService {
      */
     @Override
     public List<CategoryDTO> findCategoryNames(CategoryNamesRequest categoryNamesRequest) {
-        String bigCategoryName = URLDecoder.decode(categoryNamesRequest.getBigCategoryName());
-        List<CategoryDTO> categoryNames = categoryMapper.findCategoryNames(bigCategoryName);
-        return categoryNames;
+        return categoryMapper.findCategoryNames(categoryNamesRequest.getBigCategoryName());
     }
 
 }

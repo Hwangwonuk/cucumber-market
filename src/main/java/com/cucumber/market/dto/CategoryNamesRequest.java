@@ -6,5 +6,5 @@ import lombok.Getter;
 @Getter
 @Builder
 public class CategoryNamesRequest {
-    private String bigCategoryName;
+    private final String bigCategoryName;
 }

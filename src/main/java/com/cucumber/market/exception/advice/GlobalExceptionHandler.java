@@ -38,7 +38,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
 
-    // 소분류 등록시 입력한 대분류명이 없을 때
+    // 입력한 분류명(Category)이 없을 때
     @ExceptionHandler(CategoryNameNotFoundException.class)
     public ResponseEntity<ExceptionResponse> categoryNameNotFoundException(final CategoryNameNotFoundException ex) {
         log.error(ex.getMessage(), ex);

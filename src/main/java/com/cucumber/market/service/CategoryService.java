@@ -24,14 +24,4 @@ public interface CategoryService {
     CategoryResponse updateSmallCategory(SmallCategoryUpdateRequest smallCategoryUpdateRequest);
 
     List<CategoryDTO> findCategoryNames(CategoryNamesRequest categoryNamesRequest);
-
-/*    int registerSmallCategory(SmallCategoryDTO smallCategoryDTO);
-
-    void updateBigCategory(BigCategoryDTO bigCategoryDTO);
-
-    void updateSmallCategory(SmallCategoryDTO smallCategoryDTO);
-
-    void deleteBigCategory(int bigCategoryId);
-
-    void deleteSmallCategory(int smallCategoryId);*/
 }

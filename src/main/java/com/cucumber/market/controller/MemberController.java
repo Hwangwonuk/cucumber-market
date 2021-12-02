@@ -1,11 +1,9 @@
 package com.cucumber.market.controller;
 
 import com.cucumber.market.dto.*;
-import com.cucumber.market.dto.MemberDTO;
 import com.cucumber.market.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

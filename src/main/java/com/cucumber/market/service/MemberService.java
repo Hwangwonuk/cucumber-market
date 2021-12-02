@@ -1,13 +1,16 @@
 package com.cucumber.market.service;
 
 import com.cucumber.market.dto.*;
-import com.cucumber.market.dto.MemberDTO;
 
 public interface MemberService {
 
     MemberSignUpResponse signUpMember(MemberSignUpRequest memberSignUpRequest);
 
     void isDuplicateMemberId(String member_id);
+
+    void findMemberIdCount(String member_id);
+
+    void isMatchIdAndPassword(String member_id, String password);
 
     MemberUpdateInfoResponse updateMemberInfo(MemberUpdateInfoRequest memberUpdateInfoRequest);
 

@@ -1,5 +1,6 @@
 package com.cucumber.market.exception.advice;
 
+import com.cucumber.market.exception.CategoryNameNotFoundException;
 import com.cucumber.market.exception.MemberNotFoundException;
 import com.cucumber.market.exception.PasswordMismatchException;
 import lombok.extern.slf4j.Slf4j;
@@ -35,5 +36,13 @@ public class GlobalExceptionHandler {
         log.error(ex.getMessage(), ex);
         ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+    }
+
+    // 입력한 분류명(Category)이 없을 때
+    @ExceptionHandler(CategoryNameNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> categoryNameNotFoundException(final CategoryNameNotFoundException ex) {
+        log.error(ex.getMessage(), ex);
+        ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 }

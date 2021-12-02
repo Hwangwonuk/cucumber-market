@@ -1,6 +1,7 @@
 package com.cucumber.market.dto;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
 

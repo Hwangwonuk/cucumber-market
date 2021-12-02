@@ -1,21 +1,29 @@
 package com.cucumber.market.service;
 
-import com.cucumber.market.dto.BigCategoryRequest;
-import com.cucumber.market.dto.BigCategoryResponse;
-import com.cucumber.market.dto.SmallCategoryRequest;
-import com.cucumber.market.dto.SmallCategoryResponse;
+import com.cucumber.market.dto.*;
+
+import java.util.List;
+
 
 public interface CategoryService {
 
-    BigCategoryResponse registerBigCategory(BigCategoryRequest bigCategoryRequest);
+    BigCategoryRegisterResponse registerBigCategory(BigCategoryRegisterRequest bigCategoryRegisterRequest);
 
-    SmallCategoryResponse registerSmallCategory(SmallCategoryRequest smallCategoryRequest);
+    SmallCategoryRegisterResponse registerSmallCategory(SmallCategoryRegisterRequest smallCategoryRegisterRequest);
 
     void isDuplicateBigCategoryName(String bigCategoryName);
 
     void findByBigCategoryName(String bigCategoryName);
 
+    void findBySmallCategoryName(String smallCategoryName);
+
     void isDuplicateSmallCategoryName(String smallCategoryName);
+
+    BigCategoryUpdateResponse updateBigCategory(BigCategoryUpdateRequest bigCategoryUpdateRequest);
+
+    SmallCategoryUpdateResponse updateSmallCategory(SmallCategoryUpdateRequest smallCategoryUpdateRequest);
+
+    List<CategoryDTO> findCategoryNames(CategoryNamesRequest categoryNamesRequest);
 
 /*    int registerSmallCategory(SmallCategoryDTO smallCategoryDTO);
 

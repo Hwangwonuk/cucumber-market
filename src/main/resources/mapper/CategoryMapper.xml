@@ -5,7 +5,7 @@
 
 <mapper namespace="com.cucumber.market.mapper.CategoryMapper">
 
-    <insert id="registerBigCategory" useGeneratedKeys="true" parameterType="com.cucumber.market.dto.BigCategoryRequest">
+    <insert id="registerBigCategory" parameterType="com.cucumber.market.dto.BigCategoryRegisterRequest">
         INSERT INTO big_category (big_category_name)
         VALUES (#{bigCategoryName})
     </insert>
@@ -16,7 +16,7 @@
         WHERE big_category_name = #{bigCategoryName}
     </select>
 
-    <insert id="registerSmallCategory" useGeneratedKeys="true" parameterType="com.cucumber.market.dto.BigCategoryRequest">
+    <insert id="registerSmallCategory" parameterType="com.cucumber.market.dto.SmallCategoryRegisterRequest">
         INSERT INTO small_category (small_category_name, big_category_name)
         VALUES (#{smallCategoryName}, #{bigCategoryName})
     </insert>
@@ -25,6 +25,27 @@
         SELECT COUNT(small_category_name)
         FROM small_category
         WHERE small_category_name = #{smallCategoryName}
+    </select>
+
+    <update id="updateBigCategory" parameterType="com.cucumber.market.dto.BigCategoryUpdateRequest">
+        UPDATE big_category
+        SET big_category_name = #{newBigCategoryName}
+        WHERE big_category_name = #{oldBigCategoryName}
+    </update>
+
+    <update id="updateSmallCategory" parameterType="com.cucumber.market.dto.SmallCategoryUpdateRequest">
+        UPDATE small_category
+        SET small_category_name = #{newSmallCategoryName}
+        WHERE small_category_name = #{oldSmallCategoryName}
+        AND big_category_name = #{bigCategoryName}
+    </update>
+
+    <select id="findCategoryNames"
+            parameterType="com.cucumber.market.dto.CategoryNamesRequest"
+            resultType="com.cucumber.market.dto.CategoryDTO">
+        SELECT small_category_name
+        FROM small_category
+        WHERE big_category_name = #{bigCategoryName}
     </select>
 
 </mapper>

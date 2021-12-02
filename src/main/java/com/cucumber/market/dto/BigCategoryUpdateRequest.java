@@ -7,10 +7,10 @@ import javax.validation.constraints.NotBlank;
 
 @Getter
 @Builder
-public class SmallCategoryRequest {
+public class BigCategoryUpdateRequest {
     @NotBlank(message = "대분류 명을 입력해주세요.")
-    private final String bigCategoryName;
+    private final String oldBigCategoryName;
 
-    @NotBlank(message = "소분류 명을 입력해주세요.")
-    private final String smallCategoryName;
+    @NotBlank(message = "변경할 대분류 명을 입력해주세요.")
+    private final String newBigCategoryName;
 }

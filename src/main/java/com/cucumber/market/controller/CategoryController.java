@@ -3,17 +3,13 @@ package com.cucumber.market.controller;
 import com.cucumber.market.dto.*;
 import com.cucumber.market.service.CategoryService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
-@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/categories")
@@ -21,19 +17,39 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    // 대분류 등록
+    // 대분류(카테고리) 등록
     @PostMapping("/big")
-    public ResponseEntity<BigCategoryResponse> signUpMember(@Valid @RequestBody BigCategoryRequest request) {
+    public ResponseEntity<BigCategoryRegisterResponse> registerBigCategory(@Valid @RequestBody BigCategoryRegisterRequest request) {
         categoryService.isDuplicateBigCategoryName(request.getBigCategoryName());
         return new ResponseEntity<>(categoryService.registerBigCategory(request), HttpStatus.FOUND);
     }
 
-    // 소분류 등록
+    // 대분류(카테고리) 조회 - 조회할 대분류에 속하는 소분류 조회
+    @GetMapping("/big")
+    public ResponseEntity<List<CategoryDTO>> findCategoryNames(@Valid CategoryNamesRequest request) {
+        return new ResponseEntity<>(categoryService.findCategoryNames(request), HttpStatus.OK);
+    }
+
+    // 대분류(카테고리) 이름 수정
+    @PatchMapping("/big")
+    public ResponseEntity<BigCategoryUpdateResponse> updateBigCategory(@Valid @RequestBody BigCategoryUpdateRequest request) {
+        categoryService.findByBigCategoryName(request.getOldBigCategoryName());
+        return new ResponseEntity<>(categoryService.updateBigCategory(request), HttpStatus.FOUND);
+    }
+
+    // 소분류(카테고리) 등록
     @PostMapping("/small")
-    public ResponseEntity<SmallCategoryResponse> signUpMember(@Valid @RequestBody SmallCategoryRequest request) {
+    public ResponseEntity<SmallCategoryRegisterResponse> signUpMember(@Valid @RequestBody SmallCategoryRegisterRequest request) {
         categoryService.findByBigCategoryName(request.getBigCategoryName());
         categoryService.isDuplicateSmallCategoryName(request.getSmallCategoryName());
         return new ResponseEntity<>(categoryService.registerSmallCategory(request), HttpStatus.FOUND);
     }
 
+    // 소분류(카테고리) 이름 수정
+    @PatchMapping("/small")
+    public ResponseEntity<SmallCategoryUpdateResponse> updateBigCategory(@Valid @RequestBody SmallCategoryUpdateRequest request) {
+        categoryService.findByBigCategoryName(request.getBigCategoryName());
+        categoryService.findBySmallCategoryName(request.getOldSmallCategoryName());
+        return new ResponseEntity<>(categoryService.updateSmallCategory(request), HttpStatus.FOUND);
+    }
 }

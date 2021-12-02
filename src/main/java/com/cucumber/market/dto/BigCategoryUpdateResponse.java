@@ -5,6 +5,6 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class BigCategoryResponse {
+public class BigCategoryUpdateResponse {
     private String redirectUrl;
 }

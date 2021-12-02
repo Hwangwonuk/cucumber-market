@@ -1,8 +1,6 @@
 package com.cucumber.market.exception.advice;
 
-import com.cucumber.market.exception.CategoryNameNotFoundException;
-import com.cucumber.market.exception.MemberNotFoundException;
-import com.cucumber.market.exception.PasswordMismatchException;
+import com.cucumber.market.exception.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -44,5 +42,21 @@ public class GlobalExceptionHandler {
         log.error(ex.getMessage(), ex);
         ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    // 이미 로그인된 상태에서 로그인을 시도할 때
+    @ExceptionHandler(AlreadySignInException.class)
+    public ResponseEntity<ExceptionResponse> alreadySignInException(final AlreadySignInException ex) {
+        log.error(ex.getMessage(), ex);
+        ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    // 이미 로그아웃된 상태 혹은 로그인되지 않은 상태에서 로그아웃을 시도할 때
+    @ExceptionHandler(AlreadySignOutException.class)
+    public ResponseEntity<ExceptionResponse> alreadySignOutException(final AlreadySignOutException ex) {
+        log.error(ex.getMessage(), ex);
+        ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }

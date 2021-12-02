@@ -1,14 +1,15 @@
 package com.cucumber.market.controller;
 
+import com.cucumber.market.annotation.CurrentMember;
 import com.cucumber.market.dto.*;
 import com.cucumber.market.service.MemberService;
+import com.cucumber.market.service.SessionSignInService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 /*
@@ -36,6 +37,7 @@ public class MemberController {
 
     private final MemberService memberService;
 
+    private final SessionSignInService sessionSignInService;
     /**
      * @ModelAttribute 는 필드 단위로 정교하게 바인딩이 적용된다. 특정 필드가 바인딩 되지 않아도 나머지
      * 필드는 정상 바인딩 되고, Validator를 사용한 검증도 적용할 수 있다.
@@ -56,7 +58,7 @@ public class MemberController {
 
     // 회원조회(회원정보)
     @GetMapping("/myInfo")
-    public ResponseEntity<MemberDTO> findMemberInfo(@Valid MemberMyInfoRequest request) {
+    public ResponseEntity<MemberDTO> findMemberInfo(@CurrentMember MemberMyInfoRequest request) {
         memberService.findMemberIdCount(request.getMember_id());
         return new ResponseEntity<>(memberService.findMemberInfo(request), HttpStatus.OK);
     }
@@ -79,19 +81,23 @@ public class MemberController {
 
     // 로그인
     @PostMapping("/signIn")
-    public ResponseEntity<MemberSignInResponse> signInMember(@Valid @RequestBody MemberIdPasswordRequest request, HttpSession httpSession) {
+    public ResponseEntity<MemberSignInResponse> signInMember(@Valid @RequestBody MemberIdPasswordRequest request) {
         memberService.findMemberIdCount(request.getMember_id());
         memberService.isMatchIdAndPassword(request.getMember_id(), request.getPassword());
         MemberSignInResponse response = memberService.signInMember(request);
 
-        // TODO: 2021-12-02 Controller에서 getAttribute, setAttribute를 직접 해주는건 좋지 않은 구조일까?
-//        if(httpSession.getAttribute("signIn") != null) {
-//            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-//        } else {
-//            httpSession.setAttribute("signIn", response);
-//            return new ResponseEntity<>(response, HttpStatus.OK);
-//        }
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        if(sessionSignInService.getCurrentMemberId().equals(response.getMember_id())) {
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        } else {
+            sessionSignInService.signInMember(request.getMember_id());
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
     }
+
+    // 로그아웃
+    @GetMapping("/signOut")
+    public ResponseEntity<MemberSignOutResponse> signOutMember() {
+        return new ResponseEntity<>(sessionSignInService.signOutMember(), HttpStatus.OK);
+    }
+
 }

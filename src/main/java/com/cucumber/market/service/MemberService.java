@@ -2,6 +2,8 @@ package com.cucumber.market.service;
 
 import com.cucumber.market.dto.*;
 
+import java.lang.reflect.Member;
+
 public interface MemberService {
 
     MemberSignUpResponse signUpMember(MemberSignUpRequest memberSignUpRequest);
@@ -12,11 +14,13 @@ public interface MemberService {
 
     void isMatchIdAndPassword(String member_id, String password);
 
-    MemberUpdateInfoResponse updateMemberInfo(MemberUpdateInfoRequest memberUpdateInfoRequest);
+    void isActivityMember(String member_id);
 
-    MemberInactivateResponse inactivateMember(MemberIdPasswordRequest memberInactivateRequest);
+    MemberUpdateInfoResponse updateMemberInfo(MemberUpdateInfoRequest memberUpdateInfoRequest, MemberDTO currentMember);
 
-    MemberDTO findMemberInfo(MemberMyInfoRequest memberMyInfoRequest);
+    void inactivateMember(MemberIdPasswordRequest memberInactivateRequest, MemberDTO currentMember);
 
-    MemberSignInResponse signInMember(MemberIdPasswordRequest memberIdPasswordRequest);
+    MemberDTO findMemberInfo(String member_id);
+
+//    MemberDTO signInMember(MemberIdPasswordRequest memberIdPasswordRequest);
 }

@@ -20,18 +20,19 @@ public class SessionSignInServiceImpl implements SessionSignInService {
     private String loginUrl;
 
     @Override
-    public void signInMember(String memberId) {
-        if (getCurrentMemberId().equals(memberId)) {
-            throw new AlreadySignInException();
+    public void signInMember(String member_id) {
+        if (getCurrentMemberId() != null/*.equals(memberId)*/) {
+            throw new AlreadySignInException("이미 로그인된 상태입니다.");
         }
 
-        httpSession.setAttribute(SessionKeys.USER_ID, memberId);
+        httpSession.setAttribute(SessionKeys.Member_ID, member_id);
+        System.out.println((String) httpSession.getAttribute(SessionKeys.Member_ID));
     }
 
     @Override
     public MemberSignOutResponse signOutMember() {
         if (getCurrentMemberId() == null) {
-            throw new AlreadySignOutException();
+            throw new AlreadySignOutException("이미 로그아웃된 상태입니다.");
         }
 
         httpSession.invalidate();
@@ -42,6 +43,7 @@ public class SessionSignInServiceImpl implements SessionSignInService {
 
     @Override
     public String getCurrentMemberId() {
-        return (String) httpSession.getAttribute(SessionKeys.USER_ID);
+        System.out.println((String) httpSession.getAttribute(SessionKeys.Member_ID));
+        return (String) httpSession.getAttribute(SessionKeys.Member_ID);
     }
 }

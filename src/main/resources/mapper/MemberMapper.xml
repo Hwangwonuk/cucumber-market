@@ -23,6 +23,13 @@
         AND password = #{password}
     </select>
 
+    <select id="isActivityMember" resultType="Integer">
+        SELECT isactive
+        FROM member
+        WHERE member_id = #{member_id}
+        AND isactive = 'y'
+    </select>
+
     <select id="findByMemberId" resultType="com.cucumber.market.dto.MemberDTO">
         SELECT member_id, password, name, phone, address, isactive, isadmin
         FROM member
@@ -42,14 +49,16 @@
         AND password = #{password}
     </update>
 
-    <select id="findByMemberIdAndPassword"
+
+
+<!--    <select id="findByMemberIdAndPassword"
             parameterType="com.cucumber.market.dto.MemberIdPasswordRequest"
-            resultType="com.cucumber.market.dto.MemberSignInResponse">
+            resultType="com.cucumber.market.dto.MemberDTO">
         SELECT member_id, name
         FROM member
         WHERE member_id = #{member_id}
         AND password = #{password}
-    </select>
+    </select>-->
 
 
 </mapper>

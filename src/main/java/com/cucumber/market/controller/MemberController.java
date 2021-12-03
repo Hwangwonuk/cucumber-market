@@ -1,15 +1,18 @@
 package com.cucumber.market.controller;
 
+import com.cucumber.market.annotation.CheckSignIn;
 import com.cucumber.market.annotation.CurrentMember;
 import com.cucumber.market.dto.*;
 import com.cucumber.market.service.MemberService;
 import com.cucumber.market.service.SessionSignInService;
+import com.cucumber.market.util.SessionKeys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 /*
@@ -56,42 +59,54 @@ public class MemberController {
         return new ResponseEntity<>(memberService.signUpMember(request), HttpStatus.FOUND);
     }
 
-    // 회원조회(회원정보)
-    @GetMapping("/myInfo")
-    public ResponseEntity<MemberDTO> findMemberInfo(@CurrentMember MemberMyInfoRequest request) {
-        memberService.findMemberIdCount(request.getMember_id());
-        return new ResponseEntity<>(memberService.findMemberInfo(request), HttpStatus.OK);
+    // 회원조회(회원정보 - 마이페이지)
+
+    @GetMapping("/myInfo/{member_id}")
+    @CheckSignIn
+    public ResponseEntity<MemberDTO> findMemberInfo(@CurrentMember MemberDTO currentMember) {
+//        memberService.findMemberIdCount(currentMember.getMember_id());
+        return new ResponseEntity<>(memberService.findMemberInfo(currentMember.getMember_id()), HttpStatus.OK);
     }
 
     // 회원정보 수정(이름, 비밀번호, 전화번호, 주소)
     @PatchMapping("/myInfo")
-    public ResponseEntity<MemberUpdateInfoResponse> updateMemberInfo(@Valid @RequestBody MemberUpdateInfoRequest request) {
-        memberService.findMemberIdCount(request.getMember_id());
-        memberService.isMatchIdAndPassword(request.getMember_id(), request.getOldPassword());
-        return new ResponseEntity<>(memberService.updateMemberInfo(request), HttpStatus.FOUND);
+    @CheckSignIn
+    public ResponseEntity<MemberUpdateInfoResponse> updateMemberInfo(@Valid @RequestBody MemberUpdateInfoRequest request,
+                                                                     @CurrentMember MemberDTO currentMember) {
+//        memberService.findMemberIdCount(currentMember.getMember_id());
+        memberService.isMatchIdAndPassword(currentMember.getMember_id(), request.getOldPassword());
+        return new ResponseEntity<>(memberService.updateMemberInfo(request, currentMember), HttpStatus.FOUND);
     }
 
     // 회원탈퇴(비활성화)
     @PatchMapping("/inactivate")
-    public ResponseEntity<MemberInactivateResponse> inactivateMember(@Valid @RequestBody MemberIdPasswordRequest request) {
-        memberService.findMemberIdCount(request.getMember_id());
-        memberService.isMatchIdAndPassword(request.getMember_id(), request.getPassword());
-        return new ResponseEntity<>(memberService.inactivateMember(request), HttpStatus.FOUND);
+    @CheckSignIn
+    public ResponseEntity<?> inactivateMember(@Valid @RequestBody MemberIdPasswordRequest request,
+                                                                     @CurrentMember MemberDTO currentMember) {
+//        memberService.findMemberIdCount(currentMember.getMember_id());
+        // 아이디 비밀번호 일치여부 검사 -> 회원탈퇴 -> 로그아웃 -> 리다이렉트 순으로 되야함
+        memberService.isMatchIdAndPassword(currentMember.getMember_id(), request.getPassword());
+        memberService.inactivateMember(request, currentMember);
+        sessionSignInService.signOutMember();
+        return new ResponseEntity<>("회원탈퇴 성공", HttpStatus.FOUND);  //리다이렉트 SignOutMember에서 하니까 지워야하나
     }
 
     // 로그인
     @PostMapping("/signIn")
-    public ResponseEntity<MemberSignInResponse> signInMember(@Valid @RequestBody MemberIdPasswordRequest request) {
-        memberService.findMemberIdCount(request.getMember_id());
-        memberService.isMatchIdAndPassword(request.getMember_id(), request.getPassword());
-        MemberSignInResponse response = memberService.signInMember(request);
+    public ResponseEntity<?> signInMember(@Valid @RequestBody MemberIdPasswordRequest request) {
+        memberService.findMemberIdCount(request.getMember_id()); // 아이디 존재여부 검사
+        memberService.isMatchIdAndPassword(request.getMember_id(), request.getPassword()); // 아이디 비밀번호 일치여부 검사
+        memberService.isActivityMember(request.getMember_id());// 회원 탈퇴상태 여부검사
+        MemberDTO currentMember = memberService.findMemberInfo(request.getMember_id()); // MemberDTO 회원정보 가져오기
 
-        if(sessionSignInService.getCurrentMemberId().equals(response.getMember_id())) {
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        sessionSignInService.signInMember(currentMember.getMember_id()); // 로그인(세션 저장)
+        return new ResponseEntity<>(currentMember.getName(), HttpStatus.OK); // currentMember.getName()님 환영합니다.
+/*        if(sessionSignInService.getCurrentMemberId(currentMember.getMember_id()) != null*//*.equals(response.getMember_id())*//*) {
+            return new ResponseEntity<>(currentMember, HttpStatus.BAD_REQUEST);
         } else {
             sessionSignInService.signInMember(request.getMember_id());
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        }
+            return new ResponseEntity<>(currentMember, HttpStatus.OK);
+        }*/
     }
 
     // 로그아웃

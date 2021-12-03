@@ -13,11 +13,13 @@ public interface MemberMapper {
     // 왜 여기만 @Param을 해주어야 되는가?
     int isMatchIdAndPassword(@Param("member_id")String member_id, @Param("password")String password);
 
+    int isActivityMember(String member_id);
+
     MemberDTO findByMemberId(String member_id);
 
     void updateMemberInfo(MemberUpdateInfoRequest memberUpdateInfoRequest);
 
     void inactivateMember(MemberIdPasswordRequest memberIdPasswordRequest);
 
-    MemberSignInResponse findByMemberIdAndPassword(MemberIdPasswordRequest memberIdPasswordRequest);
+//    MemberDTO findByMemberIdAndPassword(MemberIdPasswordRequest memberIdPasswordRequest);
 }

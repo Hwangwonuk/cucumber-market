@@ -62,11 +62,11 @@ public class MemberServiceImpl implements MemberService {
 
     /**
      * 회원조회(회원정보) 메소드
-     * @param memberMyInfoRequest 회원조회시 필요한 정보
+     * @param member_id 현재 로그인한 회원의 아이디
      */
     @Override
-    public MemberDTO findMemberInfo(MemberMyInfoRequest memberMyInfoRequest) {
-        MemberDTO memberDTO = memberMapper.findByMemberId(memberMyInfoRequest.getMember_id());
+    public MemberDTO findMemberInfo(String member_id) {
+        MemberDTO memberDTO = memberMapper.findByMemberId(member_id);
         // Password를 넘겨주지 않게 하기 위해 새로운 MemberDTO를 Builder 생성자로 생성
         return MemberDTO.builder()
                 .member_id(memberDTO.getMember_id())
@@ -104,16 +104,27 @@ public class MemberServiceImpl implements MemberService {
     }
 
     /**
+     * 회원 탈퇴여부 검사 메소드
+     * @param member_id 입력한 아이디
+     */
+    @Override
+    public void isActivityMember(String member_id) {
+        if (memberMapper.isActivityMember(member_id) == 0) {
+            throw new PasswordMismatchException("탈퇴한 계정의 아이디입니다.");
+        }
+    }
+
+    /**
      * 회원정보 수정 메소드
      * @param memberUpdateInfoRequest 정보 수정시 필요한 회원정보
      */
     @Override
-    public MemberUpdateInfoResponse updateMemberInfo(MemberUpdateInfoRequest memberUpdateInfoRequest) {
-        MemberDTO memberDTO = memberMapper.findByMemberId(memberUpdateInfoRequest.getMember_id());
+    public MemberUpdateInfoResponse updateMemberInfo(MemberUpdateInfoRequest memberUpdateInfoRequest, MemberDTO currentMember) {
+        //MemberDTO memberDTO = memberMapper.findByMemberId(memberUpdateInfoRequest.getMember_id()); 안쓰는데 왜있지?
 
         String encryptedNewPassword = SHA256Util.encryptSHA256(memberUpdateInfoRequest.getNewPassword());
         MemberUpdateInfoRequest updatedMemberInfo = MemberUpdateInfoRequest.builder()
-                .member_id(memberUpdateInfoRequest.getMember_id())
+                .member_id(currentMember.getMember_id())
                 .newPassword(encryptedNewPassword)
                 .name(memberUpdateInfoRequest.getName())
                 .address(memberUpdateInfoRequest.getAddress())
@@ -132,35 +143,35 @@ public class MemberServiceImpl implements MemberService {
      * @param memberIdPasswordRequest 비활성화시 필요한 회원정보
      */
     @Override
-    public MemberInactivateResponse inactivateMember(MemberIdPasswordRequest memberIdPasswordRequest) {
-        MemberDTO memberDTO = memberMapper.findByMemberId(memberIdPasswordRequest.getMember_id());
+    public void inactivateMember(MemberIdPasswordRequest memberIdPasswordRequest, MemberDTO currentMember) {
 
         String encryptedPassword = SHA256Util.encryptSHA256(memberIdPasswordRequest.getPassword());
         memberMapper.inactivateMember(
                 MemberIdPasswordRequest.builder()
-                        .member_id(memberIdPasswordRequest.getMember_id())
+                        .member_id(currentMember.getMember_id())
                         .password(encryptedPassword)
                         .build()
         );
 
-        return MemberInactivateResponse.builder()
+/*        return MemberInactivateResponse.builder()
                 .redirectUrl(loginUrl)
-                .build();
+                .build();*/
     }
 
-    /**
+/*    *//**
      * 로그인 메소드
      * @param memberIdPasswordRequest 로그인시 필요한 회원정보
-     */
+     *//*
     @Override
-    public MemberSignInResponse signInMember(MemberIdPasswordRequest memberIdPasswordRequest) {
+    public MemberDTO signInMember(MemberIdPasswordRequest memberIdPasswordRequest) {
         String encryptedPassword = SHA256Util.encryptSHA256(memberIdPasswordRequest.getPassword());
+
         return memberMapper.findByMemberIdAndPassword(
                 MemberIdPasswordRequest.builder()
                         .member_id(memberIdPasswordRequest.getMember_id())
                         .password(encryptedPassword)
                         .build()
         );
-    }
+    }*/
 }
 

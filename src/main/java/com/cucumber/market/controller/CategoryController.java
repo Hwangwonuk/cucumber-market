@@ -1,6 +1,6 @@
 package com.cucumber.market.controller;
 
-import com.cucumber.market.dto.*;
+import com.cucumber.market.dto.category.*;
 import com.cucumber.market.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

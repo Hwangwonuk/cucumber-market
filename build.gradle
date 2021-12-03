@@ -21,6 +21,8 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
+	implementation 'org.springframework.boot:spring-boot-starter-aop' // @Aspect AOP 사용
+
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0' // SQL Mapper인 MyBatis로 DB와 Java의 POJO를 SQL로 연결(Mapping)
 
 	implementation 'io.springfox:springfox-boot-starter:3.0.0' // API 문서화 및 테스트를 가능케 해주는 프레임워크
@@ -30,7 +32,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'org.springframework.session:spring-session-data-redis' // 로그인 세션 정보를 NoSQL 서비스 중 하나인 Redis에 Key-Value 형태로 관리
 
-	runtimeOnly 'mysql:mysql-connector-java'
+	runtimeOnly 'mysql:mysql-connector-java' // mysql 연결을 위한 커넥터
 
 	compileOnly 'org.projectlombok:lombok' // Lombok으로 반복적인 코드를 어노테이션을 적용하여 간소화
 	annotationProcessor 'org.projectlombok:lombok'

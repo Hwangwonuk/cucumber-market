@@ -5,7 +5,7 @@
 
 <mapper namespace="com.cucumber.market.mapper.MemberMapper">
 
-    <insert id="insertMember" parameterType="com.cucumber.market.dto.MemberSignUpRequest">
+    <insert id="insertMember" parameterType="com.cucumber.market.dto.member.MemberSignUpRequest">
         INSERT INTO member (member_id, password, name, phone, address)
         VALUES (#{member_id}, #{password}, #{name}, #{phone}, #{address})
     </insert>
@@ -23,33 +23,30 @@
         AND password = #{password}
     </select>
 
-    <select id="findByMemberId" resultType="com.cucumber.market.dto.MemberDTO">
+    <select id="isActivityMember" resultType="Integer">
+        SELECT COUNT(isactive)
+        FROM member
+        WHERE member_id = #{member_id}
+        AND isactive = 'y'
+    </select>
+
+    <select id="findByMemberId" resultType="com.cucumber.market.dto.member.MemberDTO">
         SELECT member_id, password, name, phone, address, isactive, isadmin
         FROM member
         WHERE member_id = #{member_id}
     </select>
 
-    <update id="updateMemberInfo" parameterType="com.cucumber.market.dto.MemberUpdateInfoRequest">
+    <update id="updateMemberInfo" parameterType="com.cucumber.market.dto.member.MemberUpdateInfoRequest">
         UPDATE member
         SET password = #{newPassword}, name = #{name}, phone = #{phone}, address = #{address}
         WHERE member_id = #{member_id}
     </update>
 
-    <update id="inactivateMember" parameterType="com.cucumber.market.dto.MemberIdPasswordRequest">
+    <update id="inactivateMember" parameterType="com.cucumber.market.dto.member.MemberIdPasswordRequest">
         UPDATE member
         SET isactive = 'n'
         WHERE member_id = #{member_id}
         AND password = #{password}
     </update>
-
-    <select id="findByMemberIdAndPassword"
-            parameterType="com.cucumber.market.dto.MemberIdPasswordRequest"
-            resultType="com.cucumber.market.dto.MemberSignInResponse">
-        SELECT member_id, name
-        FROM member
-        WHERE member_id = #{member_id}
-        AND password = #{password}
-    </select>
-
 
 </mapper>

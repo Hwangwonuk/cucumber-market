@@ -1,4 +1,4 @@
-package com.cucumber.market.dto;
+package com.cucumber.market.dto.member;
 
 
 import lombok.Builder;
@@ -18,7 +18,6 @@ import javax.validation.constraints.Pattern;
 @Getter
 @Builder
 public class MemberUpdateInfoRequest {
-
     @NotBlank(message = "아이디를 입력해주세요.")
     private final String member_id;
 

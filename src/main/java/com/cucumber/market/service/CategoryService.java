@@ -1,12 +1,10 @@
 package com.cucumber.market.service;
 
-import com.cucumber.market.dto.*;
+import com.cucumber.market.dto.category.*;
 
 import java.util.List;
 
-
 public interface CategoryService {
-
     CategoryResponse registerBigCategory(BigCategoryRegisterRequest bigCategoryRegisterRequest);
 
     CategoryResponse registerSmallCategory(SmallCategoryRegisterRequest smallCategoryRegisterRequest);

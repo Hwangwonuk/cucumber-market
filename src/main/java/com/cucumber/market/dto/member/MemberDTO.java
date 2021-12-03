@@ -1,10 +1,12 @@
-package com.cucumber.market.dto;
+package com.cucumber.market.dto.member;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
+@AllArgsConstructor
 public class MemberDTO {
     private String member_id;
     private String password;

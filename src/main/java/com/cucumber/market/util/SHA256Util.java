@@ -21,20 +21,16 @@ public class SHA256Util {
      * Checked Exception과 Unchecked Exception
      * Checked Exception은 개발하는 프로그래머가 인지하고 있어야 하는 예외일 때 사용한다.
      * 개발자가 반드시 이 예외 처리 로직을 작성해야 하며 이러한 예외가 발생할 수 있다는 정보를 알려준다.
-     * <p>
      * Unchecked Exception은 일반적으로 프로그래머의 실수에 의해 발생할 수 있다.
-     * 업무의 흐름 보다는 프로그래머가 작성한 로직이 잘못되었 을 때, 기본적인 내용에 문제가 있을 때(0으로 나누는 경우) 발생한다.
+     * 업무의 흐름 보다는 프로그래머가 작성한 로직이 잘못되었을때, 기본적인 내용에 문제가 있을 때(0으로 나누는 경우) 발생한다.
      * 이 경우 기본적인 코드가 잘못된 경우가 많기 때문에 예외처리 보다는 이 예외가 아예 발생하지 않도록 처리하는 것이 올바른 처리 방법이다.
-     * <p>
-     * NoSuchAlgorithmException : 잘못된 알고리즘을 입력하여 키를 생성할 경우 발생할 수 있다. 개발시 키 생성을 정상적으로 할 수 있다면 발생하지 않는
-     * Exception이므로 Runtime Exception으로 사용한다.
-     * <p>
-     * CheckedException, UnCheckedException CheckedException - 프로그램 실행 흐름상 발생 가능성이 있는 오류를 표현한다. 프로그래머가
-     * 작성한 코드 보다는 실행 상황에 따라 발생 가능성이 있는 예외일 때 사용한다. 컴파일시 에러가 발생한다. 코드 작성시 에러 처리 로직을 작성해야 컴파일이 가능하다. Ex)
-     * SQLException, IOException
-     * <p>
-     * UnCheckedException(RuntimeException) - 코드상으로 오류가 있을 때 발생한다. 프로그래머가 작성한 로직상 오류가 있거나 실수가 있을 때
-     * 발생한다. 컴파일시에는 에러가 발생하지 않지만 실행도중 예외가 발생할 수 있다. Ex) IndexOutOfBoundException, NullPointerException
+     * NoSuchAlgorithmException : 잘못된 알고리즘을 입력하여 키를 생성할 경우 발생할 수 있다.
+     * 개발시 키 생성을 정상적으로 할 수 있다면 발생하지 않는 Exception이므로 Runtime Exception으로 사용한다.
+     * CheckedException, UnCheckedException CheckedException - 프로그램 실행 흐름상 발생 가능성이 있는 오류를 표현한다.
+     * 프로그래머가 작성한 코드 보다는 실행 상황에 따라 발생 가능성이 있는 예외일 때 사용한다. 컴파일시 에러가 발생한다.
+     * 코드 작성시 에러 처리 로직을 작성해야 컴파일이 가능하다. Ex) SQLException, IOException
+     * UnCheckedException(RuntimeException) - 코드상으로 오류가 있을 때 발생한다. 프로그래머가 작성한 로직상 오류가 있거나 실수가 있을 때 발생한다.
+     * 컴파일시에는 에러가 발생하지 않지만 실행도중 예외가 발생할 수 있다. Ex) IndexOutOfBoundException, NullPointerException
      */
     public static String encryptSHA256(String password) {
         String SHA = null;

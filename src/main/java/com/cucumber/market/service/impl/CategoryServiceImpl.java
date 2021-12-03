@@ -1,6 +1,6 @@
 package com.cucumber.market.service.impl;
 
-import com.cucumber.market.dto.*;
+import com.cucumber.market.dto.category.*;
 import com.cucumber.market.exception.CategoryNameNotFoundException;
 import com.cucumber.market.mapper.CategoryMapper;
 import com.cucumber.market.service.CategoryService;

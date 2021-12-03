@@ -1,6 +1,7 @@
 package com.cucumber.market.service.impl;
 
-import com.cucumber.market.dto.*;
+import com.cucumber.market.dto.member.*;
+import com.cucumber.market.exception.AlreadyInActiveMemberException;
 import com.cucumber.market.exception.MemberNotFoundException;
 import com.cucumber.market.exception.PasswordMismatchException;
 import com.cucumber.market.mapper.MemberMapper;
@@ -110,7 +111,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void isActivityMember(String member_id) {
         if (memberMapper.isActivityMember(member_id) == 0) {
-            throw new PasswordMismatchException("탈퇴한 계정의 아이디입니다.");
+            throw new AlreadyInActiveMemberException("탈퇴한 계정의 아이디입니다.");
         }
     }
 
@@ -120,8 +121,6 @@ public class MemberServiceImpl implements MemberService {
      */
     @Override
     public MemberUpdateInfoResponse updateMemberInfo(MemberUpdateInfoRequest memberUpdateInfoRequest, MemberDTO currentMember) {
-        //MemberDTO memberDTO = memberMapper.findByMemberId(memberUpdateInfoRequest.getMember_id()); 안쓰는데 왜있지?
-
         String encryptedNewPassword = SHA256Util.encryptSHA256(memberUpdateInfoRequest.getNewPassword());
         MemberUpdateInfoRequest updatedMemberInfo = MemberUpdateInfoRequest.builder()
                 .member_id(currentMember.getMember_id())
@@ -152,26 +151,6 @@ public class MemberServiceImpl implements MemberService {
                         .password(encryptedPassword)
                         .build()
         );
-
-/*        return MemberInactivateResponse.builder()
-                .redirectUrl(loginUrl)
-                .build();*/
     }
-
-/*    *//**
-     * 로그인 메소드
-     * @param memberIdPasswordRequest 로그인시 필요한 회원정보
-     *//*
-    @Override
-    public MemberDTO signInMember(MemberIdPasswordRequest memberIdPasswordRequest) {
-        String encryptedPassword = SHA256Util.encryptSHA256(memberIdPasswordRequest.getPassword());
-
-        return memberMapper.findByMemberIdAndPassword(
-                MemberIdPasswordRequest.builder()
-                        .member_id(memberIdPasswordRequest.getMember_id())
-                        .password(encryptedPassword)
-                        .build()
-        );
-    }*/
 }
 

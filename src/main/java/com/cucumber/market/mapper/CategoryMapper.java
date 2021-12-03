@@ -1,6 +1,6 @@
 package com.cucumber.market.mapper;
 
-import com.cucumber.market.dto.*;
+import com.cucumber.market.dto.category.*;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

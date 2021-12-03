@@ -1,8 +1,10 @@
-package com.cucumber.market.service;
+package com.cucumber.market.service.impl;
 
-import com.cucumber.market.dto.MemberSignOutResponse;
+import com.cucumber.market.dto.member.MemberSignInResponse;
+import com.cucumber.market.dto.member.MemberSignOutResponse;
 import com.cucumber.market.exception.AlreadySignInException;
 import com.cucumber.market.exception.AlreadySignOutException;
+import com.cucumber.market.service.SessionSignInService;
 import com.cucumber.market.util.SessionKeys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,14 +21,20 @@ public class SessionSignInServiceImpl implements SessionSignInService {
     @Value("${cucumber.login.url}")
     private String loginUrl;
 
+    @Value("${cucumber.default.url}")
+    private String defaultUrl;
+
     @Override
-    public void signInMember(String member_id) {
-        if (getCurrentMemberId() != null/*.equals(memberId)*/) {
-            throw new AlreadySignInException("이미 로그인된 상태입니다.");
+    public MemberSignInResponse signInMember(String member_id) {
+        if (getCurrentMemberId() != null) {
+            throw new AlreadySignInException("ID " + member_id + "는 이미 로그인된 상태입니다.");
         }
 
-        httpSession.setAttribute(SessionKeys.Member_ID, member_id);
-        System.out.println((String) httpSession.getAttribute(SessionKeys.Member_ID));
+        httpSession.setAttribute(SessionKeys.MEMBER_ID, member_id);
+
+        return MemberSignInResponse.builder()
+                .redirectUrl(defaultUrl)
+                .build();
     }
 
     @Override
@@ -43,7 +51,6 @@ public class SessionSignInServiceImpl implements SessionSignInService {
 
     @Override
     public String getCurrentMemberId() {
-        System.out.println((String) httpSession.getAttribute(SessionKeys.Member_ID));
-        return (String) httpSession.getAttribute(SessionKeys.Member_ID);
+        return (String) httpSession.getAttribute(SessionKeys.MEMBER_ID);
     }
 }

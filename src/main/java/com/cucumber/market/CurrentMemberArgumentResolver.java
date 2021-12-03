@@ -1,7 +1,7 @@
 package com.cucumber.market;
 
 import com.cucumber.market.annotation.CurrentMember;
-import com.cucumber.market.dto.MemberDTO;
+import com.cucumber.market.dto.member.MemberDTO;
 import com.cucumber.market.mapper.MemberMapper;
 import com.cucumber.market.service.SessionSignInService;
 import lombok.RequiredArgsConstructor;
@@ -24,15 +24,15 @@ public class CurrentMemberArgumentResolver implements HandlerMethodArgumentResol
 
     @Override
     public boolean supportsParameter(MethodParameter methodParameter) {
-        return methodParameter.hasParameterAnnotation(CurrentMember.class);
+        return methodParameter.getParameterAnnotation(CurrentMember.class) != null
+                && methodParameter.getParameterType().equals(MemberDTO.class);
     }
 
     @Override
     public Object resolveArgument(MethodParameter methodParameter,
                                      ModelAndViewContainer modelAndViewContainer,
                                      NativeWebRequest nativeWebRequest,
-                                     WebDataBinderFactory webDataBinderFactory) throws Exception {
-
+                                     WebDataBinderFactory webDataBinderFactory) {
         try {
             String currentMemberId = sessionSignInService.getCurrentMemberId();
 

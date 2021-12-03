@@ -1,4 +1,4 @@
-package com.cucumber.market.dto;
+package com.cucumber.market.dto.member;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -6,6 +6,5 @@ import lombok.Getter;
 @Getter
 @Builder
 public class MemberSignInResponse {
-    private String member_id;
-    private String name;
+    private String redirectUrl;
 }

@@ -1,13 +1,12 @@
 package com.cucumber.market.service;
 
-import com.cucumber.market.dto.MemberSignOutResponse;
-import com.cucumber.market.exception.AlreadySignInException;
+import com.cucumber.market.dto.member.MemberSignInResponse;
+import com.cucumber.market.dto.member.MemberSignOutResponse;
 
 public interface SessionSignInService {
+    MemberSignInResponse signInMember(String userId);
 
-    public void signInMember(String userId) throws AlreadySignInException;
+    MemberSignOutResponse signOutMember();
 
-    public MemberSignOutResponse signOutMember();
-
-    public String getCurrentMemberId();
+    String getCurrentMemberId();
 }

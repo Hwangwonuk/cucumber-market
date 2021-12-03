@@ -1,11 +1,8 @@
 package com.cucumber.market.service;
 
-import com.cucumber.market.dto.*;
-
-import java.lang.reflect.Member;
+import com.cucumber.market.dto.member.*;
 
 public interface MemberService {
-
     MemberSignUpResponse signUpMember(MemberSignUpRequest memberSignUpRequest);
 
     void isDuplicateMemberId(String member_id);
@@ -21,6 +18,4 @@ public interface MemberService {
     void inactivateMember(MemberIdPasswordRequest memberInactivateRequest, MemberDTO currentMember);
 
     MemberDTO findMemberInfo(String member_id);
-
-//    MemberDTO signInMember(MemberIdPasswordRequest memberIdPasswordRequest);
 }

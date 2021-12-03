@@ -1,10 +1,10 @@
-package com.cucumber.market.dto;
+package com.cucumber.market.dto.member;
 
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-public class SmallCategoryRegisterResponse {
+public class MemberSignUpResponse {
     private String redirectUrl;
 }

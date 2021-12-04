@@ -1,13 +1,10 @@
 package com.cucumber.market.config;
 
-import com.cucumber.market.dto.member.CurrentMemberInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.ser.std.ObjectArraySerializer;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.jackson.JsonObjectSerializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -15,7 +12,6 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
@@ -49,11 +45,13 @@ public class RedisConfig {
      *
      * writerWithDefaultPrettyPrint().writeValueAs... JSON 파일이 정렬된 상태로 저장
      */
+
+    // redis에서 값을 저장하고 가져오는 과정에서, LocalDateTime이나 LocalDateTime 형식은 역직렬화하는 과정에서 에러발생할 때 사용하는 것이 objectMapper
     @Bean
     public ObjectMapper objectMapper() {
         ObjectMapper mapper = new ObjectMapper();
-        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        mapper.registerModules(new JavaTimeModule(), new Jdk8Module());
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // timestamp 형식 안따르도록 설정
+        mapper.registerModules(new JavaTimeModule(), new Jdk8Module()); // LocalDateTime 매핑을 위해 모듈 활성화
         return mapper;
     }
 
@@ -69,6 +67,8 @@ public class RedisConfig {
      * 비동기 기능을 제공하지 않음
      * 멀티쓰레드환경에서 쓰레드 안전을 보장하지 않음
      */
+
+    // redisConnectionFactory 를 통해 외부 redis 를 연결
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
@@ -78,6 +78,7 @@ public class RedisConfig {
         return new LettuceConnectionFactory(redisStandaloneConfiguration);
     }
 
+    // RedisTemplate을 통해 RedisConnection에서 넘겨준 byte 값을 객체 직렬화
     @Bean
     RedisTemplate<String, Object> redisTemplate() {
 

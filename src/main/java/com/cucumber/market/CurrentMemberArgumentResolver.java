@@ -2,15 +2,12 @@ package com.cucumber.market;
 
 import com.cucumber.market.annotation.CurrentMember;
 import com.cucumber.market.dto.member.CurrentMemberInfo;
-import com.cucumber.market.dto.member.MemberInfo;
 import com.cucumber.market.mapper.MemberMapper;
 import com.cucumber.market.service.SessionSignInService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;

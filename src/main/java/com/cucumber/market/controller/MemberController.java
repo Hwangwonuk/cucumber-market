@@ -1,5 +1,6 @@
 package com.cucumber.market.controller;
 
+import com.cucumber.market.annotation.CheckAdmin;
 import com.cucumber.market.annotation.CheckSignIn;
 import com.cucumber.market.annotation.CurrentMember;
 import com.cucumber.market.dto.member.*;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /*
 @RestController
@@ -61,27 +63,28 @@ public class MemberController {
     // 회원조회(회원정보 - 마이페이지)
     @GetMapping("/myInfo")
     @CheckSignIn
-    public ResponseEntity<MemberDTO> findMemberInfo(@CurrentMember MemberDTO currentMember) {
-        return new ResponseEntity<>(memberService.findMemberInfo(currentMember.getMember_id()), HttpStatus.OK);
+    public ResponseEntity<MemberInfo> findMemberInfo(@CurrentMember CurrentMemberInfo currentMemberInfo) {
+
+        return new ResponseEntity<>(memberService.findMemberInfo(currentMemberInfo.getMember_id()), HttpStatus.OK);
     }
 
     // 회원정보 수정(이름, 비밀번호, 전화번호, 주소)
     @PatchMapping("/myInfo")
     @CheckSignIn
     public ResponseEntity<MemberUpdateInfoResponse> updateMemberInfo(@Valid @RequestBody MemberUpdateInfoRequest request,
-                                                                     @CurrentMember MemberDTO currentMember) {
-        memberService.isMatchIdAndPassword(currentMember.getMember_id(), request.getOldPassword());
+                                                                     @CurrentMember CurrentMemberInfo currentMemberInfo) {
+        memberService.isMatchIdAndPassword(currentMemberInfo.getMember_id(), request.getOldPassword());
 
-        return new ResponseEntity<>(memberService.updateMemberInfo(request, currentMember), HttpStatus.FOUND); // 회원정보 수정 + 리다이렉트
+        return new ResponseEntity<>(memberService.updateMemberInfo(request, currentMemberInfo), HttpStatus.FOUND); // 회원정보 수정 + 리다이렉트
     }
 
     // 회원탈퇴(비활성화)
     @PatchMapping("/inactivate")
     @CheckSignIn
     public ResponseEntity<MemberSignOutResponse> inactivateMember(@Valid @RequestBody MemberIdPasswordRequest request,
-                                                                     @CurrentMember MemberDTO currentMember) {
-        memberService.isMatchIdAndPassword(currentMember.getMember_id(), request.getPassword()); // 입력한 비번과 현재 접속아이디 일치여부 검사
-        memberService.inactivateMember(request, currentMember); // 회원탈퇴여부 검사
+                                                                     @CurrentMember CurrentMemberInfo currentMemberInfo) {
+        memberService.isMatchIdAndPassword(currentMemberInfo.getMember_id(), request.getPassword()); // 입력한 비번과 현재 접속아이디 일치여부 검사
+        memberService.inactivateMember(request, currentMemberInfo); // 회원탈퇴여부 검사
 
         return new ResponseEntity<>(sessionSignInService.signOutMember(), HttpStatus.FOUND); // 로그아웃 + 리다이렉트
     }
@@ -92,8 +95,9 @@ public class MemberController {
         memberService.findMemberIdCount(request.getMember_id()); // 아이디 존재여부 검사
         memberService.isMatchIdAndPassword(request.getMember_id(), request.getPassword()); // 아이디 비밀번호 일치여부 검사
         memberService.isActivityMember(request.getMember_id());// 회원 탈퇴상태 여부검사
+        CurrentMemberInfo currentMemberInfo = memberService.getCurrentMemberInfo(request.getMember_id());// 회원 아이디, 관리자여부 가져오기
 
-        return new ResponseEntity<>(sessionSignInService.signInMember(request.getMember_id()), HttpStatus.OK); // 로그인(세션 저장)
+        return new ResponseEntity<>(sessionSignInService.signInMember(currentMemberInfo), HttpStatus.OK); // 로그인(세션 저장)
     }
 
     // 로그아웃
@@ -102,4 +106,23 @@ public class MemberController {
         return new ResponseEntity<>(sessionSignInService.signOutMember(), HttpStatus.OK);
     }
 
+    // 관리자
+
+    // 전체회원 조회
+    @GetMapping
+    @CheckAdmin
+    @CheckSignIn
+    public ResponseEntity<List<Member>> findAllMember(@CurrentMember CurrentMemberInfo currentMemberInfo) {
+        return new ResponseEntity<>(memberService.findAllMember(), HttpStatus.OK);
+    }
+
+    // 관리자 등록 - 기존회원 관리자로 승격
+    @PostMapping
+    @CheckAdmin
+    @CheckSignIn
+    public ResponseEntity<String> registerAdmin(@Valid @RequestBody RegisterAdminRequest request) {
+        memberService.findMemberIdCount(request.getMember_id());
+        memberService.registerAdmin(request.getMember_id());
+        return new ResponseEntity<>("관리자 승급완료", HttpStatus.OK);
+    }
 }

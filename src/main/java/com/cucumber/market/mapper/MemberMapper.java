@@ -1,11 +1,10 @@
 package com.cucumber.market.mapper;
 
-import com.cucumber.market.dto.member.MemberDTO;
-import com.cucumber.market.dto.member.MemberIdPasswordRequest;
-import com.cucumber.market.dto.member.MemberSignUpRequest;
-import com.cucumber.market.dto.member.MemberUpdateInfoRequest;
+import com.cucumber.market.dto.member.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 @Mapper
 public interface MemberMapper {
@@ -18,9 +17,15 @@ public interface MemberMapper {
 
     int isActivityMember(String member_id);
 
-    MemberDTO findByMemberId(String member_id);
+    MemberInfo findByMemberId(String member_id);
 
     void updateMemberInfo(MemberUpdateInfoRequest memberUpdateInfoRequest);
 
     void inactivateMember(MemberIdPasswordRequest memberIdPasswordRequest);
+
+    CurrentMemberInfo getCurrentMemberInfo(String member_id);
+
+    List<Member> findAllMember();
+
+    void registerAdmin(String member_id);
 }

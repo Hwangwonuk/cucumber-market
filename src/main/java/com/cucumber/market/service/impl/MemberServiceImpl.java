@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -66,17 +68,34 @@ public class MemberServiceImpl implements MemberService {
      * @param member_id 현재 로그인한 회원의 아이디
      */
     @Override
-    public MemberDTO findMemberInfo(String member_id) {
-        MemberDTO memberDTO = memberMapper.findByMemberId(member_id);
-        // Password를 넘겨주지 않게 하기 위해 새로운 MemberDTO를 Builder 생성자로 생성
-        return MemberDTO.builder()
-                .member_id(memberDTO.getMember_id())
-                .name(memberDTO.getName())
-                .address(memberDTO.getAddress())
-                .phone(memberDTO.getPhone())
-                .isactive(memberDTO.getIsactive())
-                .isadmin(memberDTO.getIsadmin())
-                .build();
+    public MemberInfo findMemberInfo(String member_id) {
+        return memberMapper.findByMemberId(member_id);
+    }
+
+    /**
+     * 현재회원 정보조회 메소드(아이디, 관리자여부)
+     * @param member_id 세션에 저장된 아이디
+     */
+    @Override
+    public CurrentMemberInfo getCurrentMemberInfo(String member_id) {
+        return memberMapper.getCurrentMemberInfo(member_id);
+    }
+
+    /**
+     * 전체회원 정보조회 메소드
+     */
+
+    @Override
+    public List<Member> findAllMember() {
+        return memberMapper.findAllMember();
+    }
+
+    /**
+     * 관리자 등록 - 기존회원 관리자로 승격 메소드
+     */
+    @Override
+    public void registerAdmin(String member_id) {
+        memberMapper.registerAdmin(member_id);
     }
 
     /**
@@ -120,10 +139,10 @@ public class MemberServiceImpl implements MemberService {
      * @param memberUpdateInfoRequest 정보 수정시 필요한 회원정보
      */
     @Override
-    public MemberUpdateInfoResponse updateMemberInfo(MemberUpdateInfoRequest memberUpdateInfoRequest, MemberDTO currentMember) {
+    public MemberUpdateInfoResponse updateMemberInfo(MemberUpdateInfoRequest memberUpdateInfoRequest, CurrentMemberInfo currentMemberInfo) {
         String encryptedNewPassword = SHA256Util.encryptSHA256(memberUpdateInfoRequest.getNewPassword());
         MemberUpdateInfoRequest updatedMemberInfo = MemberUpdateInfoRequest.builder()
-                .member_id(currentMember.getMember_id())
+                .member_id(currentMemberInfo.getMember_id())
                 .newPassword(encryptedNewPassword)
                 .name(memberUpdateInfoRequest.getName())
                 .address(memberUpdateInfoRequest.getAddress())
@@ -142,12 +161,12 @@ public class MemberServiceImpl implements MemberService {
      * @param memberIdPasswordRequest 비활성화시 필요한 회원정보
      */
     @Override
-    public void inactivateMember(MemberIdPasswordRequest memberIdPasswordRequest, MemberDTO currentMember) {
+    public void inactivateMember(MemberIdPasswordRequest memberIdPasswordRequest, CurrentMemberInfo currentMemberInfo) {
 
         String encryptedPassword = SHA256Util.encryptSHA256(memberIdPasswordRequest.getPassword());
         memberMapper.inactivateMember(
                 MemberIdPasswordRequest.builder()
-                        .member_id(currentMember.getMember_id())
+                        .member_id(currentMemberInfo.getMember_id())
                         .password(encryptedPassword)
                         .build()
         );

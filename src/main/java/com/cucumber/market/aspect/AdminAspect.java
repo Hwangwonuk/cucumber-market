@@ -12,14 +12,14 @@ import org.springframework.web.client.HttpClientErrorException;
 @Component
 @Aspect
 @RequiredArgsConstructor
-@Order(1)
-public class SignInAspect {
+@Order(2)
+public class AdminAspect {
 
     private final SessionSignInService sessionSignInService;
 
-    @Before("@annotation(com.cucumber.market.annotation.CheckSignIn)")
-    public void checkLogin() throws HttpClientErrorException {
-        if (sessionSignInService.getCurrentMemberInfo() == null) {
+    @Before("@annotation(com.cucumber.market.annotation.CheckAdmin)")
+    public void checkAdmin() throws HttpClientErrorException {
+        if (sessionSignInService.getCurrentMemberInfo().getIsAdmin().equals("n")) {
             throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
         }
     }

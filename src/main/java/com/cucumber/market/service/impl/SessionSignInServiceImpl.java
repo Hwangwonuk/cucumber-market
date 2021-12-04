@@ -1,5 +1,6 @@
 package com.cucumber.market.service.impl;
 
+import com.cucumber.market.dto.member.CurrentMemberInfo;
 import com.cucumber.market.dto.member.MemberSignInResponse;
 import com.cucumber.market.dto.member.MemberSignOutResponse;
 import com.cucumber.market.exception.AlreadySignInException;
@@ -25,12 +26,12 @@ public class SessionSignInServiceImpl implements SessionSignInService {
     private String defaultUrl;
 
     @Override
-    public MemberSignInResponse signInMember(String member_id) {
-        if (getCurrentMemberId() != null) {
-            throw new AlreadySignInException("ID " + member_id + "는 이미 로그인된 상태입니다.");
+    public MemberSignInResponse signInMember(CurrentMemberInfo currentMemberInfo) {
+        if (getCurrentMemberInfo() != null) {
+            throw new AlreadySignInException("ID " + currentMemberInfo.getMember_id() + "는 이미 로그인된 상태입니다.");
         }
 
-        httpSession.setAttribute(SessionKeys.MEMBER_ID, member_id);
+        httpSession.setAttribute(SessionKeys.CURRENT_MEMBER, currentMemberInfo);
 
         return MemberSignInResponse.builder()
                 .redirectUrl(defaultUrl)
@@ -39,7 +40,7 @@ public class SessionSignInServiceImpl implements SessionSignInService {
 
     @Override
     public MemberSignOutResponse signOutMember() {
-        if (getCurrentMemberId() == null) {
+        if (getCurrentMemberInfo() == null) {
             throw new AlreadySignOutException("이미 로그아웃된 상태입니다.");
         }
 
@@ -50,7 +51,7 @@ public class SessionSignInServiceImpl implements SessionSignInService {
     }
 
     @Override
-    public String getCurrentMemberId() {
-        return (String) httpSession.getAttribute(SessionKeys.MEMBER_ID);
+    public CurrentMemberInfo getCurrentMemberInfo() {
+        return (CurrentMemberInfo) httpSession.getAttribute(SessionKeys.CURRENT_MEMBER);
     }
 }

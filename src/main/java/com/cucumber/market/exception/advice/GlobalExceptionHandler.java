@@ -83,4 +83,12 @@ public class GlobalExceptionHandler {
         ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+
+    // 조회 데이터의 페이지 번호가 자연수가 아닌 경우
+    @ExceptionHandler(PageNoPositiveException.class)
+    public ResponseEntity<ExceptionResponse> pageNegativeNotAvailableException(final PageNoPositiveException ex) {
+        log.error(ex.getMessage(), ex);
+        ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 }

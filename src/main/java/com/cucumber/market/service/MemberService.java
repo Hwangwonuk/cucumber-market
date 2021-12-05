@@ -23,7 +23,7 @@ public interface MemberService {
 
     CurrentMemberInfo getCurrentMemberInfo(String member_id);
 
-    List<Member> findAllMember();
+    List<Member> findMemberPagination(Integer pageNum, Integer contentNum);
 
     void registerAdmin(String member_id);
 }

@@ -64,7 +64,6 @@ public class MemberController {
     @GetMapping("/myInfo")
     @CheckSignIn
     public ResponseEntity<MemberInfo> findMemberInfo(@CurrentMember CurrentMemberInfo currentMemberInfo) {
-
         return new ResponseEntity<>(memberService.findMemberInfo(currentMemberInfo.getMember_id()), HttpStatus.OK);
     }
 
@@ -108,13 +107,13 @@ public class MemberController {
 
     // 관리자
 
-    // TODO: 2021-12-05 페이징 (OFFSET, LIMIT)
-    // 전체회원 조회
+    // 전체회원 조회 (페이징 적용)
     @GetMapping
     @CheckAdmin
     @CheckSignIn
-    public ResponseEntity<List<Member>> findAllMember(@CurrentMember CurrentMemberInfo currentMemberInfo) {
-        return new ResponseEntity<>(memberService.findAllMember(), HttpStatus.OK);
+    public ResponseEntity<List<Member>> findMemberByPagination(@RequestParam(defaultValue = "1") Integer pageNum,
+                                                               @RequestParam(defaultValue = "10") Integer contentNum) {
+        return new ResponseEntity<>(memberService.findMemberPagination(pageNum, contentNum), HttpStatus.OK);
     }
 
 

@@ -55,9 +55,11 @@
         WHERE member_id = #{member_id}
     </select>
 
-    <select id="findAllMember" resultType="com.cucumber.market.dto.member.Member">
+    <select id="findMemberByPagination"
+            resultType="com.cucumber.market.dto.member.Member">
         SELECT *
         FROM member
+        ORDER BY createtime DESC LIMIT #{contentNum} OFFSET #{offset};
     </select>
 
     <update id="registerAdmin">

@@ -3,6 +3,7 @@ package com.cucumber.market.service.impl;
 import com.cucumber.market.dto.member.*;
 import com.cucumber.market.exception.AlreadyInActiveMemberException;
 import com.cucumber.market.exception.MemberNotFoundException;
+import com.cucumber.market.exception.PageNoPositiveException;
 import com.cucumber.market.exception.PasswordMismatchException;
 import com.cucumber.market.mapper.MemberMapper;
 import com.cucumber.market.service.MemberService;
@@ -83,15 +84,29 @@ public class MemberServiceImpl implements MemberService {
 
     /**
      * 전체회원 정보조회 메소드
+     * @param pageNum 데이터를 출력할 페이지
+     * @param contentNum 한 페이지에 출력할 데이터 수
      */
-
     @Override
-    public List<Member> findAllMember() {
-        return memberMapper.findAllMember();
+    public List<Member> findMemberPagination(Integer pageNum, Integer contentNum) {
+        // pageNum은 1부터 시작하는 것을 가정
+        if(pageNum <= 0)
+            throw new PageNoPositiveException("페이지는 1 이상 이어야 합니다.");
+
+        Integer offset = (pageNum - 1) * contentNum;
+        // offset으로 DB에서 몇번째 데이터만큼 건너뛸것인지 결정
+        // contentNum으로 한 페이지에 몇개의 데이터를 보여줄지 결정
+        // 만약 특정 페이지에 보여줄 데이터가 부족하다면 부족한대로 Response에 넘겨줌
+        // 예) DB에 데이터 10개 있을때
+        // contentNum이 4, offset이 8 (즉, pageNum이 3) -> 보여줄 데이터는 2개
+        // contentNum이 5, offset이 10 (즉, pageNum이 3) -> 보여줄 데이터는 0개
+
+        return memberMapper.findMemberByPagination(contentNum, offset);
     }
 
     /**
      * 관리자 등록 - 기존회원 관리자로 승격 메소드
+     * @param member_id 관리자로 승격할 회원 아이디
      */
     @Override
     public void registerAdmin(String member_id) {

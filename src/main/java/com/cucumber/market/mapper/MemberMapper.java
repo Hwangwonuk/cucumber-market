@@ -25,7 +25,7 @@ public interface MemberMapper {
 
     CurrentMemberInfo getCurrentMemberInfo(String member_id);
 
-    List<Member> findAllMember();
+    List<Member> findMemberByPagination(@Param("contentNum")Integer contentNum, @Param("offset")Integer offset);
 
     void registerAdmin(String member_id);
 }

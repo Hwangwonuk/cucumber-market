@@ -19,5 +19,5 @@ public interface CategoryMapper {
 
     void updateSmallCategory(SmallCategoryUpdateRequest smallCategoryUpdateRequest);
 
-    List<CategoryDTO> findCategoryNames(String bigCategoryName);
+    List<CategoryNamesResopnse> findCategoryNames(String bigCategoryName);
 }

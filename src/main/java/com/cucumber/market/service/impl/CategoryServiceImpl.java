@@ -120,7 +120,7 @@ public class CategoryServiceImpl implements CategoryService {
      * @return
      */
     @Override
-    public List<CategoryDTO> findCategoryNames(CategoryNamesRequest categoryNamesRequest) {
+    public List<CategoryNamesResopnse> findCategoryNames(CategoryNamesRequest categoryNamesRequest) {
         return categoryMapper.findCategoryNames(categoryNamesRequest.getBigCategoryName());
     }
 

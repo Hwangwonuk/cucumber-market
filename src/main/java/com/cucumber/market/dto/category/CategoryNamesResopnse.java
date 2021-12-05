@@ -5,6 +5,6 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class CategoryDTO {
+public class CategoryNamesResopnse {
     private String smallCategoryName;
 }

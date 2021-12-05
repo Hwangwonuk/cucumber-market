@@ -12,9 +12,6 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
-// TODO: @EnableWebMvc, implements WebMvcConfigurer, @Override public void addResourceHandlers(ResourceHandlerRegistry registry)
-// 추가해줘야 Swagger 실행가능 왜그런지 알아보자, ArgumentResolverConfig랑 합치면될듯
-
 @Configuration
 @EnableWebMvc
 public class SpringfoxConfig implements WebMvcConfigurer {
@@ -30,9 +27,10 @@ public class SpringfoxConfig implements WebMvcConfigurer {
                 .apiInfo(apiInfo()); // Springfox 문서화 UI로 노출할 정보
     }
 
-    @Override public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("swagger-ui.html") .addResourceLocations("classpath:/META-INF/resources/");
-        registry.addResourceHandler("/webjars/**") .addResourceLocations("classpath:/META-INF/resources/webjars/");
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
+        registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 
     /*

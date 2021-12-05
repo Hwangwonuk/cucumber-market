@@ -31,14 +31,6 @@ public class CurrentMemberArgumentResolver implements HandlerMethodArgumentResol
                                      ModelAndViewContainer modelAndViewContainer,
                                      NativeWebRequest nativeWebRequest,
                                      WebDataBinderFactory webDataBinderFactory) {
-        /*try {
-            String currentMemberId = sessionSignInService.getCurrentMemberInfo().getMember_id();
-
-            return memberMapper.getCurrentMemberInfo(currentMemberId);
-        } catch (IllegalArgumentException e) {
-            throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
-        }*/
-        // TODO:이미 로그인 상태를 검사하기 때문에 try,catch가 의미가있나? 세션 만료를 생각해서? 이미 SignInAspect가 하기때문에 필요없을듯
         return sessionSignInService.getCurrentMemberInfo();
     }
 }

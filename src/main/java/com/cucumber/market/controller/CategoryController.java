@@ -33,7 +33,7 @@ public class CategoryController {
     @GetMapping("/big")
     @CheckSignIn
     @CheckAdmin
-    public ResponseEntity<List<CategoryDTO>> findCategoryNames(@Valid CategoryNamesRequest request) {
+    public ResponseEntity<List<CategoryNamesResopnse>> findCategoryNames(@Valid CategoryNamesRequest request) {
         return new ResponseEntity<>(categoryService.findCategoryNames(request), HttpStatus.OK);
     }
 

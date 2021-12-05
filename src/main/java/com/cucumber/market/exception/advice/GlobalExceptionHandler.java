@@ -36,6 +36,22 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
 
+    // 로그인 되지 않은 상태에서 로그인이 필요한 API를 호출할때
+    @ExceptionHandler(NotYetSignInException.class)
+    public ResponseEntity<ExceptionResponse> notYetSignInException(final NotYetSignInException ex) {
+        log.error(ex.getMessage(), ex);
+        ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+    }
+
+    // ADMIN 권한이 있어야하는데 없을 때
+    @ExceptionHandler(NoAdminAuthorityException.class)
+    public ResponseEntity<ExceptionResponse> noAdminAuthorityException(final NoAdminAuthorityException ex) {
+        log.error(ex.getMessage(), ex);
+        ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+    }
+
     // 입력한 분류명(Category)이 없을 때
     @ExceptionHandler(CategoryNameNotFoundException.class)
     public ResponseEntity<ExceptionResponse> categoryNameNotFoundException(final CategoryNameNotFoundException ex) {

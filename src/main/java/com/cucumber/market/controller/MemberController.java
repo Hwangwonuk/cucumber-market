@@ -108,6 +108,7 @@ public class MemberController {
 
     // 관리자
 
+    // TODO: 2021-12-05 페이징 (OFFSET, LIMIT)
     // 전체회원 조회
     @GetMapping
     @CheckAdmin
@@ -115,6 +116,7 @@ public class MemberController {
     public ResponseEntity<List<Member>> findAllMember(@CurrentMember CurrentMemberInfo currentMemberInfo) {
         return new ResponseEntity<>(memberService.findAllMember(), HttpStatus.OK);
     }
+
 
     // 관리자 등록 - 기존회원 관리자로 승격
     @PostMapping

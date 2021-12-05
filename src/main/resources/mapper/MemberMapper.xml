@@ -38,7 +38,7 @@
 
     <update id="updateMemberInfo" parameterType="com.cucumber.market.dto.member.MemberUpdateInfoRequest">
         UPDATE member
-        SET password = #{newPassword}, name = #{name}, phone = #{phone}, address = #{address}
+        SET password = #{newPassword}, name = #{name}, phone = #{phone}, address = #{address}, updatetime = now()
         WHERE member_id = #{member_id}
     </update>
 
@@ -62,7 +62,7 @@
 
     <update id="registerAdmin">
         UPDATE member
-        SET isadmin = 'y'
+        SET isadmin = 'y', updatetime = now()
         WHERE member_id = #{member_id}
     </update>
 

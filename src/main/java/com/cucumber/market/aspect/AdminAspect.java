@@ -1,6 +1,6 @@
 package com.cucumber.market.aspect;
 
-import com.cucumber.market.exception.NotYetSignInException;
+import com.cucumber.market.exception.NoAdminAuthorityException;
 import com.cucumber.market.service.SessionSignInService;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.annotation.Aspect;
@@ -11,15 +11,15 @@ import org.springframework.stereotype.Component;
 @Component
 @Aspect
 @RequiredArgsConstructor
-@Order(1)
-public class SignInAspect {
+@Order(2)
+public class AdminAspect {
 
     private final SessionSignInService sessionSignInService;
 
-    @Before("@annotation(com.cucumber.market.annotation.CheckSignIn)")
-    public void checkLogin() {
-        if (sessionSignInService.getCurrentMemberInfo() == null) {
-            throw new NotYetSignInException("아직 로그인되지 않았습니다.");
+    @Before("@annotation(com.cucumber.market.annotation.CheckAdmin)")
+    public void checkAdmin() {
+        if (sessionSignInService.getCurrentMemberInfo().getIsAdmin().equals("n")) {
+            throw new NoAdminAuthorityException("ADMIN 권한이 없습니다.");
         }
     }
 }

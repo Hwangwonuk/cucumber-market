@@ -21,5 +21,5 @@ public interface CategoryService {
 
     CategoryResponse updateSmallCategory(SmallCategoryUpdateRequest smallCategoryUpdateRequest);
 
-    List<CategoryDTO> findCategoryNames(CategoryNamesRequest categoryNamesRequest);
+    List<CategoryNamesResopnse> findCategoryNames(CategoryNamesRequest categoryNamesRequest);
 }

@@ -2,7 +2,6 @@ package com.cucumber.market;
 
 import com.cucumber.market.annotation.CurrentMember;
 import com.cucumber.market.dto.member.CurrentMemberInfo;
-import com.cucumber.market.mapper.MemberMapper;
 import com.cucumber.market.service.SessionSignInService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
@@ -18,8 +17,6 @@ public class CurrentMemberArgumentResolver implements HandlerMethodArgumentResol
 
     private final SessionSignInService sessionSignInService;
 
-    private final MemberMapper memberMapper;
-
     @Override
     public boolean supportsParameter(MethodParameter methodParameter) {
         return methodParameter.getParameterAnnotation(CurrentMember.class) != null
@@ -28,9 +25,9 @@ public class CurrentMemberArgumentResolver implements HandlerMethodArgumentResol
 
     @Override
     public Object resolveArgument(MethodParameter methodParameter,
-                                     ModelAndViewContainer modelAndViewContainer,
-                                     NativeWebRequest nativeWebRequest,
-                                     WebDataBinderFactory webDataBinderFactory) {
+                                  ModelAndViewContainer modelAndViewContainer,
+                                  NativeWebRequest nativeWebRequest,
+                                  WebDataBinderFactory webDataBinderFactory) {
         return sessionSignInService.getCurrentMemberInfo();
     }
 }

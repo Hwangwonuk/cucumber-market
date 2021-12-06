@@ -13,7 +13,7 @@ public interface MemberMapper {
     int findMemberIdCount(String member_id);
 
     // TODO: 2021-12-04 왜 여기만 @Param을 해주어야 되는가?
-    int isMatchIdAndPassword(@Param("member_id")String member_id, @Param("password")String password);
+    int isMatchIdAndPassword(@Param("member_id") String member_id, @Param("password") String password);
 
     int isActivityMember(String member_id);
 
@@ -25,7 +25,7 @@ public interface MemberMapper {
 
     CurrentMemberInfo getCurrentMemberInfo(String member_id);
 
-    List<Member> findMemberByPagination(@Param("contentNum")Integer contentNum, @Param("offset")Integer offset);
+    List<Member> findMemberByPagination(@Param("contentNum") Integer contentNum, @Param("offset") Integer offset);
 
     void registerAdmin(String member_id);
 }

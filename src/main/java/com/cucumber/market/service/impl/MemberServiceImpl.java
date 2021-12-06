@@ -32,6 +32,7 @@ public class MemberServiceImpl implements MemberService {
 
     /**
      * 회원가입 메소드
+     *
      * @param memberSignUpRequest 가입시 저장할 회원정보
      */
     @Override
@@ -55,6 +56,7 @@ public class MemberServiceImpl implements MemberService {
 
     /**
      * 회원 아이디 중복 검사
+     *
      * @param member_id 중복 검사할 회원 아이디
      */
     @Override
@@ -66,6 +68,7 @@ public class MemberServiceImpl implements MemberService {
 
     /**
      * 회원조회(회원정보) 메소드
+     *
      * @param member_id 현재 로그인한 회원의 아이디
      */
     @Override
@@ -75,6 +78,7 @@ public class MemberServiceImpl implements MemberService {
 
     /**
      * 현재회원 정보조회 메소드(아이디, 관리자여부)
+     *
      * @param member_id 세션에 저장된 아이디
      */
     @Override
@@ -84,13 +88,14 @@ public class MemberServiceImpl implements MemberService {
 
     /**
      * 전체회원 정보조회 메소드
-     * @param pageNum 데이터를 출력할 페이지
+     *
+     * @param pageNum    데이터를 출력할 페이지
      * @param contentNum 한 페이지에 출력할 데이터 수
      */
     @Override
     public List<Member> findMemberPagination(Integer pageNum, Integer contentNum) {
         // pageNum은 1부터 시작하는 것을 가정
-        if(pageNum <= 0)
+        if (pageNum <= 0)
             throw new PageNoPositiveException("페이지는 1 이상 이어야 합니다.");
 
         Integer offset = (pageNum - 1) * contentNum;
@@ -106,6 +111,7 @@ public class MemberServiceImpl implements MemberService {
 
     /**
      * 관리자 등록 - 기존회원 관리자로 승격 메소드
+     *
      * @param member_id 관리자로 승격할 회원 아이디
      */
     @Override
@@ -115,6 +121,7 @@ public class MemberServiceImpl implements MemberService {
 
     /**
      * 회원아이디 존재여부 검사 메소드
+     *
      * @param member_id 중복 검사할 회원 아이디
      */
     @Override
@@ -126,8 +133,9 @@ public class MemberServiceImpl implements MemberService {
 
     /**
      * 아이디 비밀번호 일치여부 검사 메소드
+     *
      * @param member_id 입력한 아이디
-     * @param password 입력한 패스워드
+     * @param password  입력한 패스워드
      */
 
     @Override
@@ -140,6 +148,7 @@ public class MemberServiceImpl implements MemberService {
 
     /**
      * 회원 탈퇴여부 검사 메소드
+     *
      * @param member_id 입력한 아이디
      */
     @Override
@@ -151,6 +160,7 @@ public class MemberServiceImpl implements MemberService {
 
     /**
      * 회원정보 수정 메소드
+     *
      * @param memberUpdateInfoRequest 정보 수정시 필요한 회원정보
      */
     @Override
@@ -173,6 +183,7 @@ public class MemberServiceImpl implements MemberService {
 
     /**
      * 회원 비활성화(탈퇴) 메소드
+     *
      * @param memberIdPasswordRequest 비활성화시 필요한 회원정보
      */
     @Override

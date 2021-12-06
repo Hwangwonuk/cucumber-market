@@ -22,6 +22,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     /**
      * 대분류 등록 메소드
+     *
      * @param bigCategoryRegisterRequest 대분류 등록 시 저장할 이름
      */
     @Override
@@ -35,6 +36,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     /**
      * 대분류명 중복검사 메소드
+     *
      * @param bigCategoryName 중복 검사할 회원 아이디
      */
     @Override
@@ -46,6 +48,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     /**
      * 대분류 이름 수정 메소드
+     *
      * @param bigCategoryUpdateRequest 원래 대분류명, 변경할 대분류명
      */
     @Override
@@ -58,6 +61,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     /**
      * 소분류 이름 수정 메소드
+     *
      * @param smallCategoryUpdateRequest 대분류명, 원래 소분류명, 변경할 소분류명
      */
     @Override
@@ -70,6 +74,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     /**
      * 소분류 등록 메소드
+     *
      * @param smallCategoryRegisterRequest 소분류 등록 시 저장할 이름
      */
     @Override
@@ -83,6 +88,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     /**
      * 대분류명 존재여부 검사 메소드
+     *
      * @param bigCategoryName 중복 검사할 회원 아이디
      */
     @Override
@@ -94,6 +100,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     /**
      * 소분류명 중복검사 메소드
+     *
      * @param smallCategoryName 중복 검사할 회원 아이디
      */
     @Override
@@ -105,6 +112,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     /**
      * 소분류명 존재여부 검사 메소드
+     *
      * @param smallCategoryName 존재하는지 확인하기 위한 소분류명
      */
     @Override
@@ -116,6 +124,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     /**
      * 대분류명에 해당하는 소분류명 찾기 메소드
+     *
      * @param categoryNamesRequest 소분류를 불러올 대분류 이름
      * @return
      */

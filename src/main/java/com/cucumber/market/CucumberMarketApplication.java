@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class CucumberMarketApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(CucumberMarketApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(CucumberMarketApplication.class, args);
+    }
 
 }

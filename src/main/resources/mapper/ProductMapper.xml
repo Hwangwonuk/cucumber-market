@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cucumber.market.mapper.ProductMapper">
+
+    <insert id="uploadProduct" parameterType="com.cucumber.market.dto.product.ProductUploadForm">
+        INSERT INTO product (big_category_name, small_category_name, member_id, title, content, price, delivery_price)
+        VALUES (#{bigCategoryName}, #{smallCategoryName}, #{member_id}, #{title}, #{content}, #{price}, #{deliveryPrice})
+    </insert>
+
+    <select id="getMyLatestProduct" resultType="int">
+        SELECT product_idx
+        FROM product
+        WHERE member_id = #{member_id}
+        ORDER BY createtime DESC LIMIT 1
+    </select>
+
+    <update id="updateThumbnailIdx" parameterType="int">
+        UPDATE product
+        SET thumbnail_file_idx = #{thumbnailIdx}
+        WHERE product_idx = #{productIdx}
+    </update>
+
+</mapper>

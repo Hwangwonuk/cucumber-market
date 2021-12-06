@@ -75,7 +75,7 @@ public class GlobalExceptionHandler {
         ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
-    
+
     // 이미 탈퇴한 상태의 회원의 정보로 로그인을 시도할 때
     @ExceptionHandler(AlreadyInActiveMemberException.class)
     public ResponseEntity<ExceptionResponse> alreadyInActiveMemberException(final AlreadyInActiveMemberException ex) {

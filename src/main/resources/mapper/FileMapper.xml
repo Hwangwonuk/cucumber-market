@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cucumber.market.mapper.FileMapper">
+
+    <insert id="save" parameterType="java.util.List">
+        INSERT INTO file (product_idx, uploadfilename, storefileName)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+        (#{item.pk}, #{item.uploadFileName}, #{item.storeFileName})
+        </foreach>
+    </insert>
+
+    <select id="getMyThumbnailIdx" resultType="int">
+        SELECT file_idx
+        FROM file
+        WHERE product_idx = #{productIdx}
+        ORDER BY file_idx ASC LIMIT 1
+    </select>
+
+</mapper>

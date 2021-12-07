@@ -70,91 +70,91 @@ public class ProductController {
     // 상품찜(중복불가, 본인상품 찜 가능)
     @PostMapping("/{productIdx}/hope")
     @CheckSignIn
-    public ResponseEntity<?> registerHope(@PathVariable int productIdx,
+    public ResponseEntity<Void> registerHope(@PathVariable int productIdx,
                                   @CurrentMember CurrentMemberInfo currentMemberInfo) {
         productService.checkDuplicateHope(productIdx, currentMemberInfo.getMember_id());
         productService.registerHope(productIdx, currentMemberInfo.getMember_id());
 
-        return new ResponseEntity<>("상품찜 완료", HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
     // 상품찜 취소
     @DeleteMapping("/{productIdx}/hope")
     @CheckSignIn
-    public ResponseEntity<?> cancelHope(@PathVariable int productIdx,
+    public ResponseEntity<Void> cancelHope(@PathVariable int productIdx,
                                         @CurrentMember CurrentMemberInfo currentMemberInfo) {
         productService.checkAlreadyHope(productIdx, currentMemberInfo.getMember_id());
         productService.cancelHope(productIdx, currentMemberInfo.getMember_id());
 
-        return new ResponseEntity<>("상품찜 취소 완료", HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
     // 댓글등록
     @PostMapping("/{productIdx}/comment")
     @CheckSignIn
-    public ResponseEntity<?> registerComment(@PathVariable int productIdx,
+    public ResponseEntity<Void> registerComment(@PathVariable int productIdx,
                                              @Valid @RequestBody ContentRequest contentRequest,
                                              @CurrentMember CurrentMemberInfo currentMemberInfo) {
         productService.registerComment(productIdx, contentRequest.getContent(), currentMemberInfo.getMember_id());
-        return new ResponseEntity<>("댓글등록 완료", HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
     // 댓글수정
     @PatchMapping("/comments/{commentIdx}/update")
     @CheckSignIn
-    public ResponseEntity<?> updateComment(@PathVariable int commentIdx,
+    public ResponseEntity<Void> updateComment(@PathVariable int commentIdx,
                                            @Valid @RequestBody ContentRequest contentRequest,
                                            @CurrentMember CurrentMemberInfo currentMemberInfo) {
         productService.checkNotDeleteComment(commentIdx);
         productService.checkCommentWriter(commentIdx, currentMemberInfo.getMember_id());
         productService.updateComment(commentIdx, contentRequest.getContent());
-        return new ResponseEntity<>("댓글수정 완료", HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
     // 댓글삭제
     @PatchMapping("/comments/{commentIdx}/delete")
     @CheckSignIn
-    public ResponseEntity<?> deleteComment(@PathVariable int commentIdx,
+    public ResponseEntity<Void> deleteComment(@PathVariable int commentIdx,
                                            @CurrentMember CurrentMemberInfo currentMemberInfo) {
         productService.checkNotDeleteComment(commentIdx);
         productService.checkCommentWriter(commentIdx, currentMemberInfo.getMember_id());
         productService.deleteComment(commentIdx, currentMemberInfo.getMember_id());
-        return new ResponseEntity<>("댓글삭제 완료", HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
     // 대댓글등록
     @PostMapping("/{productIdx}/comments/{commentIdx}/reply")
     @CheckSignIn
-    public ResponseEntity<?> registerReply(@PathVariable int productIdx,
+    public ResponseEntity<Void> registerReply(@PathVariable int productIdx,
                                            @PathVariable int commentIdx,
                                            @Valid @RequestBody ContentRequest contentRequest,
                                            @CurrentMember CurrentMemberInfo currentMemberInfo) {
         // productIdx의 작성자이거나, commentIdx의 작성자인가
         productService.checkProductOrCommentWriter(productIdx, commentIdx, currentMemberInfo.getMember_id());
         productService.registerReply(commentIdx, contentRequest.getContent(), currentMemberInfo.getMember_id());
-        return new ResponseEntity<>("대댓글등록 완료", HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
     // 대댓글수정
     @PatchMapping("/comments/replies/{replyIdx}/update")
     @CheckSignIn
-    public ResponseEntity<?> updateReply(@PathVariable int replyIdx,
+    public ResponseEntity<Void> updateReply(@PathVariable int replyIdx,
                                          @Valid @RequestBody ContentRequest ContentRequest,
                                          @CurrentMember CurrentMemberInfo currentMemberInfo) {
         productService.checkNotDeleteReply(replyIdx);
         productService.checkReplyWriter(replyIdx, currentMemberInfo.getMember_id());
         productService.updateReply(replyIdx, ContentRequest.getContent());
-        return new ResponseEntity<>("댓글수정 완료", HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
     // 대댓글삭제
     @PatchMapping("/comments/replies/{replyIdx}/delete")
     @CheckSignIn
-    public ResponseEntity<?> deleteReply(@PathVariable int replyIdx,
+    public ResponseEntity<Void> deleteReply(@PathVariable int replyIdx,
                                          @CurrentMember CurrentMemberInfo currentMemberInfo) {
         productService.checkNotDeleteReply(replyIdx);
         productService.checkReplyWriter(replyIdx, currentMemberInfo.getMember_id());
         productService.deleteReply(replyIdx, currentMemberInfo.getMember_id());
-        return new ResponseEntity<>("댓글삭제 완료", HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 }

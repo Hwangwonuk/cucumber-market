@@ -23,4 +23,84 @@
         WHERE product_idx = #{productIdx}
     </update>
 
+    <select id="checkDuplicateHope" resultType="int">
+        SELECT COUNT(member_id)
+        FROM hope
+        WHERE product_idx = #{productIdx}
+    </select>
+
+    <insert id="registerHope">
+        INSERT INTO hope (product_idx, member_id)
+        VALUES (#{productIdx}, #{member_id})
+    </insert>
+
+    <delete id="cancelHope">
+        DELETE
+        FROM hope
+        WHERE product_idx = #{productIdx} AND member_id = #{member_id}
+    </delete>
+
+    <insert id="registerComment">
+        INSERT INTO comment (product_idx, member_id, content)
+        VALUES (#{productIdx}, #{member_id}, #{content})
+    </insert>
+
+    <select id="checkNotDeleteComment" resultType="int">
+        SELECT COUNT(*)
+        FROM comment
+        WHERE comment_idx = #{commentIdx} AND isview = 'n'
+    </select>
+
+    <select id="checkCommentWriter" resultType="int">
+        SELECT COUNT(*)
+        FROM comment
+        WHERE comment_idx = #{commentIdx} AND member_id = #{member_id}
+    </select>
+
+    <update id="updateComment">
+        UPDATE comment
+        SET content = #{content}, updatetime = now()
+        WHERE comment_idx = #{commentIdx}
+    </update>
+
+    <update id="deleteComment">
+        UPDATE comment
+        SET isview = 'n', updatetime = now()
+        WHERE comment_idx = #{commentIdx} AND member_id = #{member_id}
+    </update>
+
+    <insert id="registerReply">
+        INSERT INTO reply (comment_idx, content, member_id)
+        VALUES (#{commentIdx}, #{content}, #{member_id})
+    </insert>
+
+    <select id="checkProductWriter" resultType="int">
+        SELECT COUNT(*)
+        FROM product
+        WHERE product_idx = #{productIdx} AND member_id = #{member_id}
+    </select>
+
+    <select id="checkNotDeleteReply" resultType="int">
+        SELECT COUNT(*)
+        FROM reply
+        WHERE reply_idx = #{replyIdx} AND isview = 'n'
+    </select>
+
+    <select id="checkReplyWriter" resultType="int">
+        SELECT COUNT(*)
+        FROM reply
+        WHERE reply_idx = #{replyIdx} AND member_id = #{member_id}
+    </select>
+
+    <update id="updateReply">
+        UPDATE reply
+        SET content = #{content}, updatetime = now()
+        WHERE reply_idx = #{replyIdx}
+    </update>
+
+    <update id="deleteReply">
+        UPDATE reply
+        SET isview = 'n', updatetime = now()
+        WHERE reply_idx = #{replyIdx} AND member_id = #{member_id}
+    </update>
 </mapper>

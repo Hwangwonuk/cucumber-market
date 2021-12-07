@@ -7,7 +7,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+/*
+ @ExceptionHandler 를 사용해서 예외를 깔끔하게 처리할 수 있지만, 정상 코드와 예외 처리 코드가 하나의 컨트롤러에 섞여 있게된다.
+ @ControllerAdvice 또는 @RestControllerAdvice 를 사용하면 둘을 분리할 수 있다.
 
+ @ControllerAdvice
+ @ControllerAdvice 는 대상으로 지정한 여러 컨트롤러에 @ExceptionHandler , @InitBinder 기능을 부여해주는 역할을 한다.
+ @ControllerAdvice 에 대상을 지정하지 않으면 모든 컨트롤러에 적용된다. (글로벌 적용)
+
+ @RestControllerAdvice 는 @ControllerAdvice 와 같고, @ResponseBody 가 추가되어 있다.
+ @Controller , @RestController 의 차이와 같다
+ */
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -87,6 +97,54 @@ public class GlobalExceptionHandler {
     // 조회 데이터의 페이지 번호가 자연수가 아닌 경우
     @ExceptionHandler(PageNoPositiveException.class)
     public ResponseEntity<ExceptionResponse> pageNegativeNotAvailableException(final PageNoPositiveException ex) {
+        log.error(ex.getMessage(), ex);
+        ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    // 상품에 찜이 돼있는데 찜을 등록하려는 경우
+    @ExceptionHandler(AlreadyHopeRegisteredException.class)
+    public ResponseEntity<ExceptionResponse> alreadyHopeRegisteredException(final AlreadyHopeRegisteredException ex) {
+        log.error(ex.getMessage(), ex);
+        ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    // 상품에 찜이 안돼있는데 찜을 해제하려는 경우
+    @ExceptionHandler(NotYetHopeRegisteredException.class)
+    public ResponseEntity<ExceptionResponse> notYetHopeRegisteredException(final NotYetHopeRegisteredException ex) {
+        log.error(ex.getMessage(), ex);
+        ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    // 이미 삭제된 댓글인데 삭제하려는 경우
+    @ExceptionHandler(AlreadyDeletedCommentException.class)
+    public ResponseEntity<ExceptionResponse> alreadyDeletedCommentException(final AlreadyDeletedCommentException ex) {
+        log.error(ex.getMessage(), ex);
+        ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    // 해당 댓글의 작성자가 아닌데 댓글을 수정/삭제 하려는 경우
+    @ExceptionHandler(NoWriterForCommentException.class)
+    public ResponseEntity<ExceptionResponse> noWriterForCommentException(final NoWriterForCommentException ex) {
+        log.error(ex.getMessage(), ex);
+        ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    // 해당 판매글이나 댓글의 작성자가 아닌데 대댓글을 등록하려는 경우
+    @ExceptionHandler(NoWriterForProductOrCommentException.class)
+    public ResponseEntity<ExceptionResponse> noWriterForProductOrCommentException(final NoWriterForProductOrCommentException ex) {
+        log.error(ex.getMessage(), ex);
+        ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    // 이미 삭제된 대댓글인데 삭제하려는 경우
+    @ExceptionHandler(AlreadyDeletedReplyException.class)
+    public ResponseEntity<ExceptionResponse> alreadyDeletedReplyException(final AlreadyDeletedReplyException ex) {
         log.error(ex.getMessage(), ex);
         ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);

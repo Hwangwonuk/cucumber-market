@@ -3,6 +3,8 @@ package com.cucumber.market.controller;
 import com.cucumber.market.annotation.CheckSignIn;
 import com.cucumber.market.annotation.CurrentMember;
 import com.cucumber.market.dto.member.CurrentMemberInfo;
+import com.cucumber.market.dto.product.CommentRegisterRequest;
+import com.cucumber.market.dto.product.CommentUpdateRequest;
 import com.cucumber.market.dto.product.ProductUploadForm;
 import com.cucumber.market.dto.product.ProductUploadResponse;
 import com.cucumber.market.service.ProductService;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 /*
@@ -62,7 +65,7 @@ public class ProductController {
         return new ResponseEntity<>(productService.uploadProduct(productUploadForm, multipartFiles, currentMemberInfo.getMember_id()), HttpStatus.OK);
     }
 
-    // 상품조회기능 -> 제목 등의 product 컬럼들 join 문으로 파일테이블의 이미지 파일경로 + 상품찜 수
+    // 상품조회기능 -> 제목 등의 product 컬럼들 join 문으로 파일테이블의 이미지 파일경로 + 상품찜 수 + 댓글수 뷰로 만들기
 
     // 상품찜(중복불가, 본인상품 찜 가능)
     @PostMapping("/{productIdx}/hope")
@@ -86,4 +89,36 @@ public class ProductController {
         return new ResponseEntity<>("상품찜 취소 완료", HttpStatus.OK);
     }
 
+    // 댓글등록
+    @PostMapping("/{productIdx}/comment")
+    @CheckSignIn
+    public ResponseEntity<?> registerComment(@PathVariable int productIdx,
+                                             @Valid @RequestBody CommentRegisterRequest commentRegisterRequest,
+                                             @CurrentMember CurrentMemberInfo currentMemberInfo) {
+        productService.registerComment(productIdx, commentRegisterRequest.getContent(), currentMemberInfo.getMember_id());
+        return new ResponseEntity<>("댓글등록 완료", HttpStatus.OK);
+    }
+
+    // 댓글수정
+    @PatchMapping("/{commentIdx}/updateComment")
+    @CheckSignIn
+    public ResponseEntity<?> updateComment(@PathVariable int commentIdx,
+                                           @Valid @RequestBody CommentUpdateRequest commentUpdateRequest,
+                                           @CurrentMember CurrentMemberInfo currentMemberInfo) {
+        productService.checkNotDeleteComment(commentIdx);
+        productService.checkCommentWriter(commentIdx, currentMemberInfo.getMember_id());
+        productService.updateComment(commentIdx, commentUpdateRequest.getContent());
+        return new ResponseEntity<>("댓글수정 완료", HttpStatus.OK);
+    }
+
+    // 댓글삭제
+    @PatchMapping("/{commentIdx}/deleteComment")
+    @CheckSignIn
+    public ResponseEntity<?> deleteComment(@PathVariable int commentIdx,
+                                           @CurrentMember CurrentMemberInfo currentMemberInfo) {
+        productService.checkNotDeleteComment(commentIdx);
+        productService.checkCommentWriter(commentIdx, currentMemberInfo.getMember_id());
+        productService.deleteComment(commentIdx, currentMemberInfo.getMember_id());
+        return new ResponseEntity<>("댓글삭제 완료", HttpStatus.OK);
+    }
 }

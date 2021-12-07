@@ -154,7 +154,7 @@ public class MemberController {
         return new ResponseEntity<>(memberService.findMemberPagination(pageNum, contentNum), HttpStatus.OK);
     }
 
-
+    // TODO: 리스폰스 생성
     // 관리자 등록 - 기존회원 관리자로 승격
     @PostMapping
     @CheckAdmin

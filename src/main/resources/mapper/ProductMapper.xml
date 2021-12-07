@@ -23,4 +23,21 @@
         WHERE product_idx = #{productIdx}
     </update>
 
+    <select id="checkDuplicateHope" resultType="int">
+        SELECT COUNT(member_id)
+        FROM hope
+        WHERE product_idx = #{productIdx}
+    </select>
+
+    <insert id="hope">
+        INSERT INTO hope (product_idx, member_id)
+        VALUES (#{productIdx}, #{member_id})
+    </insert>
+
+    <delete id="cancelHope">
+        DELETE
+        FROM hope
+        WHERE product_idx = #{productIdx} AND member_id = #{member_id}
+    </delete>
+
 </mapper>

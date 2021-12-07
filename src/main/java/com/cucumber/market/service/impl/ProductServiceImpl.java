@@ -7,6 +7,7 @@ import com.cucumber.market.mapper.ProductMapper;
 import com.cucumber.market.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -55,6 +56,12 @@ public class ProductServiceImpl implements ProductService {
 //                .build();
 //    }
 
+    /**
+     * 글 등록 메소드(이미지 파일 포함)
+     * @param productUploadForm 글 등록시 필요한 데이터
+     * @param multipartFiles 업로드된 파일들
+     * @param member_id 현재 접속중인 회원의 아이디
+     */
     @Override
     public ProductUploadResponse uploadProduct(ProductUploadForm productUploadForm,
                                                List<MultipartFile> multipartFiles,
@@ -72,5 +79,51 @@ public class ProductServiceImpl implements ProductService {
         return ProductUploadResponse.builder()
                 .redirectUrl(productUrl)
                 .build();
+    }
+
+    /**
+     * 상품찜 중복검사 메소드
+     * @param productIdx 상품번호
+     * @param member_id 로그인한 회원의 아이디
+     */
+    @Override
+    public void checkDuplicateHope(int productIdx, String member_id) {
+        if (productMapper.checkDuplicateHope(productIdx, member_id) == 1) {
+            throw new DataIntegrityViolationException("이미 해당 상품을 찜하셨습니다.");
+            // custom 예외로 만드는것이 좋아보인다.
+        }
+    }
+
+    /**
+     * 상품찜 메소드
+     * @param productIdx 상품번호
+     * @param member_id 로그인한 회원의 아이디
+     */
+    @Override
+    public void hope(int productIdx, String member_id) {
+        productMapper.hope(productIdx, member_id);
+    }
+
+    /**
+     * 상품찜 취소전 본인확인 메소드
+     * @param productIdx 상품번호
+     * @param member_id 로그인한 회원의 아이디
+     */
+    @Override
+    public void checkAlreadyHope(int productIdx, String member_id) {
+        if (productMapper.checkDuplicateHope(productIdx, member_id) == 0) {
+            throw new DataIntegrityViolationException("해당 상품을 찜한적이 없습니다.");
+            // custom 예외로 만드는것이 좋아보인다.
+        }
+    }
+
+    /**
+     * 상품찜 취소 메소드
+     * @param productIdx 상품번호
+     * @param member_id 로그인한 회원의 아이디
+     */
+    @Override
+    public void cancelHope(int productIdx, String member_id) {
+        productMapper.cancelHope(productIdx, member_id);
     }
 }

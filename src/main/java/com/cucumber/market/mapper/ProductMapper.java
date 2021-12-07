@@ -11,4 +11,10 @@ public interface ProductMapper {
     int getMyLatestProduct(String member_id);
 
     void updateThumbnailIdx(@Param("productIdx") int productIdx, @Param("thumbnailIdx") int thumbnailIdx);
+
+    int checkDuplicateHope(@Param("productIdx") int productIdx, @Param("member_id") String member_id);
+
+    void hope(@Param("productIdx") int productIdx, @Param("member_id") String member_id);
+
+    void cancelHope(@Param("productIdx") int productIdx, @Param("member_id") String member_id);
 }

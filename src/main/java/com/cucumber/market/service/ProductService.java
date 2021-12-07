@@ -15,4 +15,13 @@ public interface ProductService {
     ProductUploadResponse uploadProduct(ProductUploadForm productUploadForm,
                                         List<MultipartFile> multipartFiles,
                                         String member_id) throws IOException;
+
+    void checkDuplicateHope(int productIdx, String member_id);
+
+    void hope(int productIdx, String member_id);
+
+    void checkAlreadyHope(int productIdx, String member_id);
+
+    void cancelHope(int productIdx, String member_id);
+
 }

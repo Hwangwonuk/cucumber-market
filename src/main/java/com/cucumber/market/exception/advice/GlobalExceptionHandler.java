@@ -7,7 +7,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+/*
+ @ExceptionHandler 를 사용해서 예외를 깔끔하게 처리할 수 있지만, 정상 코드와 예외 처리 코드가 하나의 컨트롤러에 섞여 있게된다.
+ @ControllerAdvice 또는 @RestControllerAdvice 를 사용하면 둘을 분리할 수 있다.
 
+ @ControllerAdvice
+ @ControllerAdvice 는 대상으로 지정한 여러 컨트롤러에 @ExceptionHandler , @InitBinder 기능을 부여해주는 역할을 한다.
+ @ControllerAdvice 에 대상을 지정하지 않으면 모든 컨트롤러에 적용된다. (글로벌 적용)
+
+ @RestControllerAdvice 는 @ControllerAdvice 와 같고, @ResponseBody 가 추가되어 있다.
+ @Controller , @RestController 의 차이와 같다
+ */
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {

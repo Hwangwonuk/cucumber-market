@@ -3,8 +3,7 @@ package com.cucumber.market.controller;
 import com.cucumber.market.annotation.CheckSignIn;
 import com.cucumber.market.annotation.CurrentMember;
 import com.cucumber.market.dto.member.CurrentMemberInfo;
-import com.cucumber.market.dto.product.CommentRegisterRequest;
-import com.cucumber.market.dto.product.CommentUpdateRequest;
+import com.cucumber.market.dto.product.ContentRequest;
 import com.cucumber.market.dto.product.ProductUploadForm;
 import com.cucumber.market.dto.product.ProductUploadResponse;
 import com.cucumber.market.service.ProductService;
@@ -21,6 +20,7 @@ import java.util.List;
  @ModelAttribute 는 HTTP 요청 파라미터(URL 쿼리 스트링, POST Form)를 다룰 때 사용한다.
  @RequestBody 는 HTTP Body의 데이터를 객체로 변환할 때 사용한다. 주로 API JSON 요청을 다룰 때 사용한다
 * */
+// TODO: 2021-12-08 상품찜, 댓글, 대댓글 리스폰스 객체 생성
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/products")
@@ -70,10 +70,10 @@ public class ProductController {
     // 상품찜(중복불가, 본인상품 찜 가능)
     @PostMapping("/{productIdx}/hope")
     @CheckSignIn
-    public ResponseEntity<?> hope(@PathVariable int productIdx,
+    public ResponseEntity<?> registerHope(@PathVariable int productIdx,
                                   @CurrentMember CurrentMemberInfo currentMemberInfo) {
         productService.checkDuplicateHope(productIdx, currentMemberInfo.getMember_id());
-        productService.hope(productIdx, currentMemberInfo.getMember_id());
+        productService.registerHope(productIdx, currentMemberInfo.getMember_id());
 
         return new ResponseEntity<>("상품찜 완료", HttpStatus.OK);
     }
@@ -93,32 +93,68 @@ public class ProductController {
     @PostMapping("/{productIdx}/comment")
     @CheckSignIn
     public ResponseEntity<?> registerComment(@PathVariable int productIdx,
-                                             @Valid @RequestBody CommentRegisterRequest commentRegisterRequest,
+                                             @Valid @RequestBody ContentRequest contentRequest,
                                              @CurrentMember CurrentMemberInfo currentMemberInfo) {
-        productService.registerComment(productIdx, commentRegisterRequest.getContent(), currentMemberInfo.getMember_id());
+        productService.registerComment(productIdx, contentRequest.getContent(), currentMemberInfo.getMember_id());
         return new ResponseEntity<>("댓글등록 완료", HttpStatus.OK);
     }
 
     // 댓글수정
-    @PatchMapping("/{commentIdx}/updateComment")
+    @PatchMapping("/comments/{commentIdx}/update")
     @CheckSignIn
     public ResponseEntity<?> updateComment(@PathVariable int commentIdx,
-                                           @Valid @RequestBody CommentUpdateRequest commentUpdateRequest,
+                                           @Valid @RequestBody ContentRequest contentRequest,
                                            @CurrentMember CurrentMemberInfo currentMemberInfo) {
         productService.checkNotDeleteComment(commentIdx);
         productService.checkCommentWriter(commentIdx, currentMemberInfo.getMember_id());
-        productService.updateComment(commentIdx, commentUpdateRequest.getContent());
+        productService.updateComment(commentIdx, contentRequest.getContent());
         return new ResponseEntity<>("댓글수정 완료", HttpStatus.OK);
     }
 
     // 댓글삭제
-    @PatchMapping("/{commentIdx}/deleteComment")
+    @PatchMapping("/comments/{commentIdx}/delete")
     @CheckSignIn
     public ResponseEntity<?> deleteComment(@PathVariable int commentIdx,
                                            @CurrentMember CurrentMemberInfo currentMemberInfo) {
         productService.checkNotDeleteComment(commentIdx);
         productService.checkCommentWriter(commentIdx, currentMemberInfo.getMember_id());
         productService.deleteComment(commentIdx, currentMemberInfo.getMember_id());
+        return new ResponseEntity<>("댓글삭제 완료", HttpStatus.OK);
+    }
+
+    // 대댓글등록
+    @PostMapping("/{productIdx}/comments/{commentIdx}/reply")
+    @CheckSignIn
+    public ResponseEntity<?> registerReply(@PathVariable int productIdx,
+                                           @PathVariable int commentIdx,
+                                           @Valid @RequestBody ContentRequest contentRequest,
+                                           @CurrentMember CurrentMemberInfo currentMemberInfo) {
+        // productIdx의 작성자이거나, commentIdx의 작성자인가
+        productService.checkProductOrCommentWriter(productIdx, commentIdx, currentMemberInfo.getMember_id());
+        productService.registerReply(commentIdx, contentRequest.getContent(), currentMemberInfo.getMember_id());
+        return new ResponseEntity<>("대댓글등록 완료", HttpStatus.OK);
+    }
+
+    // 대댓글수정
+    @PatchMapping("/comments/replies/{replyIdx}/update")
+    @CheckSignIn
+    public ResponseEntity<?> updateReply(@PathVariable int replyIdx,
+                                         @Valid @RequestBody ContentRequest ContentRequest,
+                                         @CurrentMember CurrentMemberInfo currentMemberInfo) {
+        productService.checkNotDeleteReply(replyIdx);
+        productService.checkReplyWriter(replyIdx, currentMemberInfo.getMember_id());
+        productService.updateReply(replyIdx, ContentRequest.getContent());
+        return new ResponseEntity<>("댓글수정 완료", HttpStatus.OK);
+    }
+
+    // 대댓글삭제
+    @PatchMapping("/comments/replies/{replyIdx}/delete")
+    @CheckSignIn
+    public ResponseEntity<?> deleteReply(@PathVariable int replyIdx,
+                                         @CurrentMember CurrentMemberInfo currentMemberInfo) {
+        productService.checkNotDeleteReply(replyIdx);
+        productService.checkReplyWriter(replyIdx, currentMemberInfo.getMember_id());
+        productService.deleteReply(replyIdx, currentMemberInfo.getMember_id());
         return new ResponseEntity<>("댓글삭제 완료", HttpStatus.OK);
     }
 }

@@ -14,7 +14,7 @@ public interface ProductMapper {
 
     int checkDuplicateHope(@Param("productIdx") int productIdx, @Param("member_id") String member_id);
 
-    void hope(@Param("productIdx") int productIdx, @Param("member_id") String member_id);
+    void registerHope(@Param("productIdx") int productIdx, @Param("member_id") String member_id);
 
     void cancelHope(@Param("productIdx") int productIdx, @Param("member_id") String member_id);
 
@@ -26,5 +26,17 @@ public interface ProductMapper {
 
     void updateComment(@Param("commentIdx") int commentIdx, @Param("content") String content);
 
-    void deleteComment(@Param("commentIdx") int commentIdx,@Param("member_id") String member_id);
+    void deleteComment(@Param("commentIdx") int commentIdx, @Param("member_id") String member_id);
+
+    void registerReply(@Param("commentIdx") int commentIdx, @Param("content") String content, @Param("member_id") String member_id);
+
+    int checkProductWriter(@Param("productIdx") int productIdx, @Param("member_id") String member_id);
+
+    int checkNotDeleteReply(int replyIdx);
+
+    int checkReplyWriter(@Param("replyIdx") int replyIdx, @Param("member_id") String member_id);
+
+    void updateReply(@Param("replyIdx") int replyIdx, @Param("member_id") String content);
+
+    void deleteReply(@Param("replyIdx") int replyIdx, @Param("member_id") String member_id);
 }

@@ -18,7 +18,7 @@ public interface ProductService {
 
     void checkDuplicateHope(int productIdx, String member_id);
 
-    void hope(int productIdx, String member_id);
+    void registerHope(int productIdx, String member_id);
 
     void checkAlreadyHope(int productIdx, String member_id);
 
@@ -34,4 +34,15 @@ public interface ProductService {
 
     void deleteComment(int commentIdx, String member_id);
 
+    void registerReply(int commentIdx, String content, String member_id);
+
+    void checkProductOrCommentWriter(int productIdx, int commentIdx, String member_id);
+
+    void checkNotDeleteReply(int replyIdx);
+
+    void checkReplyWriter(int replyIdx, String member_id);
+
+    void updateReply(int replyIdx, String content);
+
+    void deleteReply(int replyIdx, String member_id);
 }

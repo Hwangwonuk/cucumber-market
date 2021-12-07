@@ -29,7 +29,7 @@
         WHERE product_idx = #{productIdx}
     </select>
 
-    <insert id="hope">
+    <insert id="registerHope">
         INSERT INTO hope (product_idx, member_id)
         VALUES (#{productIdx}, #{member_id})
     </insert>
@@ -69,4 +69,38 @@
         WHERE comment_idx = #{commentIdx} AND member_id = #{member_id}
     </update>
 
+    <insert id="registerReply">
+        INSERT INTO reply (comment_idx, content, member_id)
+        VALUES (#{commentIdx}, #{content}, #{member_id})
+    </insert>
+
+    <select id="checkProductWriter" resultType="int">
+        SELECT COUNT(*)
+        FROM product
+        WHERE product_idx = #{productIdx} AND member_id = #{member_id}
+    </select>
+
+    <select id="checkNotDeleteReply" resultType="int">
+        SELECT COUNT(*)
+        FROM reply
+        WHERE reply_idx = #{replyIdx} AND isview = 'n'
+    </select>
+
+    <select id="checkReplyWriter" resultType="int">
+        SELECT COUNT(*)
+        FROM reply
+        WHERE reply_idx = #{replyIdx} AND member_id = #{member_id}
+    </select>
+
+    <update id="updateReply">
+        UPDATE reply
+        SET content = #{content}, updatetime = now()
+        WHERE reply_idx = #{replyIdx}
+    </update>
+
+    <update id="deleteReply">
+        UPDATE reply
+        SET isview = 'n', updatetime = now()
+        WHERE reply_idx = #{replyIdx} AND member_id = #{member_id}
+    </update>
 </mapper>

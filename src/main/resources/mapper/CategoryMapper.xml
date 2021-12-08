@@ -5,26 +5,23 @@
 
 <mapper namespace="com.cucumber.market.mapper.CategoryMapper">
 
-    <insert id="registerBigCategory" parameterType="com.cucumber.market.dto.category.BigCategoryRegisterRequest">
+    <insert id="registerBigCategory">
         INSERT INTO big_category (big_category_name)
         VALUES (#{bigCategoryName})
     </insert>
 
-    <select id="findBigCategoryNameCount" resultType="Integer">
+    <select id="checkDuplicateBigCategoryName" resultType="Int">
         SELECT COUNT(big_category_name)
         FROM big_category
         WHERE big_category_name = #{bigCategoryName}
     </select>
 
-    <insert id="registerSmallCategory" parameterType="com.cucumber.market.dto.category.SmallCategoryRegisterRequest">
-        INSERT INTO small_category (small_category_name, big_category_name)
-        VALUES (#{smallCategoryName}, #{bigCategoryName})
-    </insert>
-
-    <select id="findSmallCategoryNameCount" resultType="Integer">
-        SELECT COUNT(small_category_name)
+    <select id="getSmallCategoryNames"
+            resultType="com.cucumber.market.dto.category.SmallCategoryNamesResponse">
+        SELECT small_category_name
         FROM small_category
-        WHERE small_category_name = #{smallCategoryName}
+        WHERE big_category_name = #{bigCategoryName}
+        ORDER BY BINARY(small_category_name)
     </select>
 
     <update id="updateBigCategory" parameterType="com.cucumber.market.dto.category.BigCategoryUpdateRequest">
@@ -33,20 +30,22 @@
         WHERE big_category_name = #{oldBigCategoryName}
     </update>
 
+    <insert id="registerSmallCategory" parameterType="com.cucumber.market.dto.category.SmallCategoryRegisterRequest">
+        INSERT INTO small_category (small_category_name, big_category_name)
+        VALUES (#{smallCategoryName}, #{bigCategoryName})
+    </insert>
+
+    <select id="checkDuplicateSmallCategoryName" resultType="Int">
+        SELECT COUNT(small_category_name)
+        FROM small_category
+        WHERE small_category_name = #{smallCategoryName}
+    </select>
+
     <update id="updateSmallCategory" parameterType="com.cucumber.market.dto.category.SmallCategoryUpdateRequest">
         UPDATE small_category
         SET small_category_name = #{newSmallCategoryName}
         WHERE small_category_name = #{oldSmallCategoryName}
         AND big_category_name = #{bigCategoryName}
     </update>
-
-    <select id="findCategoryNames"
-            parameterType="com.cucumber.market.dto.category.CategoryNamesRequest"
-            resultType="com.cucumber.market.dto.category.CategoryNamesResopnse">
-        SELECT small_category_name
-        FROM small_category
-        WHERE big_category_name = #{bigCategoryName}
-        ORDER BY BINARY(small_category_name)
-    </select>
 
 </mapper>

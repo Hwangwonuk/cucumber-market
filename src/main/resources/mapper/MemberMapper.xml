@@ -55,7 +55,7 @@
         WHERE member_id = #{member_id}
     </select>
 
-    <select id="findMemberByPagination"
+    <select id="findAllMemberByPagination"
             resultType="com.cucumber.market.dto.member.Member">
         SELECT *
         FROM member
@@ -68,4 +68,10 @@
         WHERE member_id = #{member_id}
     </update>
 
+    <select id="checkAlreadyAdmin" resultType="int">
+        SELECT COUNT(isactive)
+        FROM member
+        WHERE member_id = #{member_id}
+        AND isadmin = 'y'
+    </select>
 </mapper>

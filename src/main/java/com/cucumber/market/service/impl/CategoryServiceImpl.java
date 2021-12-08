@@ -23,11 +23,11 @@ public class CategoryServiceImpl implements CategoryService {
     /**
      * 대분류 등록 메소드
      *
-     * @param bigCategoryRegisterRequest 대분류 등록 시 저장할 이름
+     * @param bigCategoryNameRequest 대분류 등록 시 저장할 이름
      */
     @Override
-    public CategoryResponse registerBigCategory(BigCategoryRegisterRequest bigCategoryRegisterRequest) {
-        categoryMapper.registerBigCategory(bigCategoryRegisterRequest);
+    public CategoryResponse registerBigCategory(BigCategoryNameRequest bigCategoryNameRequest) {
+        categoryMapper.registerBigCategory(bigCategoryNameRequest.getBigCategoryName());
 
         return CategoryResponse.builder()
                 .redirectUrl(categoryUrl)
@@ -40,9 +40,31 @@ public class CategoryServiceImpl implements CategoryService {
      * @param bigCategoryName 중복 검사할 회원 아이디
      */
     @Override
-    public void isDuplicateBigCategoryName(String bigCategoryName) {
-        if (categoryMapper.findBigCategoryNameCount(bigCategoryName) == 1) {
+    public void checkDuplicateBigCategoryName(String bigCategoryName) {
+        if (categoryMapper.checkDuplicateBigCategoryName(bigCategoryName) == 1) {
             throw new DataIntegrityViolationException("중복된 대분류명 입니다.");
+        }
+    }
+
+    /**
+     * 대분류명에 해당하는 소분류명 찾기 메소드
+     *
+     * @param bigCategoryNameRequest 소분류를 불러올 대분류 이름
+     */
+    @Override
+    public List<SmallCategoryNamesResponse> getSmallCategoryNames(BigCategoryNameRequest bigCategoryNameRequest) {
+        return categoryMapper.getSmallCategoryNames(bigCategoryNameRequest.getBigCategoryName());
+    }
+
+    /**
+     * 대분류명 존재여부 검사 메소드
+     *
+     * @param bigCategoryName 중복 검사할 회원 아이디
+     */
+    @Override
+    public void checkExistBigCategoryName(String bigCategoryName) {
+        if (categoryMapper.checkDuplicateBigCategoryName(bigCategoryName) == 0) {
+            throw new CategoryNameNotFoundException("입력한 대분류명은 존재하지 않습니다.");
         }
     }
 
@@ -54,19 +76,6 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryResponse updateBigCategory(BigCategoryUpdateRequest bigCategoryUpdateRequest) {
         categoryMapper.updateBigCategory(bigCategoryUpdateRequest);
-        return CategoryResponse.builder()
-                .redirectUrl(categoryUrl)
-                .build();
-    }
-
-    /**
-     * 소분류 이름 수정 메소드
-     *
-     * @param smallCategoryUpdateRequest 대분류명, 원래 소분류명, 변경할 소분류명
-     */
-    @Override
-    public CategoryResponse updateSmallCategory(SmallCategoryUpdateRequest smallCategoryUpdateRequest) {
-        categoryMapper.updateSmallCategory(smallCategoryUpdateRequest);
         return CategoryResponse.builder()
                 .redirectUrl(categoryUrl)
                 .build();
@@ -87,27 +96,28 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     /**
-     * 대분류명 존재여부 검사 메소드
-     *
-     * @param bigCategoryName 중복 검사할 회원 아이디
-     */
-    @Override
-    public void findByBigCategoryName(String bigCategoryName) {
-        if (categoryMapper.findBigCategoryNameCount(bigCategoryName) == 0) {
-            throw new CategoryNameNotFoundException("입력한 대분류명은 존재하지 않습니다.");
-        }
-    }
-
-    /**
      * 소분류명 중복검사 메소드
      *
      * @param smallCategoryName 중복 검사할 회원 아이디
      */
     @Override
-    public void isDuplicateSmallCategoryName(String smallCategoryName) {
-        if (categoryMapper.findSmallCategoryNameCount(smallCategoryName) == 1) {
+    public void checkDuplicateSmallCategoryName(String smallCategoryName) {
+        if (categoryMapper.checkDuplicateSmallCategoryName(smallCategoryName) == 1) {
             throw new DataIntegrityViolationException("중복된 소분류명 입니다.");
         }
+    }
+
+    /**
+     * 소분류 이름 수정 메소드
+     *
+     * @param smallCategoryUpdateRequest 대분류명, 원래 소분류명, 변경할 소분류명
+     */
+    @Override
+    public CategoryResponse updateSmallCategory(SmallCategoryUpdateRequest smallCategoryUpdateRequest) {
+        categoryMapper.updateSmallCategory(smallCategoryUpdateRequest);
+        return CategoryResponse.builder()
+                .redirectUrl(categoryUrl)
+                .build();
     }
 
     /**
@@ -116,21 +126,10 @@ public class CategoryServiceImpl implements CategoryService {
      * @param smallCategoryName 존재하는지 확인하기 위한 소분류명
      */
     @Override
-    public void findBySmallCategoryName(String smallCategoryName) {
-        if (categoryMapper.findSmallCategoryNameCount(smallCategoryName) == 0) {
+    public void checkExistSmallCategoryName(String smallCategoryName) {
+        if (categoryMapper.checkDuplicateSmallCategoryName(smallCategoryName) == 0) {
             throw new CategoryNameNotFoundException("입력한 소분류명은 존재하지 않습니다.");
         }
-    }
-
-    /**
-     * 대분류명에 해당하는 소분류명 찾기 메소드
-     *
-     * @param categoryNamesRequest 소분류를 불러올 대분류 이름
-     * @return
-     */
-    @Override
-    public List<CategoryNamesResopnse> findCategoryNames(CategoryNamesRequest categoryNamesRequest) {
-        return categoryMapper.findCategoryNames(categoryNamesRequest.getBigCategoryName());
     }
 
 }

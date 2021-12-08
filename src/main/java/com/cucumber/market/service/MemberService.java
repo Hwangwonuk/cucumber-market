@@ -11,7 +11,7 @@ public interface MemberService {
 
     MemberInfo getMemberInfo(String member_id);
 
-    void findMemberIdCount(String member_id);
+    void checkExistMemberId(String member_id);
 
     void checkMatchIdAndPassword(String member_id, String password);
 
@@ -23,7 +23,7 @@ public interface MemberService {
 
     CurrentMemberInfo getCurrentMemberInfo(String member_id);
 
-    List<Member> findMemberPagination(Integer pageNum, Integer contentNum);
+    List<Member> findAllMemberByPagination(Integer pageNum, Integer contentNum);
 
     void registerAdmin(String member_id);
 

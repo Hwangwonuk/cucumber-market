@@ -7,17 +7,18 @@ import java.util.List;
 
 @Mapper
 public interface CategoryMapper {
-    void registerBigCategory(BigCategoryRegisterRequest bigCategoryRegisterRequest);
+    void registerBigCategory(String bigCategoryName);
 
-    void registerSmallCategory(SmallCategoryRegisterRequest smallCategoryRegisterRequest);
+    int checkDuplicateBigCategoryName(String bigCategoryName);
 
-    int findBigCategoryNameCount(String bigCategoryName);
-
-    int findSmallCategoryNameCount(String smallCategoryName);
+    List<SmallCategoryNamesResponse> getSmallCategoryNames(String bigCategoryName);
 
     void updateBigCategory(BigCategoryUpdateRequest bigCategoryUpdateRequest);
 
+    void registerSmallCategory(SmallCategoryRegisterRequest smallCategoryRegisterRequest);
+
+    int checkDuplicateSmallCategoryName(String smallCategoryName);
+
     void updateSmallCategory(SmallCategoryUpdateRequest smallCategoryUpdateRequest);
 
-    List<CategoryNamesResopnse> findCategoryNames(String bigCategoryName);
 }

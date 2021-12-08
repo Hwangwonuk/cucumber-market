@@ -90,7 +90,7 @@ public class MemberServiceImpl implements MemberService {
      * @param contentNum 한 페이지에 출력할 데이터 수
      */
     @Override
-    public List<Member> findMemberPagination(Integer pageNum, Integer contentNum) {
+    public List<Member> findAllMemberByPagination(Integer pageNum, Integer contentNum) {
         // pageNum은 1부터 시작하는 것을 가정
         if (pageNum <= 0)
             throw new PageNoPositiveException("페이지는 1 이상 이어야 합니다.");
@@ -103,7 +103,7 @@ public class MemberServiceImpl implements MemberService {
         // contentNum이 4, offset이 8 (즉, pageNum이 3) -> 보여줄 데이터는 2개
         // contentNum이 5, offset이 10 (즉, pageNum이 3) -> 보여줄 데이터는 0개
 
-        return memberMapper.findMemberByPagination(contentNum, offset);
+        return memberMapper.findAllMemberByPagination(contentNum, offset);
     }
 
     /**
@@ -129,7 +129,7 @@ public class MemberServiceImpl implements MemberService {
      * @param member_id 중복 검사할 회원 아이디
      */
     @Override
-    public void findMemberIdCount(String member_id) {
+    public void checkExistMemberId(String member_id) {
         if (memberMapper.checkDuplicateMemberId(member_id) == 0) {
             throw new MemberNotFoundException("입력한 아이디의 회원이 존재하지 않습니다.");
         }

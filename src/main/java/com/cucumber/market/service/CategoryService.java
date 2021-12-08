@@ -5,21 +5,22 @@ import com.cucumber.market.dto.category.*;
 import java.util.List;
 
 public interface CategoryService {
-    CategoryResponse registerBigCategory(BigCategoryRegisterRequest bigCategoryRegisterRequest);
+    CategoryResponse registerBigCategory(BigCategoryNameRequest bigCategoryNameRequest);
 
-    CategoryResponse registerSmallCategory(SmallCategoryRegisterRequest smallCategoryRegisterRequest);
+    void checkDuplicateBigCategoryName(String bigCategoryName);
 
-    void isDuplicateBigCategoryName(String bigCategoryName);
+    List<SmallCategoryNamesResponse> getSmallCategoryNames(BigCategoryNameRequest bigCategoryNameRequest);
 
-    void findByBigCategoryName(String bigCategoryName);
-
-    void findBySmallCategoryName(String smallCategoryName);
-
-    void isDuplicateSmallCategoryName(String smallCategoryName);
+    void checkExistBigCategoryName(String bigCategoryName);
 
     CategoryResponse updateBigCategory(BigCategoryUpdateRequest bigCategoryUpdateRequest);
 
+    CategoryResponse registerSmallCategory(SmallCategoryRegisterRequest smallCategoryRegisterRequest);
+
+    void checkDuplicateSmallCategoryName(String smallCategoryName);
+
     CategoryResponse updateSmallCategory(SmallCategoryUpdateRequest smallCategoryUpdateRequest);
 
-    List<CategoryNamesResopnse> findCategoryNames(CategoryNamesRequest categoryNamesRequest);
+    void checkExistSmallCategoryName(String smallCategoryName);
+
 }

@@ -130,7 +130,7 @@ public class MemberController {
     // 로그인
     @PostMapping("/signIn")
     public ResponseEntity<MemberSignInResponse> signInMember(@Valid @RequestBody MemberIdPasswordRequest request) {
-        memberService.findMemberIdCount(request.getMember_id()); // 아이디 존재여부 검사
+        memberService.checkExistMemberId(request.getMember_id()); // 아이디 존재여부 검사
         memberService.checkMatchIdAndPassword(request.getMember_id(), request.getPassword()); // 아이디 비밀번호 일치여부 검사
         memberService.checkActivityMember(request.getMember_id());// 회원 탈퇴상태 여부검사
         CurrentMemberInfo currentMemberInfo = memberService.getCurrentMemberInfo(request.getMember_id());// 회원 아이디, 관리자여부 가져오기
@@ -150,9 +150,9 @@ public class MemberController {
     @GetMapping
     @CheckAdmin
     @CheckSignIn
-    public ResponseEntity<List<Member>> findMemberByPagination(@RequestParam(defaultValue = "1") Integer pageNum,
-                                                               @RequestParam(defaultValue = "10") Integer contentNum) {
-        return new ResponseEntity<>(memberService.findMemberPagination(pageNum, contentNum), HttpStatus.OK);
+    public ResponseEntity<List<Member>> findAllMemberByPagination(@RequestParam(defaultValue = "1") Integer pageNum,
+                                                                  @RequestParam(defaultValue = "10") Integer contentNum) {
+        return new ResponseEntity<>(memberService.findAllMemberByPagination(pageNum, contentNum), HttpStatus.OK);
     }
 
     // 관리자 등록 - 기존회원 관리자로 승격
@@ -160,7 +160,7 @@ public class MemberController {
     @CheckAdmin
     @CheckSignIn
     public ResponseEntity<Void> registerAdmin(@Valid @RequestBody RegisterAdminRequest request) {
-        memberService.findMemberIdCount(request.getMember_id());
+        memberService.checkExistMemberId(request.getMember_id());
         memberService.checkAlreadyAdmin(request.getMember_id());
         memberService.registerAdmin(request.getMember_id());
         return ResponseEntity.ok().build();

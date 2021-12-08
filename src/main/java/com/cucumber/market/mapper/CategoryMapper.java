@@ -1,6 +1,9 @@
 package com.cucumber.market.mapper;
 
-import com.cucumber.market.dto.category.*;
+import com.cucumber.market.dto.category.BigCategoryUpdateRequest;
+import com.cucumber.market.dto.category.SmallCategoryNamesResponse;
+import com.cucumber.market.dto.category.SmallCategoryRegisterRequest;
+import com.cucumber.market.dto.category.SmallCategoryUpdateRequest;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

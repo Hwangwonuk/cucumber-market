@@ -93,7 +93,7 @@ public class MemberController {
     // 회원가입
     @PostMapping("/signUp")
     public ResponseEntity<MemberSignUpResponse> signUpMember(@Valid @RequestBody MemberSignUpRequest request) {
-        memberService.isDuplicateMemberId(request.getMember_id());
+        memberService.checkDuplicateMemberId(request.getMember_id());
 
         return new ResponseEntity<>(memberService.signUpMember(request), HttpStatus.FOUND);
     }
@@ -101,8 +101,8 @@ public class MemberController {
     // 회원조회(회원정보 - 마이페이지)
     @GetMapping("/myInfo")
     @CheckSignIn
-    public ResponseEntity<MemberInfo> findMemberInfo(@CurrentMember CurrentMemberInfo currentMemberInfo) {
-        return new ResponseEntity<>(memberService.findMemberInfo(currentMemberInfo.getMember_id()), HttpStatus.OK);
+    public ResponseEntity<MemberInfo> getMemberInfo(@CurrentMember CurrentMemberInfo currentMemberInfo) {
+        return new ResponseEntity<>(memberService.getMemberInfo(currentMemberInfo.getMember_id()), HttpStatus.OK);
     }
 
     // 회원정보 수정(이름, 비밀번호, 전화번호, 주소)
@@ -110,7 +110,7 @@ public class MemberController {
     @CheckSignIn
     public ResponseEntity<MemberUpdateInfoResponse> updateMemberInfo(@Valid @RequestBody MemberUpdateInfoRequest request,
                                                                      @CurrentMember CurrentMemberInfo currentMemberInfo) {
-        memberService.isMatchIdAndPassword(currentMemberInfo.getMember_id(), request.getOldPassword());
+        memberService.checkMatchIdAndPassword(currentMemberInfo.getMember_id(), request.getOldPassword());
 
         return new ResponseEntity<>(memberService.updateMemberInfo(request, currentMemberInfo), HttpStatus.FOUND); // 회원정보 수정 + 리다이렉트
     }
@@ -120,8 +120,9 @@ public class MemberController {
     @CheckSignIn
     public ResponseEntity<MemberSignOutResponse> inactivateMember(@Valid @RequestBody MemberIdPasswordRequest request,
                                                                      @CurrentMember CurrentMemberInfo currentMemberInfo) {
-        memberService.isMatchIdAndPassword(currentMemberInfo.getMember_id(), request.getPassword()); // 입력한 비밀번호와 현재 접속아이디 일치여부 검사
-        memberService.inactivateMember(request, currentMemberInfo); // 회원탈퇴여부 검사
+        memberService.checkMatchIdAndPassword(currentMemberInfo.getMember_id(), request.getPassword()); // 입력한 비밀번호와 현재 접속아이디 일치여부 검사
+        memberService.checkActivityMember(currentMemberInfo.getMember_id()); // 회원탈퇴여부 검사
+        memberService.inactivateMember(request, currentMemberInfo); // 회원탈퇴
 
         return new ResponseEntity<>(sessionSignInService.signOutMember(), HttpStatus.FOUND); // 로그아웃 + 리다이렉트
     }
@@ -130,8 +131,8 @@ public class MemberController {
     @PostMapping("/signIn")
     public ResponseEntity<MemberSignInResponse> signInMember(@Valid @RequestBody MemberIdPasswordRequest request) {
         memberService.findMemberIdCount(request.getMember_id()); // 아이디 존재여부 검사
-        memberService.isMatchIdAndPassword(request.getMember_id(), request.getPassword()); // 아이디 비밀번호 일치여부 검사
-        memberService.isActivityMember(request.getMember_id());// 회원 탈퇴상태 여부검사
+        memberService.checkMatchIdAndPassword(request.getMember_id(), request.getPassword()); // 아이디 비밀번호 일치여부 검사
+        memberService.checkActivityMember(request.getMember_id());// 회원 탈퇴상태 여부검사
         CurrentMemberInfo currentMemberInfo = memberService.getCurrentMemberInfo(request.getMember_id());// 회원 아이디, 관리자여부 가져오기
 
         return new ResponseEntity<>(sessionSignInService.signInMember(currentMemberInfo), HttpStatus.OK); // 로그인(세션 저장)
@@ -154,14 +155,14 @@ public class MemberController {
         return new ResponseEntity<>(memberService.findMemberPagination(pageNum, contentNum), HttpStatus.OK);
     }
 
-    // TODO: 2021-12-07 리스폰스 생성
     // 관리자 등록 - 기존회원 관리자로 승격
     @PostMapping
     @CheckAdmin
     @CheckSignIn
-    public ResponseEntity<String> registerAdmin(@Valid @RequestBody RegisterAdminRequest request) {
+    public ResponseEntity<Void> registerAdmin(@Valid @RequestBody RegisterAdminRequest request) {
         memberService.findMemberIdCount(request.getMember_id());
+        memberService.checkAlreadyAdmin(request.getMember_id());
         memberService.registerAdmin(request.getMember_id());
-        return new ResponseEntity<>("관리자 승급완료", HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 }

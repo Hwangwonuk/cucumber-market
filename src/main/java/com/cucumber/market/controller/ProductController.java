@@ -67,6 +67,7 @@ public class ProductController {
 
     // 상품조회기능 -> 제목 등의 product 컬럼들 join 문으로 파일테이블의 이미지 파일경로 + 상품찜 수 + 댓글수 뷰로 만들기
 
+
     // 상품찜(중복불가, 본인상품 찜 가능)
     @PostMapping("/{productIdx}/hope")
     @CheckSignIn

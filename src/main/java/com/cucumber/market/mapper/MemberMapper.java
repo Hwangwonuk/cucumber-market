@@ -8,16 +8,16 @@ import java.util.List;
 
 @Mapper
 public interface MemberMapper {
-    void insertMember(MemberSignUpRequest memberSignUpRequest);
+    void signUpMember(MemberSignUpRequest memberSignUpRequest);
 
-    int findMemberIdCount(String member_id);
+    int checkDuplicateMemberId(String member_id);
 
     // TODO: 2021-12-04 왜 여기만 @Param을 해주어야 되는가?
-    int isMatchIdAndPassword(@Param("member_id") String member_id, @Param("password") String password);
+    int checkMatchIdAndPassword(@Param("member_id") String member_id, @Param("password") String password);
 
-    int isActivityMember(String member_id);
+    int checkActivityMember(String member_id);
 
-    MemberInfo findByMemberId(String member_id);
+    MemberInfo getMemberInfo(String member_id);
 
     void updateMemberInfo(MemberUpdateInfoRequest memberUpdateInfoRequest);
 
@@ -28,4 +28,6 @@ public interface MemberMapper {
     List<Member> findMemberByPagination(@Param("contentNum") Integer contentNum, @Param("offset") Integer offset);
 
     void registerAdmin(String member_id);
+
+    int checkAlreadyAdmin(String member_id);
 }

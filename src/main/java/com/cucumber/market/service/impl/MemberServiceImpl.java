@@ -1,10 +1,7 @@
 package com.cucumber.market.service.impl;
 
 import com.cucumber.market.dto.member.*;
-import com.cucumber.market.exception.AlreadyInActiveMemberException;
-import com.cucumber.market.exception.MemberNotFoundException;
-import com.cucumber.market.exception.PageNoPositiveException;
-import com.cucumber.market.exception.PasswordMismatchException;
+import com.cucumber.market.exception.*;
 import com.cucumber.market.mapper.MemberMapper;
 import com.cucumber.market.service.MemberService;
 import com.cucumber.market.util.SHA256Util;
@@ -47,7 +44,7 @@ public class MemberServiceImpl implements MemberService {
                 .address(memberSignUpRequest.getAddress())
                 .build();
 
-        memberMapper.insertMember(encryptedParam);
+        memberMapper.signUpMember(encryptedParam);
 
         return MemberSignUpResponse.builder()
                 .redirectUrl(loginUrl)
@@ -60,8 +57,8 @@ public class MemberServiceImpl implements MemberService {
      * @param member_id 중복 검사할 회원 아이디
      */
     @Override
-    public void isDuplicateMemberId(String member_id) {
-        if (memberMapper.findMemberIdCount(member_id) == 1) {
+    public void checkDuplicateMemberId(String member_id) {
+        if (memberMapper.checkDuplicateMemberId(member_id) == 1) {
             throw new DataIntegrityViolationException("중복된 아이디입니다.");
         }
     }
@@ -72,8 +69,8 @@ public class MemberServiceImpl implements MemberService {
      * @param member_id 현재 로그인한 회원의 아이디
      */
     @Override
-    public MemberInfo findMemberInfo(String member_id) {
-        return memberMapper.findByMemberId(member_id);
+    public MemberInfo getMemberInfo(String member_id) {
+        return memberMapper.getMemberInfo(member_id);
     }
 
     /**
@@ -119,6 +116,13 @@ public class MemberServiceImpl implements MemberService {
         memberMapper.registerAdmin(member_id);
     }
 
+    @Override
+    public void checkAlreadyAdmin(String member_id) {
+        if (memberMapper.checkAlreadyAdmin(member_id) == 1) {
+            throw new AlreadyAdminException("입력한 회원은 이미 관리자 입니다.");
+        }
+    }
+
     /**
      * 회원아이디 존재여부 검사 메소드
      *
@@ -126,7 +130,7 @@ public class MemberServiceImpl implements MemberService {
      */
     @Override
     public void findMemberIdCount(String member_id) {
-        if (memberMapper.findMemberIdCount(member_id) == 0) {
+        if (memberMapper.checkDuplicateMemberId(member_id) == 0) {
             throw new MemberNotFoundException("입력한 아이디의 회원이 존재하지 않습니다.");
         }
     }
@@ -139,9 +143,9 @@ public class MemberServiceImpl implements MemberService {
      */
 
     @Override
-    public void isMatchIdAndPassword(String member_id, String password) {
+    public void checkMatchIdAndPassword(String member_id, String password) {
         String encryptedPassword = SHA256Util.encryptSHA256(password);
-        if (memberMapper.isMatchIdAndPassword(member_id, encryptedPassword) == 0) {
+        if (memberMapper.checkMatchIdAndPassword(member_id, encryptedPassword) == 0) {
             throw new PasswordMismatchException("입력한 아이디와 비밀번호가 일치하지 않습니다.");
         }
     }
@@ -152,8 +156,8 @@ public class MemberServiceImpl implements MemberService {
      * @param member_id 입력한 아이디
      */
     @Override
-    public void isActivityMember(String member_id) {
-        if (memberMapper.isActivityMember(member_id) == 0) {
+    public void checkActivityMember(String member_id) {
+        if (memberMapper.checkActivityMember(member_id) == 0) {
             throw new AlreadyInActiveMemberException("탈퇴한 계정의 아이디입니다.");
         }
     }

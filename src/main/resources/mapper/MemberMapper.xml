@@ -5,32 +5,32 @@
 
 <mapper namespace="com.cucumber.market.mapper.MemberMapper">
 
-    <insert id="insertMember" parameterType="com.cucumber.market.dto.member.MemberSignUpRequest">
+    <insert id="signUpMember" parameterType="com.cucumber.market.dto.member.MemberSignUpRequest">
         INSERT INTO member (member_id, password, name, phone, address)
         VALUES (#{member_id}, #{password}, #{name}, #{phone}, #{address})
     </insert>
 
-    <select id="findMemberIdCount" resultType="Integer">
+    <select id="checkDuplicateMemberId" resultType="int">
         SELECT COUNT(member_id)
         FROM member
         WHERE member_id = #{member_id}
     </select>
 
-    <select id="isMatchIdAndPassword" resultType="Integer">
+    <select id="checkMatchIdAndPassword" resultType="int">
         SELECT COUNT(name)
         FROM member
         WHERE member_id = #{member_id}
         AND password = #{password}
     </select>
 
-    <select id="isActivityMember" resultType="Integer">
+    <select id="checkActivityMember" resultType="int">
         SELECT COUNT(isactive)
         FROM member
         WHERE member_id = #{member_id}
         AND isactive = 'y'
     </select>
 
-    <select id="findByMemberId" resultType="com.cucumber.market.dto.member.MemberInfo">
+    <select id="getMemberInfo" resultType="com.cucumber.market.dto.member.MemberInfo">
         SELECT member_id, name, phone, address
         FROM member
         WHERE member_id = #{member_id}

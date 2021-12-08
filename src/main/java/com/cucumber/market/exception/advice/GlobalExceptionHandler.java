@@ -149,4 +149,12 @@ public class GlobalExceptionHandler {
         ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+
+    // 이미 관리자인데 관리자로 등록할 경우
+    @ExceptionHandler(AlreadyAdminException.class)
+    public ResponseEntity<ExceptionResponse> alreadyAdminException(final AlreadyAdminException ex) {
+        log.error(ex.getMessage(), ex);
+        ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 }

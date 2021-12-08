@@ -18,6 +18,20 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  @RestControllerAdvice 는 @ControllerAdvice 와 같고, @ResponseBody 가 추가되어 있다.
  @Controller , @RestController 의 차이와 같다
  */
+
+/*
+ * Checked Exception과 Unchecked Exception
+ *
+ * Checked Exception은 개발하는 프로그래머가 인지하고 있어야 하는 예외일 때 사용한다.
+ * 개발자가 반드시 이 예외 처리 로직을 작성해야 하며 이러한 예외가 발생할 수 있다는 정보를 알려준다.
+ * 컴파일시 에러가 발생한다.
+ * 코드 작성시 에러 처리 로직을 작성해야 컴파일이 가능하다. Ex) SQLException, IOException
+ *
+ * Unchecked Exception(RuntimeException)은 일반적으로 프로그래머의 실수에 의해 발생할 수 있다.
+ * 업무의 흐름 보다는 프로그래머가 작성한 로직이 잘못되었을때, 기본적인 내용에 문제가 있을 때 발생한다.
+ * 이 경우 기본적인 코드가 잘못된 경우가 많기 때문에 예외처리 보다는 이 예외가 아예 발생하지 않도록 처리하는 것이 올바른 처리 방법이다.
+ * 컴파일시에는 에러가 발생하지 않지만 실행도중 예외가 발생할 수 있다. Ex) IndexOutOfBoundException, NullPointerException
+ */
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -157,4 +171,29 @@ public class GlobalExceptionHandler {
         ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+
+    // 해당 판매글 작성자가 아닌데 글 수정을 하려는 경우
+    @ExceptionHandler(NoWriterForProductException.class)
+    public ResponseEntity<ExceptionResponse> noWriterForProductException(final NoWriterForProductException ex) {
+        log.error(ex.getMessage(), ex);
+        ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    // 이미 판매완료 처리된 판매글인데 판매완료 처리를 하려는 경우
+    @ExceptionHandler(AlreadySoldOutProductException.class)
+    public ResponseEntity<ExceptionResponse> alreadySoldOutProductException(final AlreadySoldOutProductException ex) {
+        log.error(ex.getMessage(), ex);
+        ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    // 이미 삭제된 판매글인데 삭제하려는 경우
+    @ExceptionHandler(AlreadyDeleteProductException.class)
+    public ResponseEntity<ExceptionResponse> alreadyDeleteProductException(final AlreadyDeleteProductException ex) {
+        log.error(ex.getMessage(), ex);
+        ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
 }

@@ -156,7 +156,7 @@ public class MemberController {
     }
 
     // 관리자 등록 - 기존회원 관리자로 승격
-    @PostMapping
+    @PostMapping("/admin")
     @CheckAdmin
     @CheckSignIn
     public ResponseEntity<Void> registerAdmin(@Valid @RequestBody RegisterAdminRequest request) {

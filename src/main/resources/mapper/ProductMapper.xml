@@ -5,7 +5,7 @@
 
 <mapper namespace="com.cucumber.market.mapper.ProductMapper">
 
-    <insert id="uploadProduct" parameterType="com.cucumber.market.dto.product.ProductUploadForm">
+    <insert id="uploadProduct" parameterType="com.cucumber.market.dto.product.ProductUploadRequest">
         INSERT INTO product (big_category_name, small_category_name, member_id, title, content, price, delivery_price)
         VALUES (#{bigCategoryName}, #{smallCategoryName}, #{member_id}, #{title}, #{content}, #{price}, #{deliveryPrice})
     </insert>
@@ -29,4 +29,33 @@
         WHERE product_idx = #{productIdx} AND member_id = #{member_id}
     </select>
 
+    <update id="updateProduct" parameterType="com.cucumber.market.dto.product.ProductUpdateRequest">
+        UPDATE product
+        SET title = #{title}, content = #{content}, price = #{price}, delivery_price = #{deliveryPrice}, updatetime = now()
+        WHERE product_idx = #{productIdx}
+    </update>
+
+    <select id="checkNotSoldOutProduct" resultType="int">
+        SELECT COUNT(*)
+        FROM product
+        WHERE product_idx = #{productIdx} AND status = 'b'
+    </select>
+
+    <update id="soldOutProduct">
+        UPDATE product
+        SET status = 'b', updatetime = now()
+        WHERE product_idx = #{productIdx} AND member_id = #{member_id}
+    </update>
+
+    <select id="checkNotDeleteProduct" resultType="int">
+        SELECT COUNT(*)
+        FROM product
+        WHERE product_idx = #{productIdx} AND status = 'c'
+    </select>
+
+    <update id="deleteProduct">
+        UPDATE product
+        SET status = 'c', updatetime = now()
+        WHERE product_idx = #{productIdx} AND member_id = #{member_id}
+    </update>
 </mapper>

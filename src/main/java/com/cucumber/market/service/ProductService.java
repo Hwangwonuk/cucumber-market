@@ -1,6 +1,7 @@
 package com.cucumber.market.service;
 
-import com.cucumber.market.dto.product.ProductUploadForm;
+import com.cucumber.market.dto.product.ProductUpdateRequest;
+import com.cucumber.market.dto.product.ProductUploadRequest;
 import com.cucumber.market.dto.product.ProductUploadResponse;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,8 +13,19 @@ public interface ProductService {
                                           List<MultipartFile> multipartFiles,
                                           String member_id) throws IOException;*/
 
-    ProductUploadResponse uploadProduct(ProductUploadForm productUploadForm,
-                                        List<MultipartFile> multipartFiles,
-                                        String member_id) throws IOException;
+    ProductUploadResponse uploadProduct(ProductUploadRequest productUploadRequest, String member_id);
 
+    ProductUploadResponse uploadProductImages(List<MultipartFile> images, String member_id) throws IOException;
+
+    void checkProductWriter(int productIdx, String member_id);
+
+    ProductUploadResponse updateProduct(int productIdx, ProductUpdateRequest productUpdateRequest, String member_id);
+
+    void checkNotSoldOutProduct(int productIdx);
+
+    void soldOutProduct(int productIdx, String member_id);
+
+    void checkNotDeleteProduct(int productIdx);
+
+    void deleteProduct(int productIdx, String member_id);
 }

@@ -4,7 +4,8 @@ import com.cucumber.market.annotation.CheckSignIn;
 import com.cucumber.market.annotation.CurrentMember;
 import com.cucumber.market.dto.member.CurrentMemberInfo;
 import com.cucumber.market.dto.product.ContentRequest;
-import com.cucumber.market.dto.product.ProductUploadForm;
+import com.cucumber.market.dto.product.ProductUpdateRequest;
+import com.cucumber.market.dto.product.ProductUploadRequest;
 import com.cucumber.market.dto.product.ProductUploadResponse;
 import com.cucumber.market.service.CommentService;
 import com.cucumber.market.service.HopeService;
@@ -49,29 +50,56 @@ public class ProductController {
 //        return new ResponseEntity<>(productService.uploadProductV2(productUploadRequest, multipartFiles, currentMemberInfo.getMember_id()), HttpStatus.OK);
 //    }
 
-    // 판매글 등록(다중 이미지 포함) TODO: 2021-12-07 이미지 파일업로드 보안정책 고려, 예외처리방식 리팩토링
+    // 판매글 등록
     @PostMapping
     @CheckSignIn
-    public ResponseEntity<ProductUploadResponse> uploadProduct(
-            @RequestParam("bigCategoryName") String bigCategoryName,
-            @RequestParam("smallCategoryName") String smallCategoryName,
-            @RequestParam("title") String title,
-            @RequestParam("content") String content,
-            @RequestParam("price") String price,
-            @RequestParam("deliveryPrice") String deliveryPrice,
-            @RequestPart(value = "images", required = false) List<MultipartFile> multipartFiles,
-            @CurrentMember CurrentMemberInfo currentMemberInfo) throws IOException {
-        ProductUploadForm productUploadForm = ProductUploadForm.builder()
-                .bigCategoryName(bigCategoryName)
-                .smallCategoryName(smallCategoryName)
-                .title(title)
-                .content(content)
-                .price(price)
-                .deliveryPrice(deliveryPrice)
-                .member_id(currentMemberInfo.getMember_id())
-                .build();
+    public ResponseEntity<ProductUploadResponse> uploadProduct(@RequestBody ProductUploadRequest request,
+                                                               @CurrentMember CurrentMemberInfo currentMemberInfo) {
 
-        return new ResponseEntity<>(productService.uploadProduct(productUploadForm, multipartFiles, currentMemberInfo.getMember_id()), HttpStatus.OK);
+        return new ResponseEntity<>(productService.uploadProduct(request, currentMemberInfo.getMember_id()), HttpStatus.OK);
+    }
+
+    // 판매글 등록 시 함께 호출될 썸네일 이미지, 상세페이지 이미지 등록 TODO: 2021-12-07 이미지 파일업로드 보안정책 고려, 예외처리방식 리팩토링, 글,이미지 등록 리스폰스 고려
+    @PostMapping("/images")
+    @CheckSignIn
+    public ResponseEntity<ProductUploadResponse> uploadProductImages(@RequestPart List<MultipartFile> images,
+                                                                     @CurrentMember CurrentMemberInfo currentMemberInfo) throws IOException {
+
+        return new ResponseEntity<>(productService.uploadProductImages(images, currentMemberInfo.getMember_id()), HttpStatus.OK);
+    }
+
+    // 판매글 수정
+    @PatchMapping("/{productIdx}/update")
+    @CheckSignIn
+    public ResponseEntity<Void> updateProduct(@PathVariable("productIdx") int productIdx,
+                                                               @RequestBody ProductUpdateRequest request,
+                                                               @CurrentMember CurrentMemberInfo currentMemberInfo) {
+        productService.checkProductWriter(productIdx, currentMemberInfo.getMember_id());
+        productService.updateProduct(productIdx, request, currentMemberInfo.getMember_id());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    // 판매글 판매완료 상태변경
+    @PatchMapping("/{productIdx}/soldOut")
+    @CheckSignIn
+    public ResponseEntity<Void> soldOutProduct(@PathVariable("productIdx") int productIdx,
+                                               @CurrentMember CurrentMemberInfo currentMemberInfo) {
+        productService.checkNotSoldOutProduct(productIdx);
+        productService.checkNotDeleteProduct(productIdx);
+        productService.checkProductWriter(productIdx, currentMemberInfo.getMember_id());
+        productService.soldOutProduct(productIdx, currentMemberInfo.getMember_id());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    // 판매글 삭제(비활성화)
+    @PatchMapping("/{productIdx}/delete")
+    @CheckSignIn
+    public ResponseEntity<Void> deleteProduct(@PathVariable("productIdx") int productIdx,
+                                                               @CurrentMember CurrentMemberInfo currentMemberInfo) {
+        productService.checkNotDeleteProduct(productIdx);
+        productService.checkProductWriter(productIdx, currentMemberInfo.getMember_id());
+        productService.deleteProduct(productIdx, currentMemberInfo.getMember_id());
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     // 상품조회기능 -> 제목 등의 product 컬럼들 join 문으로 파일테이블의 이미지 파일경로 + 상품찜 수 + 댓글수 뷰로 만들기
@@ -81,7 +109,7 @@ public class ProductController {
     @PostMapping("/{productIdx}/hope")
     @CheckSignIn
     public ResponseEntity<Void> registerHope(@PathVariable int productIdx,
-                                  @CurrentMember CurrentMemberInfo currentMemberInfo) {
+                                             @CurrentMember CurrentMemberInfo currentMemberInfo) {
         hopeService.checkDuplicateHope(productIdx, currentMemberInfo.getMember_id());
         hopeService.registerHope(productIdx, currentMemberInfo.getMember_id());
 
@@ -92,7 +120,7 @@ public class ProductController {
     @DeleteMapping("/{productIdx}/hope")
     @CheckSignIn
     public ResponseEntity<Void> cancelHope(@PathVariable int productIdx,
-                                        @CurrentMember CurrentMemberInfo currentMemberInfo) {
+                                           @CurrentMember CurrentMemberInfo currentMemberInfo) {
         hopeService.checkAlreadyHope(productIdx, currentMemberInfo.getMember_id());
         hopeService.cancelHope(productIdx, currentMemberInfo.getMember_id());
 
@@ -103,8 +131,8 @@ public class ProductController {
     @PostMapping("/{productIdx}/comment")
     @CheckSignIn
     public ResponseEntity<Void> registerComment(@PathVariable int productIdx,
-                                             @Valid @RequestBody ContentRequest contentRequest,
-                                             @CurrentMember CurrentMemberInfo currentMemberInfo) {
+                                                @Valid @RequestBody ContentRequest contentRequest,
+                                                @CurrentMember CurrentMemberInfo currentMemberInfo) {
         commentService.registerComment(productIdx, contentRequest.getContent(), currentMemberInfo.getMember_id());
         return ResponseEntity.ok().build();
     }
@@ -113,8 +141,8 @@ public class ProductController {
     @PatchMapping("/comments/{commentIdx}/update")
     @CheckSignIn
     public ResponseEntity<Void> updateComment(@PathVariable int commentIdx,
-                                           @Valid @RequestBody ContentRequest request,
-                                           @CurrentMember CurrentMemberInfo currentMemberInfo) {
+                                              @Valid @RequestBody ContentRequest request,
+                                              @CurrentMember CurrentMemberInfo currentMemberInfo) {
         commentService.checkNotDeleteComment(commentIdx);
         commentService.checkCommentWriter(commentIdx, currentMemberInfo.getMember_id());
         commentService.updateComment(commentIdx, request.getContent());
@@ -125,7 +153,7 @@ public class ProductController {
     @PatchMapping("/comments/{commentIdx}/delete")
     @CheckSignIn
     public ResponseEntity<Void> deleteComment(@PathVariable int commentIdx,
-                                           @CurrentMember CurrentMemberInfo currentMemberInfo) {
+                                              @CurrentMember CurrentMemberInfo currentMemberInfo) {
         commentService.checkNotDeleteComment(commentIdx);
         commentService.checkCommentWriter(commentIdx, currentMemberInfo.getMember_id());
         commentService.deleteComment(commentIdx, currentMemberInfo.getMember_id());
@@ -136,9 +164,9 @@ public class ProductController {
     @PostMapping("/{productIdx}/comments/{commentIdx}/reply")
     @CheckSignIn
     public ResponseEntity<Void> registerReply(@PathVariable int productIdx,
-                                           @PathVariable int commentIdx,
-                                           @Valid @RequestBody ContentRequest request,
-                                           @CurrentMember CurrentMemberInfo currentMemberInfo) {
+                                              @PathVariable int commentIdx,
+                                              @Valid @RequestBody ContentRequest request,
+                                              @CurrentMember CurrentMemberInfo currentMemberInfo) {
         // productIdx의 작성자이거나, commentIdx의 작성자인가
         replyService.checkProductOrCommentWriter(productIdx, commentIdx, currentMemberInfo.getMember_id());
         replyService.registerReply(commentIdx, request.getContent(), currentMemberInfo.getMember_id());
@@ -149,8 +177,8 @@ public class ProductController {
     @PatchMapping("/comments/replies/{replyIdx}/update")
     @CheckSignIn
     public ResponseEntity<Void> updateReply(@PathVariable int replyIdx,
-                                         @Valid @RequestBody ContentRequest request,
-                                         @CurrentMember CurrentMemberInfo currentMemberInfo) {
+                                            @Valid @RequestBody ContentRequest request,
+                                            @CurrentMember CurrentMemberInfo currentMemberInfo) {
         replyService.checkNotDeleteReply(replyIdx);
         replyService.checkReplyWriter(replyIdx, currentMemberInfo.getMember_id());
         replyService.updateReply(replyIdx, request.getContent());
@@ -161,7 +189,7 @@ public class ProductController {
     @PatchMapping("/comments/replies/{replyIdx}/delete")
     @CheckSignIn
     public ResponseEntity<Void> deleteReply(@PathVariable int replyIdx,
-                                         @CurrentMember CurrentMemberInfo currentMemberInfo) {
+                                            @CurrentMember CurrentMemberInfo currentMemberInfo) {
         replyService.checkNotDeleteReply(replyIdx);
         replyService.checkReplyWriter(replyIdx, currentMemberInfo.getMember_id());
         replyService.deleteReply(replyIdx, currentMemberInfo.getMember_id());

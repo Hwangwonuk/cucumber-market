@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cucumber.market.mapper.ReplyMapper">
+
+    <insert id="registerReply">
+        INSERT INTO reply (comment_idx, content, member_id)
+        VALUES (#{commentIdx}, #{content}, #{member_id})
+    </insert>
+
+    <select id="checkNotDeleteReply" resultType="int">
+        SELECT COUNT(*)
+        FROM reply
+        WHERE reply_idx = #{replyIdx} AND isview = 'n'
+    </select>
+
+    <select id="checkReplyWriter" resultType="int">
+        SELECT COUNT(*)
+        FROM reply
+        WHERE reply_idx = #{replyIdx} AND member_id = #{member_id}
+    </select>
+
+    <update id="updateReply">
+        UPDATE reply
+        SET content = #{content}, updatetime = now()
+        WHERE reply_idx = #{replyIdx}
+    </update>
+
+    <update id="deleteReply">
+        UPDATE reply
+        SET isview = 'n', updatetime = now()
+        WHERE reply_idx = #{replyIdx} AND member_id = #{member_id}
+    </update>
+
+</mapper>

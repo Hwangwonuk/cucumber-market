@@ -16,9 +16,9 @@ public interface ProductService {
                                         List<MultipartFile> multipartFiles,
                                         String member_id) throws IOException;
 
-    void checkDuplicateHope(int productIdx, String member_id);
-
     void registerHope(int productIdx, String member_id);
+
+    void checkDuplicateHope(int productIdx, String member_id);
 
     void checkAlreadyHope(int productIdx, String member_id);
 

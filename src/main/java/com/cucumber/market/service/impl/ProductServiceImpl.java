@@ -5,8 +5,7 @@ import com.cucumber.market.dto.product.ProductUploadForm;
 import com.cucumber.market.dto.product.ProductUploadResponse;
 import com.cucumber.market.exception.*;
 import com.cucumber.market.file.FileStore;
-import com.cucumber.market.mapper.FileMapper;
-import com.cucumber.market.mapper.ProductMapper;
+import com.cucumber.market.mapper.*;
 import com.cucumber.market.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +24,14 @@ public class ProductServiceImpl implements ProductService {
     private final FileMapper fileMapper;
 
     private final FileStore fileStore;
+
+    private final HopeMapper hopeMapper;
+
+    private final CommentMapper commentMapper;
+
+    private final ReplyMapper replyMapper;
+
+
 
     @Value("${cucumber.product.url}")
     private String productUrl;
@@ -84,25 +91,25 @@ public class ProductServiceImpl implements ProductService {
     }
 
     /**
-     * 상품찜 중복검사 메소드
-     * @param productIdx 상품번호
-     * @param member_id 로그인한 회원의 아이디
-     */
-    @Override
-    public void checkDuplicateHope(int productIdx, String member_id) {
-        if (productMapper.checkDuplicateHope(productIdx, member_id) == 1) {
-            throw new AlreadyHopeRegisteredException("이미 해당 상품을 찜하셨습니다.");
-        }
-    }
-
-    /**
      * 상품찜 메소드
      * @param productIdx 상품번호
      * @param member_id 로그인한 회원의 아이디
      */
     @Override
     public void registerHope(int productIdx, String member_id) {
-        productMapper.registerHope(productIdx, member_id);
+        hopeMapper.registerHope(productIdx, member_id);
+    }
+
+    /**
+     * 상품찜 중복검사 메소드
+     * @param productIdx 상품번호
+     * @param member_id 로그인한 회원의 아이디
+     */
+    @Override
+    public void checkDuplicateHope(int productIdx, String member_id) {
+        if (hopeMapper.checkDuplicateHope(productIdx, member_id) == 1) {
+            throw new AlreadyHopeRegisteredException("이미 해당 상품을 찜하셨습니다.");
+        }
     }
 
     /**
@@ -112,7 +119,7 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public void checkAlreadyHope(int productIdx, String member_id) {
-        if (productMapper.checkDuplicateHope(productIdx, member_id) == 0) {
+        if (hopeMapper.checkDuplicateHope(productIdx, member_id) == 0) {
             throw new NotYetHopeRegisteredException("해당 상품을 찜한적이 없습니다.");
         }
     }
@@ -124,7 +131,7 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public void cancelHope(int productIdx, String member_id) {
-        productMapper.cancelHope(productIdx, member_id);
+        hopeMapper.cancelHope(productIdx, member_id);
     }
 
     /**
@@ -135,16 +142,16 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public void registerComment(int productIdx, String content, String member_id) {
-        productMapper.registerComment(productIdx, content, member_id);
+        commentMapper.registerComment(productIdx, content, member_id);
     }
 
     /**
      * 댓글삭제 여부검사 메소드
-     * @param commentIdx
+     * @param commentIdx 댓글번호
      */
     @Override
     public void checkNotDeleteComment(int commentIdx) {
-        if (productMapper.checkNotDeleteComment(commentIdx) == 1) {
+        if (commentMapper.checkNotDeleteComment(commentIdx) == 1) {
             throw new AlreadyDeletedCommentException("해당 댓글은 이미 삭제되었습니다.");
         }
     }
@@ -156,7 +163,7 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public void checkCommentWriter(int commentIdx, String member_id) {
-        if (productMapper.checkCommentWriter(commentIdx, member_id) == 0) {
+        if (commentMapper.checkCommentWriter(commentIdx, member_id) == 0) {
             throw new NoWriterForCommentException("해당 댓글의 작성자가 아닙니다.");
         }
     }
@@ -168,7 +175,7 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public void updateComment(int commentIdx, String content) {
-        productMapper.updateComment(commentIdx, content);
+        commentMapper.updateComment(commentIdx, content);
     }
 
     /**
@@ -178,7 +185,7 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public void deleteComment(int commentIdx, String member_id) {
-        productMapper.deleteComment(commentIdx, member_id);
+        commentMapper.deleteComment(commentIdx, member_id);
     }
 
     /**
@@ -189,18 +196,18 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public void registerReply(int commentIdx, String content, String member_id) {
-        productMapper.registerReply(commentIdx, content, member_id);
+        replyMapper.registerReply(commentIdx, content, member_id);
     }
 
     /**
      * 상품글 작성자 or 댓글 작성자 검사 메소드
-     * @param productIdx
-     * @param commentIdx
-     * @param member_id
+     * @param productIdx 글번호
+     * @param commentIdx 댓글번호
+     * @param member_id 대댓글 작성을 시도하는 회원의 아이디
      */
     @Override
     public void checkProductOrCommentWriter(int productIdx, int commentIdx, String member_id) {
-        if (productMapper.checkProductWriter(productIdx, member_id) == 0 || productMapper.checkCommentWriter(commentIdx, member_id) == 0) {
+        if (productMapper.checkProductWriter(productIdx, member_id) == 0 || commentMapper.checkCommentWriter(commentIdx, member_id) == 0) {
             throw new NoWriterForProductOrCommentException("해당 글이나 댓글의 작성자가 아닙니다.");
         }
     }
@@ -211,7 +218,7 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public void checkNotDeleteReply(int replyIdx) {
-        if (productMapper.checkNotDeleteReply(replyIdx) == 1) {
+        if (replyMapper.checkNotDeleteReply(replyIdx) == 1) {
             throw new AlreadyDeletedReplyException("해당 대댓글은 이미 삭제되었습니다.");
         }
     }
@@ -223,7 +230,7 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public void checkReplyWriter(int replyIdx, String member_id) {
-        if (productMapper.checkReplyWriter(replyIdx, member_id) == 0) {
+        if (replyMapper.checkReplyWriter(replyIdx, member_id) == 0) {
             throw new NoWriterForReplyException("해당 대댓글의 작성자가 아닙니다.");
         }
     }
@@ -235,7 +242,7 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public void updateReply(int replyIdx, String content) {
-        productMapper.updateReply(replyIdx, content);
+        replyMapper.updateReply(replyIdx, content);
     }
 
     /**
@@ -245,6 +252,6 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public void deleteReply(int replyIdx, String member_id) {
-        productMapper.deleteReply(replyIdx, member_id);
+        replyMapper.deleteReply(replyIdx, member_id);
     }
 }

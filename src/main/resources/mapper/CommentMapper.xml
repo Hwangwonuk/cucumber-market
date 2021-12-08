@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cucumber.market.mapper.CommentMapper">
+    <insert id="registerComment">
+        INSERT INTO comment (product_idx, member_id, content)
+        VALUES (#{productIdx}, #{member_id}, #{content})
+    </insert>
+
+    <select id="checkNotDeleteComment" resultType="int">
+        SELECT COUNT(*)
+        FROM comment
+        WHERE comment_idx = #{commentIdx} AND isview = 'n'
+    </select>
+
+    <select id="checkCommentWriter" resultType="int">
+        SELECT COUNT(*)
+        FROM comment
+        WHERE comment_idx = #{commentIdx} AND member_id = #{member_id}
+    </select>
+
+    <update id="updateComment">
+        UPDATE comment
+        SET content = #{content}, updatetime = now()
+        WHERE comment_idx = #{commentIdx}
+    </update>
+
+    <update id="deleteComment">
+        UPDATE comment
+        SET isview = 'n', updatetime = now()
+        WHERE comment_idx = #{commentIdx} AND member_id = #{member_id}
+    </update>
+</mapper>

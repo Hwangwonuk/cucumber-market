@@ -104,11 +104,11 @@ public class ProductController {
     @PatchMapping("/comments/{commentIdx}/update")
     @CheckSignIn
     public ResponseEntity<Void> updateComment(@PathVariable int commentIdx,
-                                           @Valid @RequestBody ContentRequest contentRequest,
+                                           @Valid @RequestBody ContentRequest request,
                                            @CurrentMember CurrentMemberInfo currentMemberInfo) {
         productService.checkNotDeleteComment(commentIdx);
         productService.checkCommentWriter(commentIdx, currentMemberInfo.getMember_id());
-        productService.updateComment(commentIdx, contentRequest.getContent());
+        productService.updateComment(commentIdx, request.getContent());
         return ResponseEntity.ok().build();
     }
 
@@ -128,11 +128,11 @@ public class ProductController {
     @CheckSignIn
     public ResponseEntity<Void> registerReply(@PathVariable int productIdx,
                                            @PathVariable int commentIdx,
-                                           @Valid @RequestBody ContentRequest contentRequest,
+                                           @Valid @RequestBody ContentRequest request,
                                            @CurrentMember CurrentMemberInfo currentMemberInfo) {
         // productIdx의 작성자이거나, commentIdx의 작성자인가
         productService.checkProductOrCommentWriter(productIdx, commentIdx, currentMemberInfo.getMember_id());
-        productService.registerReply(commentIdx, contentRequest.getContent(), currentMemberInfo.getMember_id());
+        productService.registerReply(commentIdx, request.getContent(), currentMemberInfo.getMember_id());
         return ResponseEntity.ok().build();
     }
 
@@ -140,11 +140,11 @@ public class ProductController {
     @PatchMapping("/comments/replies/{replyIdx}/update")
     @CheckSignIn
     public ResponseEntity<Void> updateReply(@PathVariable int replyIdx,
-                                         @Valid @RequestBody ContentRequest ContentRequest,
+                                         @Valid @RequestBody ContentRequest request,
                                          @CurrentMember CurrentMemberInfo currentMemberInfo) {
         productService.checkNotDeleteReply(replyIdx);
         productService.checkReplyWriter(replyIdx, currentMemberInfo.getMember_id());
-        productService.updateReply(replyIdx, ContentRequest.getContent());
+        productService.updateReply(replyIdx, request.getContent());
         return ResponseEntity.ok().build();
     }
 

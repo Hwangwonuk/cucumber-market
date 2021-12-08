@@ -1,23 +1,27 @@
 package com.cucumber.market.mapper;
 
-import com.cucumber.market.dto.category.*;
+import com.cucumber.market.dto.category.BigCategoryUpdateRequest;
+import com.cucumber.market.dto.category.SmallCategoryNamesResponse;
+import com.cucumber.market.dto.category.SmallCategoryRegisterRequest;
+import com.cucumber.market.dto.category.SmallCategoryUpdateRequest;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
 @Mapper
 public interface CategoryMapper {
-    void registerBigCategory(BigCategoryRegisterRequest bigCategoryRegisterRequest);
+    void registerBigCategory(String bigCategoryName);
 
-    void registerSmallCategory(SmallCategoryRegisterRequest smallCategoryRegisterRequest);
+    int checkDuplicateBigCategoryName(String bigCategoryName);
 
-    int findBigCategoryNameCount(String bigCategoryName);
-
-    int findSmallCategoryNameCount(String smallCategoryName);
+    List<SmallCategoryNamesResponse> getSmallCategoryNames(String bigCategoryName);
 
     void updateBigCategory(BigCategoryUpdateRequest bigCategoryUpdateRequest);
 
+    void registerSmallCategory(SmallCategoryRegisterRequest smallCategoryRegisterRequest);
+
+    int checkDuplicateSmallCategoryName(String smallCategoryName);
+
     void updateSmallCategory(SmallCategoryUpdateRequest smallCategoryUpdateRequest);
 
-    List<CategoryNamesResopnse> findCategoryNames(String bigCategoryName);
 }

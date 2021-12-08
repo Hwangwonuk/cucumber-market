@@ -7,23 +7,25 @@ import java.util.List;
 public interface MemberService {
     MemberSignUpResponse signUpMember(MemberSignUpRequest memberSignUpRequest);
 
-    void isDuplicateMemberId(String member_id);
+    void checkDuplicateMemberId(String member_id);
 
-    void findMemberIdCount(String member_id);
+    MemberInfo getMemberInfo(String member_id);
 
-    void isMatchIdAndPassword(String member_id, String password);
+    void checkExistMemberId(String member_id);
 
-    void isActivityMember(String member_id);
+    void checkMatchIdAndPassword(String member_id, String password);
+
+    void checkActivityMember(String member_id);
 
     MemberUpdateInfoResponse updateMemberInfo(MemberUpdateInfoRequest memberUpdateInfoRequest, CurrentMemberInfo currentMemberInfo);
 
     void inactivateMember(MemberIdPasswordRequest memberInactivateRequest, CurrentMemberInfo currentMemberInfo);
 
-    MemberInfo findMemberInfo(String member_id);
-
     CurrentMemberInfo getCurrentMemberInfo(String member_id);
 
-    List<Member> findMemberPagination(Integer pageNum, Integer contentNum);
+    List<Member> findAllMemberByPagination(Integer pageNum, Integer contentNum);
 
     void registerAdmin(String member_id);
+
+    void checkAlreadyAdmin(String member_id);
 }

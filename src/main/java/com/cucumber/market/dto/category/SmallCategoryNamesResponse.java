@@ -5,6 +5,6 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class SmallCategoryRegisterResponse {
-    private String redirectUrl;
+public class SmallCategoryNamesResponse {
+    private String smallCategoryName;
 }

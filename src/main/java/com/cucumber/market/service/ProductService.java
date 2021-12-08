@@ -16,33 +16,4 @@ public interface ProductService {
                                         List<MultipartFile> multipartFiles,
                                         String member_id) throws IOException;
 
-    void checkDuplicateHope(int productIdx, String member_id);
-
-    void registerHope(int productIdx, String member_id);
-
-    void checkAlreadyHope(int productIdx, String member_id);
-
-    void cancelHope(int productIdx, String member_id);
-
-    void registerComment(int productIdx, String content, String member_id);
-
-    void checkNotDeleteComment(int commentIdx);
-
-    void checkCommentWriter(int commentIdx, String member_id);
-
-    void updateComment(int commentIdx, String content);
-
-    void deleteComment(int commentIdx, String member_id);
-
-    void registerReply(int commentIdx, String content, String member_id);
-
-    void checkProductOrCommentWriter(int productIdx, int commentIdx, String member_id);
-
-    void checkNotDeleteReply(int replyIdx);
-
-    void checkReplyWriter(int replyIdx, String member_id);
-
-    void updateReply(int replyIdx, String content);
-
-    void deleteReply(int replyIdx, String member_id);
 }

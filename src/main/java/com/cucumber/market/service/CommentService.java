@@ -16,6 +16,8 @@ public interface CommentService {
 
     void checkCommentWriter(int commentIdx, String member_id);
 
+    Boolean isCommentWriter(int commentIdx, String member_id);
+
     void updateComment(int commentIdx, String content);
 
     void deleteComment(int commentIdx, String member_id);

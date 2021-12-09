@@ -209,8 +209,15 @@ public class ProductController {
                                                     @CurrentMember CurrentMemberInfo currentMemberInfo) {
         replyService.checkExistReply(replyIdx);
         replyService.checkCommentIncludeReply(commentIdx, replyIdx);
-        productService.checkProductOrReplyWriter(productIdx, replyIdx, currentMemberInfo.getMember_id());
-        replyService.checkNotDeleteReply(commentIdx);
+        replyService.checkNotDeleteReply(replyIdx);
+
+        // 현재 로그인한 사람이 댓글 작성자라면 판매자가 작성한 대댓글을 볼 수 있어야된다
+        if(commentService.isCommentWriter(commentIdx, currentMemberInfo.getMember_id())) {
+            return new ResponseEntity<>(replyService.getReply(replyIdx), HttpStatus.OK);
+        } else { // 판매글 작성자거나 대댓글 작성자면
+            productService.checkProductOrReplyWriter(productIdx, replyIdx, currentMemberInfo.getMember_id());
+        }
+
         return new ResponseEntity<>(replyService.getReply(replyIdx), HttpStatus.OK);
     }
 

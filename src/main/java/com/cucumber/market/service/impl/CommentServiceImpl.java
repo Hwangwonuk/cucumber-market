@@ -72,7 +72,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     /**
-     * 댓글 작성자 확인 메소드
+     * 댓글 작성자 확인 메소드 (작성자가 아니라면 예외 발생)
      * @param commentIdx 댓글번호
      * @param member_id 로그인한 회원의 아이디
      */
@@ -81,6 +81,19 @@ public class CommentServiceImpl implements CommentService {
         if (commentMapper.checkCommentWriter(commentIdx, member_id) == 0) {
             throw new NoWriterForCommentException("해당 댓글의 작성자가 아닙니다.");
         }
+    }
+
+    /**
+     * 댓글 작성자 확인 메소드 (시비 여부 확인)
+     * @param commentIdx 댓글번호
+     * @param member_id 로그인한 회원의 아이디
+     */
+    @Override
+    public Boolean isCommentWriter(int commentIdx, String member_id) {
+        if (commentMapper.checkCommentWriter(commentIdx, member_id) == 0) {
+            return false;
+        }
+        return true;
     }
 
     /**

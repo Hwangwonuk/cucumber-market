@@ -4,10 +4,7 @@ import com.cucumber.market.annotation.CheckSignIn;
 import com.cucumber.market.annotation.CurrentMember;
 import com.cucumber.market.dto.member.CurrentMemberInfo;
 import com.cucumber.market.dto.product.*;
-import com.cucumber.market.service.CommentService;
-import com.cucumber.market.service.HopeService;
-import com.cucumber.market.service.ProductService;
-import com.cucumber.market.service.ReplyService;
+import com.cucumber.market.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
+
 /*
  @ModelAttribute 는 HTTP 요청 파라미터(URL 쿼리 스트링, POST Form)를 다룰 때 사용한다.
  @RequestBody 는 HTTP Body의 데이터를 객체로 변환할 때 사용한다. 주로 API JSON 요청을 다룰 때 사용한다
@@ -28,6 +26,8 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+
+    private final CategoryService categoryService;
 
     private final HopeService hopeService;
 
@@ -46,6 +46,7 @@ public class ProductController {
 //            @CurrentMember CurrentMemberInfo currentMemberInfo) throws IOException {
 //        return new ResponseEntity<>(productService.uploadProductV2(productUploadRequest, multipartFiles, currentMemberInfo.getMember_id()), HttpStatus.OK);
 //    }
+    // 판매글 관련
 
     // 판매글 등록
     @PostMapping
@@ -65,12 +66,23 @@ public class ProductController {
         return new ResponseEntity<>(productService.uploadProductImages(images, currentMemberInfo.getMember_id()), HttpStatus.OK);
     }
 
+    // 판매글 검색 및 조회(최신순 페이징, 분류, 제목 검색기능 포함)
+    @GetMapping("{productIdx}")
+    public ResponseEntity<List<FindProductResponse>> findProductByPagination(@RequestParam(defaultValue = "1") Integer pageNum,
+                                                                             @RequestParam(defaultValue = "10") Integer contentNum,
+                                                                             @Valid FindProductRequest request) {
+        categoryService.checkExistSmallCategoryName(request.getSmallCategoryName());
+        return new ResponseEntity<>(productService.findProductByPagination(pageNum, contentNum, request.getSmallCategoryName(), request.getTitle()), HttpStatus.OK);
+    }
+
+    // 판매글 상세조회 -> 응답 -> 글번호, 제목, 가격, 배송비, 작성자, 내용, 모든 이미지 경로, 글번호에 속한 댓글번호, 대댓글번호
+
     // 판매글 수정
     @PatchMapping("/{productIdx}/update")
     @CheckSignIn
     public ResponseEntity<Void> updateProduct(@PathVariable("productIdx") int productIdx,
-                                                               @RequestBody ProductUpdateRequest request,
-                                                               @CurrentMember CurrentMemberInfo currentMemberInfo) {
+                                              @Valid @RequestBody ProductUpdateRequest request,
+                                              @CurrentMember CurrentMemberInfo currentMemberInfo) {
         productService.checkProductWriter(productIdx, currentMemberInfo.getMember_id());
         productService.updateProduct(productIdx, request, currentMemberInfo.getMember_id());
         return new ResponseEntity<>(HttpStatus.OK);
@@ -99,8 +111,7 @@ public class ProductController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    // 상품조회기능 -> 제목 등의 product 컬럼들 join 문으로 파일테이블의 이미지 파일경로 + 상품찜 수 + 댓글수 뷰로 만들기
-
+    // 상품찜 관련
 
     // 상품찜(중복불가, 본인상품 찜 가능)
     @PostMapping("/{productIdx}/hope")
@@ -124,6 +135,8 @@ public class ProductController {
         return ResponseEntity.ok().build();
     }
 
+    // 댓글관련
+
     // 댓글등록
     @PostMapping("/{productIdx}/comment")
     @CheckSignIn
@@ -134,7 +147,7 @@ public class ProductController {
         return ResponseEntity.ok().build();
     }
 
-    // 댓글조회
+    // 댓글조회(글 작성자 or 댓글 작성자만 조회가능)
     @GetMapping("{productIdx}/comments/{commentIdx}")
     @CheckSignIn
     public ResponseEntity<ContentResponse> getComment(@PathVariable int productIdx,
@@ -173,23 +186,27 @@ public class ProductController {
         return ResponseEntity.ok().build();
     }
 
-    // 대댓글등록
+    // 대댓글 관련
+
+    // 대댓글등록(글 작성자 or 댓글 작성자만 등록가능)
     @PostMapping("/{productIdx}/comments/{commentIdx}/reply")
     @CheckSignIn
     public ResponseEntity<Void> registerReply(@PathVariable int productIdx,
                                               @PathVariable int commentIdx,
+                                              @Valid @RequestBody ContentRequest request,
                                               @CurrentMember CurrentMemberInfo currentMemberInfo) {
         productService.checkProductOrCommentWriter(productIdx, commentIdx, currentMemberInfo.getMember_id());
+        replyService.registerReply(commentIdx, request.getContent(), currentMemberInfo.getMember_id());
         return ResponseEntity.ok().build();
     }
 
-    // 대댓글조회
+    // 대댓글조회(글 작성자 or 대댓글 작성자만 조회가능)
     @GetMapping("{productIdx}/comments/{commentIdx}/replies/{replyIdx}")
     @CheckSignIn
     public ResponseEntity<ContentResponse> getReply(@PathVariable int productIdx,
-                                         @PathVariable int commentIdx,
-                                         @PathVariable int replyIdx,
-                                         @CurrentMember CurrentMemberInfo currentMemberInfo) {
+                                                    @PathVariable int commentIdx,
+                                                    @PathVariable int replyIdx,
+                                                    @CurrentMember CurrentMemberInfo currentMemberInfo) {
         replyService.checkExistReply(replyIdx);
         replyService.checkCommentIncludeReply(commentIdx, replyIdx);
         productService.checkProductOrReplyWriter(productIdx, replyIdx, currentMemberInfo.getMember_id());

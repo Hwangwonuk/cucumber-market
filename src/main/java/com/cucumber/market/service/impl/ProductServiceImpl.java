@@ -1,13 +1,7 @@
 package com.cucumber.market.service.impl;
 
-import com.cucumber.market.dto.product.FileUploadForm;
-import com.cucumber.market.dto.product.ProductUpdateRequest;
-import com.cucumber.market.dto.product.ProductUploadRequest;
-import com.cucumber.market.dto.product.ProductUploadResponse;
-import com.cucumber.market.exception.AlreadyDeleteProductException;
-import com.cucumber.market.exception.AlreadySoldOutProductException;
-import com.cucumber.market.exception.NoWriterForProductException;
-import com.cucumber.market.exception.NoWriterForProductOrCommentException;
+import com.cucumber.market.dto.product.*;
+import com.cucumber.market.exception.*;
 import com.cucumber.market.file.FileStore;
 import com.cucumber.market.mapper.CommentMapper;
 import com.cucumber.market.mapper.FileMapper;
@@ -110,6 +104,30 @@ public class ProductServiceImpl implements ProductService {
         return ProductUploadResponse.builder()
                 .redirectUrl(productUrl)
                 .build();
+    }
+
+    /**
+     * 판매글 조회 메소드(페이징, 검색)
+     * @param pageNum 페이지 번호
+     * @param contentNum 보여줄 개수
+     * @param smallCategoryName 소분류명
+     * @param title 제목
+     * @return 글번호, 대분류, 소분류, 제목, 가격, 작성자, status(a,b), 수정시간, 썸네일 파일경로, 상품찜 수 MySQL 뷰 활용
+     */
+    @Override
+    public List<FindProductResponse> findProductByPagination(int pageNum, int contentNum, String smallCategoryName, String title) {
+        if (pageNum <= 0)
+            throw new PageNoPositiveException("페이지는 1 이상 이어야 합니다.");
+
+        Integer offset = (pageNum - 1) * contentNum;
+
+        String findTitle;
+        if(title == null)
+            findTitle = "%%";
+        else
+            findTitle = "%" + title + "%";
+
+        return productMapper.findProductByPagination(contentNum, offset, smallCategoryName, findTitle);
     }
 
     /**

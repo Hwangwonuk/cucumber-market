@@ -1,9 +1,12 @@
 package com.cucumber.market.mapper;
 
+import com.cucumber.market.dto.product.FindProductResponse;
 import com.cucumber.market.dto.product.ProductUpdateRequest;
 import com.cucumber.market.dto.product.ProductUploadRequest;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 @Mapper
 public interface ProductMapper {
@@ -16,6 +19,11 @@ public interface ProductMapper {
     int checkProductWriter(@Param("productIdx") int productIdx, @Param("member_id") String member_id);
 
     void updateProduct(ProductUpdateRequest productUpdateRequest);
+
+    List<FindProductResponse> findProductByPagination(@Param("contentNum") int contentNum,
+                                                      @Param("offset") int offset,
+                                                      @Param("smallCategoryName") String smallCategoryName,
+                                                      @Param("findTitle") String findTitle);
 
     int checkNotSoldOutProduct(int productIdx);
 

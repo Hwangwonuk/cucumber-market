@@ -8,13 +8,7 @@ import javax.validation.constraints.Pattern;
 
 @Getter
 @Builder
-public class ProductUploadRequest {
-    @NotBlank(message = "대분류를 입력해주세요.")
-    private final String bigCategoryName;
-
-    @NotBlank(message = "소분류를 입력해주세요.")
-    private final String smallCategoryName;
-
+public class ProductUpdateRequest {
     @NotBlank(message = "제목을 입력해주세요.")
     private final String title;
 
@@ -29,7 +23,7 @@ public class ProductUploadRequest {
     @Pattern(regexp = "[0-9]", message = "배송비는 숫자만 입력이 가능합니다.")
     private final String deliveryPrice;
 
+    private final int productIdx;
+
     private final String member_id;
-
-
 }

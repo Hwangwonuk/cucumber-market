@@ -10,6 +10,24 @@
         VALUES (#{commentIdx}, #{content}, #{member_id})
     </insert>
 
+    <select id="checkExistReply" resultType="int">
+        SELECT COUNT(*)
+        FROM reply
+        WHERE reply_idx = #{replyIdx}
+    </select>
+
+    <select id="checkCommentIncludeReply" resultType="int">
+        SELECT COUNT(*)
+        FROM reply
+        WHERE reply_idx = #{replyIdx} AND comment_idx = #{commentIdx}
+    </select>
+
+    <select id="getReply" resultType="com.cucumber.market.dto.product.ContentResponse">
+        SELECT member_id, content, updatetime
+        FROM reply
+        WHERE reply_idx = #{replyIdx}
+    </select>
+
     <select id="checkNotDeleteReply" resultType="int">
         SELECT COUNT(*)
         FROM reply

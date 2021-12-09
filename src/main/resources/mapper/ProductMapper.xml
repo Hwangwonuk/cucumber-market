@@ -5,7 +5,7 @@
 
 <mapper namespace="com.cucumber.market.mapper.ProductMapper">
 
-    <insert id="uploadProduct" parameterType="com.cucumber.market.dto.product.ProductUploadForm">
+    <insert id="uploadProduct" parameterType="com.cucumber.market.dto.product.ProductUploadRequest">
         INSERT INTO product (big_category_name, small_category_name, member_id, title, content, price, delivery_price)
         VALUES (#{bigCategoryName}, #{smallCategoryName}, #{member_id}, #{title}, #{content}, #{price}, #{deliveryPrice})
     </insert>
@@ -23,10 +23,75 @@
         WHERE product_idx = #{productIdx}
     </update>
 
+    <select id="findProductByPagination"
+            resultType="com.cucumber.market.dto.product.FindProductResponse">
+        SELECT *
+        FROM V_PRODUCT_MAIN
+        <!--
+        판매글 제목 검색 조건 분기문
+
+        <when test="조건문"></when> <otherwise></otherwise> 형식으로 사용 가능하며 <if></if>를 사용해도 됨
+        -->
+        <choose>
+            <when test="findTitle.equals('%%')">
+                WHERE small_category_name = #{smallCategoryName}
+            </when>
+            <otherwise>
+                WHERE (small_category_name = #{smallCategoryName} AND title LIKE #{findTitle})
+            </otherwise>
+        </choose>
+        LIMIT #{contentNum} OFFSET #{offset}
+    </select>
+    <!-- 뷰 상세
+    CREATE VIEW V_PRODUCT_MAIN AS(
+        SELECT
+            a.product_idx, a.big_category_name, a.small_category_name, a.title, a.price, a.member_id, a.status, a.updatetime,
+            COUNT(b.member_id) AS hope,
+            c.storefilename
+        FROM product a
+        LEFT JOIN hope b
+        ON a.product_idx = b.product_idx
+        LEFT JOIN file c
+        ON a.thumbnail_file_idx = c.file_idx
+        WHERE status = 'a' OR status = 'b'
+        GROUP BY a.product_idx
+        ORDER BY updatetime DESC
+    );
+    -->
+
     <select id="checkProductWriter" resultType="int">
         SELECT COUNT(*)
         FROM product
         WHERE product_idx = #{productIdx} AND member_id = #{member_id}
     </select>
 
+    <update id="updateProduct" parameterType="com.cucumber.market.dto.product.ProductUpdateRequest">
+        UPDATE product
+        SET title = #{title}, content = #{content}, price = #{price}, delivery_price = #{deliveryPrice}, updatetime = now()
+        WHERE product_idx = #{productIdx}
+    </update>
+
+    <select id="checkNotSoldOutProduct" resultType="int">
+        SELECT COUNT(*)
+        FROM product
+        WHERE product_idx = #{productIdx} AND status = 'b'
+    </select>
+
+    <update id="soldOutProduct">
+        UPDATE product
+        SET status = 'b', updatetime = now()
+        WHERE product_idx = #{productIdx} AND member_id = #{member_id}
+    </update>
+
+    <select id="checkNotDeleteProduct" resultType="int">
+        SELECT COUNT(*)
+        FROM product
+        WHERE product_idx = #{productIdx} AND status = 'c'
+    </select>
+
+    <update id="deleteProduct">
+        UPDATE product
+        SET status = 'c', updatetime = now()
+        WHERE product_idx = #{productIdx} AND member_id = #{member_id}
+    </update>
 </mapper>

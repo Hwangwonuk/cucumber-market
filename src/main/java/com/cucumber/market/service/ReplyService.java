@@ -1,10 +1,16 @@
 package com.cucumber.market.service;
 
+import com.cucumber.market.dto.product.ContentResponse;
+
 public interface ReplyService {
 
     void registerReply(int commentIdx, String content, String member_id);
 
-    void checkProductOrCommentWriter(int productIdx, int commentIdx, String member_id);
+    void checkExistReply(int replyIdx);
+
+    void checkCommentIncludeReply(int commentIdx, int replyIdx);
+
+    ContentResponse getReply(int replyIdx);
 
     void checkNotDeleteReply(int replyIdx);
 

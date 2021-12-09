@@ -3,10 +3,7 @@ package com.cucumber.market.controller;
 import com.cucumber.market.annotation.CheckSignIn;
 import com.cucumber.market.annotation.CurrentMember;
 import com.cucumber.market.dto.member.CurrentMemberInfo;
-import com.cucumber.market.dto.product.ContentRequest;
-import com.cucumber.market.dto.product.ProductUpdateRequest;
-import com.cucumber.market.dto.product.ProductUploadRequest;
-import com.cucumber.market.dto.product.ProductUploadResponse;
+import com.cucumber.market.dto.product.*;
 import com.cucumber.market.service.CommentService;
 import com.cucumber.market.service.HopeService;
 import com.cucumber.market.service.ProductService;
@@ -95,7 +92,7 @@ public class ProductController {
     @PatchMapping("/{productIdx}/delete")
     @CheckSignIn
     public ResponseEntity<Void> deleteProduct(@PathVariable("productIdx") int productIdx,
-                                                               @CurrentMember CurrentMemberInfo currentMemberInfo) {
+                                              @CurrentMember CurrentMemberInfo currentMemberInfo) {
         productService.checkNotDeleteProduct(productIdx);
         productService.checkProductWriter(productIdx, currentMemberInfo.getMember_id());
         productService.deleteProduct(productIdx, currentMemberInfo.getMember_id());
@@ -137,12 +134,27 @@ public class ProductController {
         return ResponseEntity.ok().build();
     }
 
+    // 댓글조회
+    @GetMapping("{productIdx}/comments/{commentIdx}")
+    @CheckSignIn
+    public ResponseEntity<ContentResponse> getComment(@PathVariable int productIdx,
+                                                      @PathVariable int commentIdx,
+                                                      @CurrentMember CurrentMemberInfo currentMemberInfo) {
+        commentService.checkExistComment(commentIdx);
+        commentService.checkProductIncludeComment(productIdx, commentIdx);
+        productService.checkProductOrCommentWriter(productIdx, commentIdx, currentMemberInfo.getMember_id());
+        commentService.checkNotDeleteComment(commentIdx);
+
+        return new ResponseEntity(commentService.getComment(commentIdx), HttpStatus.OK);
+    }
+
     // 댓글수정
     @PatchMapping("/comments/{commentIdx}/update")
     @CheckSignIn
     public ResponseEntity<Void> updateComment(@PathVariable int commentIdx,
                                               @Valid @RequestBody ContentRequest request,
                                               @CurrentMember CurrentMemberInfo currentMemberInfo) {
+        commentService.checkExistComment(commentIdx);
         commentService.checkNotDeleteComment(commentIdx);
         commentService.checkCommentWriter(commentIdx, currentMemberInfo.getMember_id());
         commentService.updateComment(commentIdx, request.getContent());
@@ -154,6 +166,7 @@ public class ProductController {
     @CheckSignIn
     public ResponseEntity<Void> deleteComment(@PathVariable int commentIdx,
                                               @CurrentMember CurrentMemberInfo currentMemberInfo) {
+        commentService.checkExistComment(commentIdx);
         commentService.checkNotDeleteComment(commentIdx);
         commentService.checkCommentWriter(commentIdx, currentMemberInfo.getMember_id());
         commentService.deleteComment(commentIdx, currentMemberInfo.getMember_id());
@@ -165,12 +178,23 @@ public class ProductController {
     @CheckSignIn
     public ResponseEntity<Void> registerReply(@PathVariable int productIdx,
                                               @PathVariable int commentIdx,
-                                              @Valid @RequestBody ContentRequest request,
                                               @CurrentMember CurrentMemberInfo currentMemberInfo) {
-        // productIdx의 작성자이거나, commentIdx의 작성자인가
-        replyService.checkProductOrCommentWriter(productIdx, commentIdx, currentMemberInfo.getMember_id());
-        replyService.registerReply(commentIdx, request.getContent(), currentMemberInfo.getMember_id());
+        productService.checkProductOrCommentWriter(productIdx, commentIdx, currentMemberInfo.getMember_id());
         return ResponseEntity.ok().build();
+    }
+
+    // 대댓글조회
+    @GetMapping("{productIdx}/comments/{commentIdx}/replies/{replyIdx}")
+    @CheckSignIn
+    public ResponseEntity<ContentResponse> getReply(@PathVariable int productIdx,
+                                         @PathVariable int commentIdx,
+                                         @PathVariable int replyIdx,
+                                         @CurrentMember CurrentMemberInfo currentMemberInfo) {
+        replyService.checkExistReply(replyIdx);
+        replyService.checkCommentIncludeReply(commentIdx, replyIdx);
+        productService.checkProductOrReplyWriter(productIdx, replyIdx, currentMemberInfo.getMember_id());
+        replyService.checkNotDeleteReply(commentIdx);
+        return new ResponseEntity<>(replyService.getReply(replyIdx), HttpStatus.OK);
     }
 
     // 대댓글수정

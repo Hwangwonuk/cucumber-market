@@ -196,4 +196,36 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    // 판매글에 해당하지 않는 댓글을 보려하는 경우
+    @ExceptionHandler(ProductNotIncludeCommentException.class)
+    public ResponseEntity<ExceptionResponse> productNotIncludeCommentException(final ProductNotIncludeCommentException ex) {
+        log.error(ex.getMessage(), ex);
+        ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    // 존재하지 않는 댓글일 경우
+    @ExceptionHandler(NotExistCommentException.class)
+    public ResponseEntity<ExceptionResponse> notExistCommentException(final NotExistCommentException ex) {
+        log.error(ex.getMessage(), ex);
+        ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    // 존재하지 않는 대댓글일 경우
+    @ExceptionHandler(NotExistReplyException.class)
+    public ResponseEntity<ExceptionResponse> notExistReplyException(final NotExistReplyException ex) {
+        log.error(ex.getMessage(), ex);
+        ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    // 댓글에 해당하지 않는 대댓글을 보려하는 경우
+    @ExceptionHandler(ProductNotIncludeReplyException.class)
+    public ResponseEntity<ExceptionResponse> productNotIncludeReplyException(final ProductNotIncludeReplyException ex) {
+        log.error(ex.getMessage(), ex);
+        ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
 }

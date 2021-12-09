@@ -7,9 +7,12 @@ import com.cucumber.market.dto.product.ProductUploadResponse;
 import com.cucumber.market.exception.AlreadyDeleteProductException;
 import com.cucumber.market.exception.AlreadySoldOutProductException;
 import com.cucumber.market.exception.NoWriterForProductException;
+import com.cucumber.market.exception.NoWriterForProductOrCommentException;
 import com.cucumber.market.file.FileStore;
+import com.cucumber.market.mapper.CommentMapper;
 import com.cucumber.market.mapper.FileMapper;
 import com.cucumber.market.mapper.ProductMapper;
+import com.cucumber.market.mapper.ReplyMapper;
 import com.cucumber.market.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +27,10 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductMapper productMapper;
+
+    private final CommentMapper commentMapper;
+
+    private final ReplyMapper replyMapper;
 
     private final FileMapper fileMapper;
 
@@ -179,5 +186,31 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteProduct(int productIdx, String member_id) {
         productMapper.deleteProduct(productIdx, member_id);
+    }
+
+    /**
+     * 상품글 작성자 or 댓글 작성자 검사 메소드
+     * @param productIdx 글번호
+     * @param commentIdx 댓글번호
+     * @param member_id 대댓글 작성 or 조회를 시도하는 회원의 아이디
+     */
+    @Override
+    public void checkProductOrCommentWriter(int productIdx, int commentIdx, String member_id) {
+        if (productMapper.checkProductWriter(productIdx, member_id) == 0 && commentMapper.checkCommentWriter(commentIdx, member_id) == 0) {
+            throw new NoWriterForProductOrCommentException("해당 글이나 댓글의 작성자가 아닙니다.");
+        }
+    }
+
+    /**
+     * 상품글 작성자 or 대댓글 작성자 검사 메소드
+     * @param productIdx 글번호
+     * @param replyIdx 대댓글번호
+     * @param member_id 대댓글 조회를 시도하는 회원의 아이디
+     */
+    @Override
+    public void checkProductOrReplyWriter(int productIdx, int replyIdx, String member_id) {
+        if (productMapper.checkProductWriter(productIdx, member_id) == 0 && replyMapper.checkReplyWriter(replyIdx, member_id) == 0) {
+            throw new NoWriterForProductOrCommentException("해당 글이나 댓글의 작성자가 아닙니다.");
+        }
     }
 }

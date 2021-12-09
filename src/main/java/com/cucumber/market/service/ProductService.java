@@ -28,4 +28,8 @@ public interface ProductService {
     void checkNotDeleteProduct(int productIdx);
 
     void deleteProduct(int productIdx, String member_id);
+
+    void checkProductOrCommentWriter(int productIdx, int commentIdx, String member_id);
+
+    void checkProductOrReplyWriter(int productIdx, int replyIdx, String member_id);
 }

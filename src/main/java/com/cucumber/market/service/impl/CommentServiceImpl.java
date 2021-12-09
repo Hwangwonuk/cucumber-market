@@ -1,7 +1,10 @@
 package com.cucumber.market.service.impl;
 
+import com.cucumber.market.dto.product.ContentResponse;
 import com.cucumber.market.exception.AlreadyDeletedCommentException;
 import com.cucumber.market.exception.NoWriterForCommentException;
+import com.cucumber.market.exception.NotExistCommentException;
+import com.cucumber.market.exception.ProductNotIncludeCommentException;
 import com.cucumber.market.mapper.CommentMapper;
 import com.cucumber.market.service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +25,39 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void registerComment(int productIdx, String content, String member_id) {
         commentMapper.registerComment(productIdx, content, member_id);
+    }
+
+    /**
+     * 댓글조회 메소드
+     * @param commentIdx 댓글번호
+     * @return 댓글 작성자 아이디, 내용
+     */
+    @Override
+    public ContentResponse getComment(int commentIdx) {
+        return commentMapper.getComment(commentIdx);
+    }
+
+    /**
+     * 댓글 존재여부 확인 메소드
+     * @param commentIdx 댓글번호
+     */
+    @Override
+    public void checkExistComment(int commentIdx) {
+        if (commentMapper.checkExistComment(commentIdx) == 0) {
+            throw new NotExistCommentException("존재하지 않는 댓글입니다.");
+        }
+    }
+
+    /**
+     * 판매글에 속하는 댓글인지 확인하는 메소드
+     * @param productIdx 판매글 번호
+     * @param commentIdx 댓글번호
+     */
+    @Override
+    public void checkProductIncludeComment(int productIdx, int commentIdx) {
+        if (commentMapper.checkProductIncludeComment(productIdx, commentIdx) == 0) {
+            throw new ProductNotIncludeCommentException("해당 판매글에 속하지 않는 댓글입니다.");
+        }
     }
 
     /**
@@ -66,4 +102,5 @@ public class CommentServiceImpl implements CommentService {
     public void deleteComment(int commentIdx, String member_id) {
         commentMapper.deleteComment(commentIdx, member_id);
     }
+
 }

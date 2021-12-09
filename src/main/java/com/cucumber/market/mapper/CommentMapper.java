@@ -1,11 +1,18 @@
 package com.cucumber.market.mapper;
 
+import com.cucumber.market.dto.product.ContentResponse;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface CommentMapper {
     void registerComment(@Param("productIdx") int productIdx, @Param("content") String content, @Param("member_id") String member_id);
+
+    ContentResponse getComment(int commentIdx);
+
+    int checkExistComment(int commentIdx);
+
+    int checkProductIncludeComment(@Param("productIdx") int productIdx, @Param("commentIdx") int commentIdx);
 
     int checkNotDeleteComment(int commentIdx);
 

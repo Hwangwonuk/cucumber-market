@@ -81,6 +81,7 @@
     ON a.product_idx = c.product_idx
     LEFT JOIN reply d
     ON c.comment_idx = d.comment_idx
+    WHERE a.status = 'a' OR a.status = 'b'
     group by a.product_idx
     );
     -->

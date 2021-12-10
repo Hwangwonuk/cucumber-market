@@ -1,6 +1,7 @@
 package com.cucumber.market.service.impl;
 
 import com.cucumber.market.dto.category.*;
+import com.cucumber.market.exception.BigCategoryNotIncludeSmallCategory;
 import com.cucumber.market.exception.CategoryNameNotFoundException;
 import com.cucumber.market.mapper.CategoryMapper;
 import com.cucumber.market.service.CategoryService;
@@ -129,6 +130,18 @@ public class CategoryServiceImpl implements CategoryService {
     public void checkExistSmallCategoryName(String smallCategoryName) {
         if (categoryMapper.checkDuplicateSmallCategoryName(smallCategoryName) == 0) {
             throw new CategoryNameNotFoundException("입력한 소분류명은 존재하지 않습니다.");
+        }
+    }
+
+    /**
+     * 대분류에 속하는 소분류인지 검사 메소드
+     * @param bigCategoryName 대분류명
+     * @param smallCategoryName 소분류명
+     */
+    @Override
+    public void checkBigCategoryIncludeSmallCategory(String bigCategoryName, String smallCategoryName) {
+        if (categoryMapper.checkBigCategoryIncludeSmallCategory(bigCategoryName, smallCategoryName) == 0) {
+            throw new BigCategoryNotIncludeSmallCategory("대분류에 속하지않는 소분류명 입니다.");
         }
     }
 

@@ -63,23 +63,13 @@ public class ProductServiceImpl implements ProductService {
 //    }
 
     /**
-     * 판매글 등록 메소드(이미지 파일 포함)
+     * 판매글 등록 메소드
      * @param productUploadRequest 글 등록시 필요한 데이터
-     * @param member_id 현재 접속중인 회원의 아이디
      */
     @Override
-    public ProductUploadResponse uploadProduct(ProductUploadRequest productUploadRequest,
-                                               String member_id) {
-        ProductUploadRequest uploadForm = ProductUploadRequest.builder()
-                .bigCategoryName(productUploadRequest.getBigCategoryName())
-                .smallCategoryName(productUploadRequest.getSmallCategoryName())
-                .title(productUploadRequest.getTitle())
-                .content(productUploadRequest.getContent())
-                .price(productUploadRequest.getPrice())
-                .deliveryPrice(productUploadRequest.getDeliveryPrice())
-                .member_id(member_id).build();
+    public ProductUploadResponse uploadProduct(ProductUploadRequest productUploadRequest) {
 
-        productMapper.uploadProduct(uploadForm); // 글등록(파일제외)
+        productMapper.uploadProduct(productUploadRequest); // 글등록(파일제외)
 
         return ProductUploadResponse.builder()
                 .redirectUrl(productUrl)
@@ -87,7 +77,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     /**
-     * 판매글 등록 시 함께 호출될 썸네일 이미지, 상세페이지 이미지 등록
+     * 판매글 등록 시 함께 호출될 썸네일 이미지, 상세페이지 이미지 등록 메소드
      * @param images 등록한 이미지들
      * @param member_id 로그인한 회원의 아이디
      */

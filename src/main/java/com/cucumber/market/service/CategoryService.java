@@ -23,4 +23,6 @@ public interface CategoryService {
 
     void checkExistSmallCategoryName(String smallCategoryName);
 
+    void checkBigCategoryIncludeSmallCategory(String bigCategoryName, String smallCategoryName);
+
 }

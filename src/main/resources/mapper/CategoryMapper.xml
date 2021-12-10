@@ -48,4 +48,10 @@
         AND big_category_name = #{bigCategoryName}
     </update>
 
+    <select id="checkBigCategoryIncludeSmallCategory" resultType="int">
+        SELECT COUNT(*)
+        FROM small_category
+        WHERE big_category_name = #{bigCategoryName} AND small_category_name = #{smallCategoryName}
+    </select>
+
 </mapper>

@@ -236,4 +236,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    // 대분류에 속하지않는 소분류명 일때
+    @ExceptionHandler(BigCategoryNotIncludeSmallCategory.class)
+    public ResponseEntity<ExceptionResponse> bigCategoryNotIncludeSmallCategory(final BigCategoryNotIncludeSmallCategory ex) {
+        log.error(ex.getMessage(), ex);
+        ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 }

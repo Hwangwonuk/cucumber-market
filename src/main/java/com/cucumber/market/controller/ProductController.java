@@ -51,7 +51,7 @@ public class ProductController {
 
     // TODO: 2021-12-07 이미지 파일업로드 보안정책 고려, 예외처리방식 리팩토링, 글,이미지 등록 리스폰스 고려
     // 판매글 등록(썸네일, 상세이미지 포함)
-    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping
     @CheckSignIn
     public ResponseEntity<ProductUploadResponse> uploadProduct(@ModelAttribute ProductUploadRequest request,
                                                                @CurrentMember CurrentMemberInfo currentMemberInfo) throws IOException {

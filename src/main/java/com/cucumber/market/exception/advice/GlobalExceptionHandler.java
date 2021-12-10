@@ -228,4 +228,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    // 글번호에 해당하는 판매글이 존재하지 않는 경우
+    @ExceptionHandler(NotExistProductException.class)
+    public ResponseEntity<ExceptionResponse> notExistProductException(final NotExistProductException ex) {
+        log.error(ex.getMessage(), ex);
+        ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
 }

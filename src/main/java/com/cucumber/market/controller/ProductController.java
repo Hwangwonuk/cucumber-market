@@ -67,7 +67,7 @@ public class ProductController {
     }
 
     // 판매글 검색 및 조회(최신순 페이징, 분류, 제목 검색기능 포함)
-    @GetMapping("{productIdx}")
+    @GetMapping
     public ResponseEntity<List<FindProductResponse>> findProductByPagination(@RequestParam(defaultValue = "1") Integer pageNum,
                                                                              @RequestParam(defaultValue = "10") Integer contentNum,
                                                                              @Valid FindProductRequest request) {
@@ -75,7 +75,14 @@ public class ProductController {
         return new ResponseEntity<>(productService.findProductByPagination(pageNum, contentNum, request.getSmallCategoryName(), request.getTitle()), HttpStatus.OK);
     }
 
-    // 판매글 상세조회 -> 응답 -> 글번호, 제목, 가격, 배송비, 작성자, 내용, 모든 이미지 경로, 글번호에 속한 댓글번호, 대댓글번호
+    // 판매글 상세조회
+    @GetMapping("{productIdx}")
+    public ResponseEntity<FindDetailProductResponse> findDetailProduct(@PathVariable("productIdx") int productIdx) {
+        productService.checkExistProduct(productIdx);
+        productService.checkNotDeleteProduct(productIdx);
+
+        return new ResponseEntity<>(productService.findDetailProduct(productIdx), HttpStatus.OK);
+    }
 
     // 판매글 수정
     @PatchMapping("/{productIdx}/update")

@@ -119,7 +119,7 @@ public class ProductServiceImpl implements ProductService {
         if (pageNum <= 0)
             throw new PageNoPositiveException("페이지는 1 이상 이어야 합니다.");
 
-        Integer offset = (pageNum - 1) * contentNum;
+        int offset = (pageNum - 1) * contentNum;
 
         String findTitle;
         if(title == null)
@@ -128,6 +128,27 @@ public class ProductServiceImpl implements ProductService {
             findTitle = "%" + title + "%";
 
         return productMapper.findProductByPagination(contentNum, offset, smallCategoryName, findTitle);
+    }
+
+    /**
+     * 판매글 존재여부 검사 메소드
+     * @param productIdx 판매글 번호
+     */
+    @Override
+    public void checkExistProduct(int productIdx) {
+        if (productMapper.checkExistProduct(productIdx) == 0) {
+            throw new NotExistProductException("글번호에 해당하는 판매글이 존재하지 않습니다.");
+        }
+    }
+
+    /**
+     * 판매글 상세조회 메소드
+     * @param productIdx 판매글 번호
+     * @return 판매글 상세정보 (글번호, 작성자, 제목, 내용, 가격, 배송비,  글상태, 수정시간, 해당글의 모든 이미지 경로, 글번호에 속한 댓글번호, 대댓글번호)
+     */
+    @Override
+    public FindDetailProductResponse findDetailProduct(int productIdx) {
+        return productMapper.findDetailProduct(productIdx);
     }
 
     /**

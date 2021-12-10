@@ -1,5 +1,6 @@
 package com.cucumber.market.mapper;
 
+import com.cucumber.market.dto.product.FindDetailProductResponse;
 import com.cucumber.market.dto.product.FindProductResponse;
 import com.cucumber.market.dto.product.ProductUpdateRequest;
 import com.cucumber.market.dto.product.ProductUploadRequest;
@@ -24,6 +25,10 @@ public interface ProductMapper {
                                                       @Param("offset") int offset,
                                                       @Param("smallCategoryName") String smallCategoryName,
                                                       @Param("findTitle") String findTitle);
+
+    int checkExistProduct(int productIdx);
+
+    FindDetailProductResponse findDetailProduct(int productIdx);
 
     int checkNotSoldOutProduct(int productIdx);
 

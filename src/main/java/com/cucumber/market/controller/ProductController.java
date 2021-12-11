@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -53,6 +54,11 @@ public class ProductController {
     // 판매글 등록(썸네일, 상세이미지 포함)
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @CheckSignIn
+    // @Transactional은 Spring에서 제공하는 DB Transaction 애노테이션
+    // 기본적으로 Unchecked Exception, Error 만을 rollback함
+    // 모든 예외에 대해서 rollback을 진행하고 싶을 경우 (rollbackFor = Exception.class) 를 붙여야함
+    // Checked Exception (예: IOException) 같은 경우도 Exception 클래스를 상속하기 때문
+    @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<ProductUploadResponse> uploadProduct(@ModelAttribute ProductUploadRequest request,
                                                                @CurrentMember CurrentMemberInfo currentMemberInfo) throws IOException {
         categoryService.checkExistBigCategoryName(request.getBigCategoryName());

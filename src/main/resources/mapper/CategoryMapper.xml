@@ -10,7 +10,7 @@
         VALUES (#{bigCategoryName})
     </insert>
 
-    <select id="checkDuplicateBigCategoryName" resultType="Int">
+    <select id="checkDuplicateBigCategoryName" resultType="int">
         SELECT COUNT(big_category_name)
         FROM big_category
         WHERE big_category_name = #{bigCategoryName}
@@ -35,7 +35,7 @@
         VALUES (#{smallCategoryName}, #{bigCategoryName})
     </insert>
 
-    <select id="checkDuplicateSmallCategoryName" resultType="Int">
+    <select id="checkDuplicateSmallCategoryName" resultType="int">
         SELECT COUNT(small_category_name)
         FROM small_category
         WHERE small_category_name = #{smallCategoryName}
@@ -47,5 +47,11 @@
         WHERE small_category_name = #{oldSmallCategoryName}
         AND big_category_name = #{bigCategoryName}
     </update>
+
+    <select id="checkBigCategoryIncludeSmallCategory" resultType="int">
+        SELECT COUNT(*)
+        FROM small_category
+        WHERE big_category_name = #{bigCategoryName} AND small_category_name = #{smallCategoryName}
+    </select>
 
 </mapper>

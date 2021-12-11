@@ -63,23 +63,13 @@ public class ProductServiceImpl implements ProductService {
 //    }
 
     /**
-     * 판매글 등록 메소드(이미지 파일 포함)
+     * 판매글 등록 메소드
      * @param productUploadRequest 글 등록시 필요한 데이터
-     * @param member_id 현재 접속중인 회원의 아이디
      */
     @Override
-    public ProductUploadResponse uploadProduct(ProductUploadRequest productUploadRequest,
-                                               String member_id) {
-        ProductUploadRequest uploadForm = ProductUploadRequest.builder()
-                .bigCategoryName(productUploadRequest.getBigCategoryName())
-                .smallCategoryName(productUploadRequest.getSmallCategoryName())
-                .title(productUploadRequest.getTitle())
-                .content(productUploadRequest.getContent())
-                .price(productUploadRequest.getPrice())
-                .deliveryPrice(productUploadRequest.getDeliveryPrice())
-                .member_id(member_id).build();
+    public ProductUploadResponse uploadProduct(ProductUploadRequest productUploadRequest) {
 
-        productMapper.uploadProduct(uploadForm); // 글등록(파일제외)
+        productMapper.uploadProduct(productUploadRequest); // 글등록(파일제외)
 
         return ProductUploadResponse.builder()
                 .redirectUrl(productUrl)
@@ -87,7 +77,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     /**
-     * 판매글 등록 시 함께 호출될 썸네일 이미지, 상세페이지 이미지 등록
+     * 판매글 등록 시 함께 호출될 썸네일 이미지, 상세페이지 이미지 등록 메소드
      * @param images 등록한 이미지들
      * @param member_id 로그인한 회원의 아이디
      */
@@ -119,7 +109,7 @@ public class ProductServiceImpl implements ProductService {
         if (pageNum <= 0)
             throw new PageNoPositiveException("페이지는 1 이상 이어야 합니다.");
 
-        Integer offset = (pageNum - 1) * contentNum;
+        int offset = (pageNum - 1) * contentNum;
 
         String findTitle;
         if(title == null)
@@ -128,6 +118,27 @@ public class ProductServiceImpl implements ProductService {
             findTitle = "%" + title + "%";
 
         return productMapper.findProductByPagination(contentNum, offset, smallCategoryName, findTitle);
+    }
+
+    /**
+     * 판매글 존재여부 검사 메소드
+     * @param productIdx 판매글 번호
+     */
+    @Override
+    public void checkExistProduct(int productIdx) {
+        if (productMapper.checkExistProduct(productIdx) == 0) {
+            throw new NotExistProductException("글번호에 해당하는 판매글이 존재하지 않습니다.");
+        }
+    }
+
+    /**
+     * 판매글 상세조회 메소드
+     * @param productIdx 판매글 번호
+     * @return 판매글 상세정보 (글번호, 작성자, 제목, 내용, 가격, 배송비,  글상태, 수정시간, 해당글의 모든 이미지 경로, 글번호에 속한 댓글번호, 대댓글번호)
+     */
+    @Override
+    public FindDetailProductResponse findDetailProduct(int productIdx) {
+        return productMapper.findDetailProduct(productIdx);
     }
 
     /**

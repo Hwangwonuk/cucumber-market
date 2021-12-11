@@ -7,9 +7,9 @@ import com.cucumber.market.dto.product.*;
 import com.cucumber.market.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -46,28 +46,34 @@ public class ProductController {
 //            @CurrentMember CurrentMemberInfo currentMemberInfo) throws IOException {
 //        return new ResponseEntity<>(productService.uploadProductV2(productUploadRequest, multipartFiles, currentMemberInfo.getMember_id()), HttpStatus.OK);
 //    }
+
     // 판매글 관련
 
-    // 판매글 등록
-    @PostMapping
+    // TODO: 2021-12-07 이미지 파일업로드 보안정책 고려, 예외처리방식 리팩토링, 글,이미지 등록 리스폰스 고려
+    // 판매글 등록(썸네일, 상세이미지 포함)
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @CheckSignIn
-    public ResponseEntity<ProductUploadResponse> uploadProduct(@RequestBody ProductUploadRequest request,
-                                                               @CurrentMember CurrentMemberInfo currentMemberInfo) {
+    public ResponseEntity<ProductUploadResponse> uploadProduct(@ModelAttribute ProductUploadRequest request,
+                                                               @CurrentMember CurrentMemberInfo currentMemberInfo) throws IOException {
+        categoryService.checkExistBigCategoryName(request.getBigCategoryName());
+        categoryService.checkExistSmallCategoryName(request.getSmallCategoryName());
+        categoryService.checkBigCategoryIncludeSmallCategory(request.getBigCategoryName(), request.getSmallCategoryName());
 
-        return new ResponseEntity<>(productService.uploadProduct(request, currentMemberInfo.getMember_id()), HttpStatus.OK);
-    }
-
-    // 판매글 등록 시 함께 호출될 썸네일 이미지, 상세페이지 이미지 등록 TODO: 2021-12-07 이미지 파일업로드 보안정책 고려, 예외처리방식 리팩토링, 글,이미지 등록 리스폰스 고려
-    @PostMapping("/images")
-    @CheckSignIn
-    public ResponseEntity<ProductUploadResponse> uploadProductImages(@RequestPart List<MultipartFile> images,
-                                                                     @CurrentMember CurrentMemberInfo currentMemberInfo) throws IOException {
-
-        return new ResponseEntity<>(productService.uploadProductImages(images, currentMemberInfo.getMember_id()), HttpStatus.OK);
+        ProductUploadRequest productUploadRequest = ProductUploadRequest.builder()
+                .bigCategoryName(request.getBigCategoryName())
+                .smallCategoryName(request.getSmallCategoryName())
+                .title(request.getTitle())
+                .content(request.getContent())
+                .price(request.getPrice())
+                .deliveryPrice(request.getDeliveryPrice())
+                .member_id(currentMemberInfo.getMember_id())
+                .build();
+        productService.uploadProduct(productUploadRequest);
+        return new ResponseEntity<>(productService.uploadProductImages(request.getImages(), currentMemberInfo.getMember_id()), HttpStatus.OK);
     }
 
     // 판매글 검색 및 조회(최신순 페이징, 분류, 제목 검색기능 포함)
-    @GetMapping("{productIdx}")
+    @GetMapping
     public ResponseEntity<List<FindProductResponse>> findProductByPagination(@RequestParam(defaultValue = "1") Integer pageNum,
                                                                              @RequestParam(defaultValue = "10") Integer contentNum,
                                                                              @Valid FindProductRequest request) {
@@ -75,7 +81,14 @@ public class ProductController {
         return new ResponseEntity<>(productService.findProductByPagination(pageNum, contentNum, request.getSmallCategoryName(), request.getTitle()), HttpStatus.OK);
     }
 
-    // 판매글 상세조회 -> 응답 -> 글번호, 제목, 가격, 배송비, 작성자, 내용, 모든 이미지 경로, 글번호에 속한 댓글번호, 대댓글번호
+    // 판매글 상세조회
+    @GetMapping("{productIdx}")
+    public ResponseEntity<FindDetailProductResponse> findDetailProduct(@PathVariable("productIdx") int productIdx) {
+        productService.checkExistProduct(productIdx);
+        productService.checkNotDeleteProduct(productIdx);
+
+        return new ResponseEntity<>(productService.findDetailProduct(productIdx), HttpStatus.OK);
+    }
 
     // 판매글 수정
     @PatchMapping("/{productIdx}/update")
@@ -174,7 +187,7 @@ public class ProductController {
         return ResponseEntity.ok().build();
     }
 
-    // 댓글삭제
+    // 댓글삭제(비활성화)
     @PatchMapping("/comments/{commentIdx}/delete")
     @CheckSignIn
     public ResponseEntity<Void> deleteComment(@PathVariable int commentIdx,
@@ -212,7 +225,7 @@ public class ProductController {
         replyService.checkNotDeleteReply(replyIdx);
 
         // 현재 로그인한 사람이 댓글 작성자라면 판매자가 작성한 대댓글을 볼 수 있어야된다
-        if(commentService.isCommentWriter(commentIdx, currentMemberInfo.getMember_id())) {
+        if (commentService.isCommentWriter(commentIdx, currentMemberInfo.getMember_id())) {
             return new ResponseEntity<>(replyService.getReply(replyIdx), HttpStatus.OK);
         } else { // 판매글 작성자거나 대댓글 작성자면
             productService.checkProductOrReplyWriter(productIdx, replyIdx, currentMemberInfo.getMember_id());
@@ -233,7 +246,7 @@ public class ProductController {
         return ResponseEntity.ok().build();
     }
 
-    // 대댓글삭제
+    // 대댓글삭제(비활성화)
     @PatchMapping("/comments/replies/{replyIdx}/delete")
     @CheckSignIn
     public ResponseEntity<Void> deleteReply(@PathVariable int replyIdx,

@@ -42,7 +42,8 @@
         </choose>
         LIMIT #{contentNum} OFFSET #{offset}
     </select>
-    <!-- 뷰 상세
+    <!--
+    MySQL View 상세
     CREATE VIEW V_PRODUCT_MAIN AS(
         SELECT
             a.product_idx, a.big_category_name, a.small_category_name, a.title, a.price, a.member_id, a.status, a.updatetime,
@@ -58,6 +59,38 @@
         ORDER BY updatetime DESC
     );
     -->
+
+    <select id="findDetailProduct"
+            resultType="com.cucumber.market.dto.product.FindDetailProductResponse">
+        SELECT *
+        FROM V_PRODUCT_DETAIL
+        WHERE product_idx = #{productIdx}
+    </select>
+    <!--
+    MySQL View 상세
+    CREATE VIEW V_PRODUCT_DETAIL AS(
+        select
+        a.product_idx, a.member_id, a.title, a.content, a.price, a.delivery_price, a.status, a.updatetime,
+        GROUP_CONCAT(DISTINCT b.storefilename) images,
+        GROUP_CONCAT(DISTINCT c.comment_idx) comments,
+        CONCAT(GROUP_CONCAT(DISTINCT d.comment_idx, "/", d.reply_idx)) replies
+    FROM product a
+    LEFT JOIN file b
+    ON a.product_idx = b.product_idx
+    LEFT JOIN comment c
+    ON a.product_idx = c.product_idx
+    LEFT JOIN reply d
+    ON c.comment_idx = d.comment_idx
+    WHERE a.status = 'a' OR a.status = 'b'
+    group by a.product_idx
+    );
+    -->
+
+    <select id="checkExistProduct" resultType="int">
+        SELECT COUNT(*)
+        FROM product
+        WHERE product_idx = #{productIdx}
+    </select>
 
     <select id="checkProductWriter" resultType="int">
         SELECT COUNT(*)

@@ -5,6 +5,7 @@ import com.cucumber.market.dto.category.SmallCategoryNamesResponse;
 import com.cucumber.market.dto.category.SmallCategoryRegisterRequest;
 import com.cucumber.market.dto.category.SmallCategoryUpdateRequest;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -23,5 +24,7 @@ public interface CategoryMapper {
     int checkDuplicateSmallCategoryName(String smallCategoryName);
 
     void updateSmallCategory(SmallCategoryUpdateRequest smallCategoryUpdateRequest);
+
+    int checkBigCategoryIncludeSmallCategory(@Param("bigCategoryName") String bigCategoryName, @Param("smallCategoryName") String smallCategoryName);
 
 }

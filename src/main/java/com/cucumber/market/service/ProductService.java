@@ -11,11 +11,15 @@ public interface ProductService {
                                           List<MultipartFile> multipartFiles,
                                           String member_id) throws IOException;*/
 
-    ProductUploadResponse uploadProduct(ProductUploadRequest productUploadRequest, String member_id);
+    ProductUploadResponse uploadProduct(ProductUploadRequest productUploadRequest);
 
     ProductUploadResponse uploadProductImages(List<MultipartFile> images, String member_id) throws IOException;
 
     List<FindProductResponse> findProductByPagination(int pageNum, int contentNum, String smallCategoryName, String title);
+
+    void checkExistProduct(int productIdx);
+
+    FindDetailProductResponse findDetailProduct(int productIdx);
 
     void checkProductWriter(int productIdx, String member_id);
 

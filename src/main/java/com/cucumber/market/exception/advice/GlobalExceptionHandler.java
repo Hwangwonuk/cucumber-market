@@ -105,7 +105,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionResponse> alreadyInActiveMemberException(final AlreadyInActiveMemberException ex) {
         log.error(ex.getMessage(), ex);
         ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
 
     // 조회 데이터의 페이지 번호가 자연수가 아닌 경우
@@ -145,7 +145,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionResponse> noWriterForCommentException(final NoWriterForCommentException ex) {
         log.error(ex.getMessage(), ex);
         ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
 
     // 해당 판매글이나 댓글의 작성자가 아닌데 대댓글을 등록하려는 경우
@@ -153,7 +153,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionResponse> noWriterForProductOrCommentException(final NoWriterForProductOrCommentException ex) {
         log.error(ex.getMessage(), ex);
         ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
 
     // 이미 삭제된 대댓글인데 삭제하려는 경우
@@ -177,7 +177,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionResponse> noWriterForProductException(final NoWriterForProductException ex) {
         log.error(ex.getMessage(), ex);
         ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
 
     // 이미 판매완료 처리된 판매글인데 판매완료 처리를 하려는 경우
@@ -209,7 +209,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionResponse> notExistCommentException(final NotExistCommentException ex) {
         log.error(ex.getMessage(), ex);
         ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
     // 존재하지 않는 대댓글일 경우
@@ -217,7 +217,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionResponse> notExistReplyException(final NotExistReplyException ex) {
         log.error(ex.getMessage(), ex);
         ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
     // 댓글에 해당하지 않는 대댓글을 보려하는 경우
@@ -233,7 +233,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionResponse> notExistProductException(final NotExistProductException ex) {
         log.error(ex.getMessage(), ex);
         ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
     // 대분류에 속하지않는 소분류명 일때

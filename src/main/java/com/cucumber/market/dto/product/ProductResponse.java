@@ -5,6 +5,6 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class ProductUploadResponse {
-    private String redirectUrl;
+public class ProductResponse {
+    private int productIdx;
 }

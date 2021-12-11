@@ -9,7 +9,7 @@
         VALUES (#{productIdx}, #{member_id}, #{content})
     </insert>
 
-    <select id="getComment" resultType="com.cucumber.market.dto.product.ContentResponse">
+    <select id="getComment" resultType="com.cucumber.market.dto.comment.ContentResponse">
         SELECT member_id, content, updatetime
         FROM comment
         WHERE comment_idx = #{commentIdx}

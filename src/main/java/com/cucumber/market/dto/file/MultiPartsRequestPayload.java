@@ -1,4 +1,4 @@
-package com.cucumber.market.dto.product;
+package com.cucumber.market.dto.file;
 
 import lombok.Getter;
 import lombok.Setter;

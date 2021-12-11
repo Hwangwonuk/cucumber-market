@@ -1,10 +1,11 @@
 package com.cucumber.market.service;
 
-import com.cucumber.market.dto.product.ContentResponse;
+import com.cucumber.market.dto.comment.CommentResponse;
+import com.cucumber.market.dto.comment.ContentResponse;
 
 public interface ReplyService {
 
-    void registerReply(int commentIdx, String content, String member_id);
+    CommentResponse registerReply(int commentIdx, String content, String member_id);
 
     void checkExistReply(int replyIdx);
 

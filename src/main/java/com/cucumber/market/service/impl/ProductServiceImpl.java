@@ -1,5 +1,6 @@
 package com.cucumber.market.service.impl;
 
+import com.cucumber.market.dto.file.FileUploadForm;
 import com.cucumber.market.dto.product.*;
 import com.cucumber.market.exception.*;
 import com.cucumber.market.file.FileStore;
@@ -71,12 +72,8 @@ public class ProductServiceImpl implements ProductService {
     // 어차피 @Transactional 없이도 DB에 commit 되거나 안되거나 둘 중 하나만 됨
     // 따라서 @Transactional 사용 안함
     @Override
-    public ProductUploadResponse uploadProduct(ProductUploadRequest productUploadRequest) {
+    public void uploadProduct(ProductUploadRequest productUploadRequest) {
         productMapper.uploadProduct(productUploadRequest); // 글등록(파일제외)
-
-        return ProductUploadResponse.builder()
-                .redirectUrl(productUrl)
-                .build();
     }
 
     /**
@@ -88,7 +85,7 @@ public class ProductServiceImpl implements ProductService {
     // 기본적으로 Unchecked Exception, Error 만을 rollback함
     @Override
     @Transactional
-    public ProductUploadResponse uploadProductImages(List<MultipartFile> images, String member_id) throws IOException {
+    public ProductResponse uploadProductImages(List<MultipartFile> images, String member_id) throws IOException {
         int productIdx = productMapper.getMyLatestProduct(member_id); // 방금 등록된 글 idx
 
         List<FileUploadForm> storeImageFiles = fileStore.storeFiles(productIdx, images); // 파일명 변환
@@ -97,8 +94,8 @@ public class ProductServiceImpl implements ProductService {
         int thumbnailIdx = fileMapper.getMyThumbnailIdx(productIdx); // 해당 글 idx로 저장된 파일중 file_idx가 가장작은(먼저등록된) 이미지의 file_idx
         productMapper.updateThumbnailIdx(productIdx, thumbnailIdx); // 썸네일 idx로 업데이트
 
-        return ProductUploadResponse.builder()
-                .redirectUrl(productUrl)
+        return ProductResponse.builder()
+                .productIdx(productIdx)
                 .build();
     }
 
@@ -165,7 +162,7 @@ public class ProductServiceImpl implements ProductService {
      * @param member_id 로그인한 회원의 아이디
      */
     @Override
-    public ProductUploadResponse updateProduct(int productIdx, ProductUpdateRequest productUpdateRequest, String member_id) {
+    public ProductResponse updateProduct(int productIdx, ProductUpdateRequest productUpdateRequest, String member_id) {
         ProductUpdateRequest updateRequest = ProductUpdateRequest.builder()
                 .title(productUpdateRequest.getTitle())
                 .content(productUpdateRequest.getContent())
@@ -175,9 +172,8 @@ public class ProductServiceImpl implements ProductService {
                 .member_id(member_id).build();
 
         productMapper.updateProduct(updateRequest);
-
-        return ProductUploadResponse.builder()
-                .redirectUrl(productUrl)
+        return ProductResponse.builder()
+                .productIdx(productIdx)
                 .build();
     }
 

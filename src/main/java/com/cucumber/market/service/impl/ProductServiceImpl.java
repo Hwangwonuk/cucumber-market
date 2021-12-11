@@ -11,6 +11,7 @@ import com.cucumber.market.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -66,9 +67,11 @@ public class ProductServiceImpl implements ProductService {
      * 판매글 등록 메소드
      * @param productUploadRequest 글 등록시 필요한 데이터
      */
+    // uploadProduct에서는 DB 관련 메서드를 하나만 사용하기 때문에 (productMapper.uploadProduct)
+    // 어차피 @Transactional 없이도 DB에 commit 되거나 안되거나 둘 중 하나만 됨
+    // 따라서 @Transactional 사용 안함
     @Override
     public ProductUploadResponse uploadProduct(ProductUploadRequest productUploadRequest) {
-
         productMapper.uploadProduct(productUploadRequest); // 글등록(파일제외)
 
         return ProductUploadResponse.builder()
@@ -81,7 +84,10 @@ public class ProductServiceImpl implements ProductService {
      * @param images 등록한 이미지들
      * @param member_id 로그인한 회원의 아이디
      */
+    // @Transactional은 Spring에서 제공하는 DB Transaction 애노테이션
+    // 기본적으로 Unchecked Exception, Error 만을 rollback함
     @Override
+    @Transactional
     public ProductUploadResponse uploadProductImages(List<MultipartFile> images, String member_id) throws IOException {
         int productIdx = productMapper.getMyLatestProduct(member_id); // 방금 등록된 글 idx
 

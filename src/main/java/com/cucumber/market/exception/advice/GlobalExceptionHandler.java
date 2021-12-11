@@ -46,8 +46,8 @@ public class GlobalExceptionHandler {
     }
 
     // 정보를 찾지 못했을때 Exception
-    @ExceptionHandler(MemberNotFoundException.class)
-    public ResponseEntity<ExceptionResponse> memberNotFoundException(final MemberNotFoundException ex) {
+    @ExceptionHandler(NotExistMemberException.class)
+    public ResponseEntity<ExceptionResponse> memberNotFoundException(final NotExistMemberException ex) {
         log.error(ex.getMessage(), ex);
         ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
@@ -78,8 +78,8 @@ public class GlobalExceptionHandler {
     }
 
     // 입력한 분류명(Category)이 없을 때
-    @ExceptionHandler(CategoryNameNotFoundException.class)
-    public ResponseEntity<ExceptionResponse> categoryNameNotFoundException(final CategoryNameNotFoundException ex) {
+    @ExceptionHandler(NotExistCategoryNameException.class)
+    public ResponseEntity<ExceptionResponse> categoryNameNotFoundException(final NotExistCategoryNameException ex) {
         log.error(ex.getMessage(), ex);
         ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
@@ -110,8 +110,8 @@ public class GlobalExceptionHandler {
     }
 
     // 조회 데이터의 페이지 번호가 자연수가 아닌 경우
-    @ExceptionHandler(PageNoPositiveException.class)
-    public ResponseEntity<ExceptionResponse> pageNegativeNotAvailableException(final PageNoPositiveException ex) {
+    @ExceptionHandler(PageNotNaturalNumberException.class)
+    public ResponseEntity<ExceptionResponse> pageNegativeNotAvailableException(final PageNotNaturalNumberException ex) {
         log.error(ex.getMessage(), ex);
         ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
@@ -190,8 +190,8 @@ public class GlobalExceptionHandler {
     }
 
     // 이미 삭제된 판매글인데 삭제하려는 경우
-    @ExceptionHandler(AlreadyDeleteProductException.class)
-    public ResponseEntity<ExceptionResponse> alreadyDeleteProductException(final AlreadyDeleteProductException ex) {
+    @ExceptionHandler(AlreadyDeletedProductException.class)
+    public ResponseEntity<ExceptionResponse> alreadyDeleteProductException(final AlreadyDeletedProductException ex) {
         log.error(ex.getMessage(), ex);
         ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
@@ -238,8 +238,8 @@ public class GlobalExceptionHandler {
     }
 
     // 대분류에 속하지않는 소분류명 일때
-    @ExceptionHandler(BigCategoryNotIncludeSmallCategory.class)
-    public ResponseEntity<ExceptionResponse> bigCategoryNotIncludeSmallCategory(final BigCategoryNotIncludeSmallCategory ex) {
+    @ExceptionHandler(BigCategoryNotIncludeSmallCategoryException.class)
+    public ResponseEntity<ExceptionResponse> bigCategoryNotIncludeSmallCategory(final BigCategoryNotIncludeSmallCategoryException ex) {
         log.error(ex.getMessage(), ex);
         ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);

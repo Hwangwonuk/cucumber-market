@@ -110,7 +110,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<FindProductResponse> findProductByPagination(int pageNum, int contentNum, String smallCategoryName, String title) {
         if (pageNum <= 0)
-            throw new PageNoPositiveException("페이지는 1 이상 이어야 합니다.");
+            throw new PageNotNaturalNumberException("페이지는 1 이상 이어야 합니다.");
 
         int offset = (pageNum - 1) * contentNum;
 
@@ -205,7 +205,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void checkNotDeleteProduct(int productIdx) {
         if (productMapper.checkNotDeleteProduct(productIdx) == 1) {
-            throw new AlreadyDeleteProductException("이미 삭제된 판매글입니다.");
+            throw new AlreadyDeletedProductException("이미 삭제된 판매글입니다.");
         }
     }
 

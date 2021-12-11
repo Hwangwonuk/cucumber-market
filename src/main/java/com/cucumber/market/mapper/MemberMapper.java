@@ -12,7 +12,6 @@ public interface MemberMapper {
 
     int checkDuplicateMemberId(String member_id);
 
-    // TODO: 2021-12-04 왜 여기만 @Param을 해주어야 되는가?
     int checkMatchIdAndPassword(@Param("member_id") String member_id, @Param("password") String password);
 
     int checkActivityMember(String member_id);

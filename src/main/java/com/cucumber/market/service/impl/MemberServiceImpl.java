@@ -146,7 +146,7 @@ public class MemberServiceImpl implements MemberService {
     public void checkMatchIdAndPassword(String member_id, String password) {
         String encryptedPassword = SHA256Util.encryptSHA256(password);
         if (memberMapper.checkMatchIdAndPassword(member_id, encryptedPassword) == 0) {
-            throw new PasswordMismatchException("입력한 아이디와 비밀번호가 일치하지 않습니다.");
+            throw new PasswordMismatchException("비밀번호가 일치하지 않습니다.");
         }
     }
 

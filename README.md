@@ -35,23 +35,27 @@ Java11, IntelliJ, Spring Boot, Gradle, Lombok, Mybatis, MySQL, Redis, Springfox
 <img src = "https://user-images.githubusercontent.com/86584999/145710572-9df24562-2fd7-45fe-98b7-6345a6aaac34.png">   
 
 ## :floppy_disk: ERD
-이미지
-* 자세한 사항 링크 -> Used RDBMS MySQL, 왜 이렇게 구성했는가 남겨놓기
+:point_right: [**상세정보 보러가기**](https://github.com/Hwangwonuk/cucumber-market/wiki/ERD)
+<img src = "https://user-images.githubusercontent.com/86584999/145711826-ca84a90f-ee33-4977-a863-aeacce0cba30.png">  
 
-## 주요 기능
-* 각 기능별 비지니스 로직 링크 -> 
-* 각 기능별 Use Case 링크 ->
+## :computer: 주요 기능
+:point_right: [**각 기능별 비지니스 로직**](https://github.com/Hwangwonuk/cucumber-market/wiki/Business-Rule)   
+:point_right: [**각 기능별 Use Case**](https://github.com/Hwangwonuk/cucumber-market/wiki/Use-Case)   
+   
+:busts_in_silhouette: **사용자**   
+- 회원가입, 탈퇴   
+- 로그인, 로그아웃   
+- 마이페이지, 정보수정   
+- 판매물품 등록, 수정, 삭제   
+- 물품 검색기능   
+- 상품찜 기능   
+- 비밀 댓글로 1:1채팅기능   
 
-사용자
-회원가입 및 로그인 -> 아이디 중복 체크, 비밀번호 암호화, 회원정보 수정, 회원탈퇴   
-//물품 카테고리에 따른 검색 기능 -> 대분류, 소분류   
-글제목, 작성자 아이디에 따른 검색 기능   
-검색된 물품 정렬 기능 -> 최신순,    
-판매물품 등록   
-글 작성자와 댓글 작성자만 볼수있는 댓글 기능   
+:guardsman: **관리자**   
+- 전체회원 조회   
+- 기존회원 관리자 등록   
+- 카테고리 관리   
 
-관리자   
-
-## 프로젝트를 진행하며 겪은 Issue
+## :warning: 프로젝트를 진행하며 겪은 Issue 및 학습한 내용
 링크
 

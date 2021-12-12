@@ -9,6 +9,8 @@ public interface CategoryService {
 
     void checkDuplicateBigCategoryName(String bigCategoryName);
 
+    List<BigCategoryNamesResponse> getBigCategoryNames();
+
     List<SmallCategoryNamesResponse> getSmallCategoryNames(BigCategoryNameRequest bigCategoryNameRequest);
 
     void checkExistBigCategoryName(String bigCategoryName);

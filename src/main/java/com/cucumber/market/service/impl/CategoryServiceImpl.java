@@ -48,6 +48,14 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     /**
+     * 모든 대분류명 조회 메소드
+     */
+    @Override
+    public List<BigCategoryNamesResponse> getBigCategoryNames() {
+        return categoryMapper.getBigCategoryNames();
+    }
+
+    /**
      * 대분류명에 해당하는 소분류명 찾기 메소드
      *
      * @param bigCategoryNameRequest 소분류를 불러올 대분류 이름

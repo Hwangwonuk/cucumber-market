@@ -18,7 +18,6 @@ import java.util.List;
 public class CategoryController {
 
     private final CategoryService categoryService;
-    // 관리자 기능
 
     // 대분류(카테고리) 등록
     @PostMapping("/big")
@@ -29,13 +28,10 @@ public class CategoryController {
         return new ResponseEntity<>(categoryService.registerBigCategory(request), HttpStatus.FOUND);
     }
 
-    // 대분류(카테고리) 조회 - 조회할 대분류에 속하는 소분류 조회
+    // 대분류(카테고리) 전체 조회
     @GetMapping("/big")
-    @CheckSignIn
-    @CheckAdmin
-    public ResponseEntity<List<SmallCategoryNamesResponse>> getSmallCategoryNames(@Valid BigCategoryNameRequest request) {
-        categoryService.checkExistBigCategoryName(request.getBigCategoryName());
-        return new ResponseEntity<>(categoryService.getSmallCategoryNames(request), HttpStatus.OK);
+    public ResponseEntity<List<BigCategoryNamesResponse>> getBigCategoryNames() {
+        return new ResponseEntity<>(categoryService.getBigCategoryNames(), HttpStatus.OK);
     }
 
     // 대분류(카테고리) 이름 수정
@@ -55,6 +51,13 @@ public class CategoryController {
         categoryService.checkExistBigCategoryName(request.getBigCategoryName());
         categoryService.checkDuplicateSmallCategoryName(request.getSmallCategoryName());
         return new ResponseEntity<>(categoryService.registerSmallCategory(request), HttpStatus.FOUND);
+    }
+
+    // 조회할 대분류에 속하는 모든 소분류(카테고리) 조회
+    @GetMapping("/small")
+    public ResponseEntity<List<SmallCategoryNamesResponse>> getSmallCategoryNames(@Valid BigCategoryNameRequest request) {
+        categoryService.checkExistBigCategoryName(request.getBigCategoryName());
+        return new ResponseEntity<>(categoryService.getSmallCategoryNames(request), HttpStatus.OK);
     }
 
     // 소분류(카테고리) 이름 수정

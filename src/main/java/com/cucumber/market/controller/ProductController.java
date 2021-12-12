@@ -53,7 +53,7 @@ public class ProductController {
 
     // 판매글 관련
 
-    // TODO: 2021-12-07 이미지 파일업로드 보안정책 고려, 글/이미지 등록 리스폰스 고려
+    // TODO: 2021-12-07 이미지 파일업로드 보안정책 고려
     // 판매글 등록(썸네일, 상세이미지 포함)
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @CheckSignIn
@@ -84,8 +84,8 @@ public class ProductController {
 
     // 판매글 검색 및 조회(최신순 페이징, 분류, 제목 검색기능 포함)
     @GetMapping
-    public ResponseEntity<List<FindProductResponse>> findProductByPagination(@RequestParam(defaultValue = "1") Integer pageNum,
-                                                                             @RequestParam(defaultValue = "10") Integer contentNum,
+    public ResponseEntity<List<FindProductResponse>> findProductByPagination(@RequestParam(defaultValue = "1") int pageNum,
+                                                                             @RequestParam(defaultValue = "10") int contentNum,
                                                                              @Valid FindProductRequest request) {
         categoryService.checkExistSmallCategoryName(request.getSmallCategoryName());
 
@@ -169,8 +169,8 @@ public class ProductController {
     @PostMapping("/{productIdx}/comment")
     @CheckSignIn
     public ResponseEntity<ProductResponse> registerComment(@PathVariable int productIdx,
-                                                @Valid @RequestBody ContentRequest contentRequest,
-                                                @CurrentMember CurrentMemberInfo currentMemberInfo) {
+                                                           @Valid @RequestBody ContentRequest contentRequest,
+                                                           @CurrentMember CurrentMemberInfo currentMemberInfo) {
         productService.checkExistProduct(productIdx);
         productService.checkNotDeleteProduct(productIdx);
 

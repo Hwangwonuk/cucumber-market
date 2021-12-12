@@ -15,6 +15,7 @@ public class HopeServiceImpl implements HopeService {
 
     /**
      * 상품찜 메소드
+     *
      * @param productIdx 상품번호
      * @param member_id 로그인한 회원의 아이디
      */
@@ -25,6 +26,7 @@ public class HopeServiceImpl implements HopeService {
 
     /**
      * 상품찜 중복검사 메소드
+     *
      * @param productIdx 상품번호
      * @param member_id 로그인한 회원의 아이디
      */
@@ -37,6 +39,7 @@ public class HopeServiceImpl implements HopeService {
 
     /**
      * 상품찜 취소전 본인확인 메소드
+     *
      * @param productIdx 상품번호
      * @param member_id 로그인한 회원의 아이디
      */
@@ -49,6 +52,7 @@ public class HopeServiceImpl implements HopeService {
 
     /**
      * 상품찜 취소 메소드
+     *
      * @param productIdx 상품번호
      * @param member_id 로그인한 회원의 아이디
      */

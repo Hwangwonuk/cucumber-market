@@ -19,10 +19,11 @@ public class ReplyServiceImpl implements ReplyService {
 
     /**
      * 대댓글 등록 메소드
+     *
      * @param commentIdx 댓글번호
      * @param content 등록할 내용
      * @param member_id 로그인한 회원의 아이디
-     * @return
+     * @return 등록한 대댓글 번호
      */
     @Override
     public CommentResponse registerReply(int commentIdx, String content, String member_id) {
@@ -35,6 +36,7 @@ public class ReplyServiceImpl implements ReplyService {
 
     /**
      * 대댓글 존재여부 검사 메소드
+     *
      * @param replyIdx 대댓글번호
      */
     @Override
@@ -46,6 +48,7 @@ public class ReplyServiceImpl implements ReplyService {
 
     /**
      * 댓글에 속하는 대댓글인지 확인하는 메소드
+     *
      * @param commentIdx 댓글번호
      * @param replyIdx 대댓글번호
      */
@@ -58,6 +61,7 @@ public class ReplyServiceImpl implements ReplyService {
 
     /**
      * 대댓글 조회 메소드
+     *
      * @param replyIdx 대댓글 번호
      * @return 대댓글 작성자, 아이디, 내용, 수정시간
      */
@@ -68,6 +72,7 @@ public class ReplyServiceImpl implements ReplyService {
 
     /**
      * 대댓글 삭제여부 확인 메소드
+     *
      * @param replyIdx 대댓글 번호
      */
     @Override
@@ -79,6 +84,7 @@ public class ReplyServiceImpl implements ReplyService {
 
     /**
      * 대댓글 작성자인지 확인하는 메소드
+     *
      * @param replyIdx 대댓글 번호
      * @param member_id 로그인한 회원의 아이디
      */
@@ -91,6 +97,7 @@ public class ReplyServiceImpl implements ReplyService {
 
     /**
      * 대댓글 수정 메소드
+     *
      * @param replyIdx 대댓글 번호
      * @param content 수정할 내용
      */
@@ -101,6 +108,7 @@ public class ReplyServiceImpl implements ReplyService {
 
     /**
      * 대댓글 삭제 메소드
+     *
      * @param replyIdx 대댓글 번호
      * @param member_id 로그인한 회원의 아이디
      */

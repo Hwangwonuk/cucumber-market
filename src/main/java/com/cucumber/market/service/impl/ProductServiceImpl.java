@@ -32,8 +32,8 @@ public class ProductServiceImpl implements ProductService {
 
     private final FileStore fileStore;
 
-    @Value("${cucumber.product.url}")
-    private String productUrl;
+//    @Value("${cucumber.product.url}")
+//    private String productUrl;
 
 //    @Override
 //    public ProductUploadResponse uploadProductV2(ProductUploadRequest productUploadRequest,
@@ -66,6 +66,7 @@ public class ProductServiceImpl implements ProductService {
 
     /**
      * 판매글 등록 메소드
+     *
      * @param productUploadRequest 글 등록시 필요한 데이터
      */
     // uploadProduct에서는 DB 관련 메서드를 하나만 사용하기 때문에 (productMapper.uploadProduct)
@@ -78,8 +79,10 @@ public class ProductServiceImpl implements ProductService {
 
     /**
      * 판매글 등록 시 함께 호출될 썸네일 이미지, 상세페이지 이미지 등록 메소드
+     *
      * @param images 등록한 이미지들
      * @param member_id 로그인한 회원의 아이디
+     * @return 등록한 판매글 번호
      */
     // @Transactional은 Spring에서 제공하는 DB Transaction 애노테이션
     // 기본적으로 Unchecked Exception, Error 만을 rollback함
@@ -101,6 +104,7 @@ public class ProductServiceImpl implements ProductService {
 
     /**
      * 판매글 조회 메소드(페이징, 검색)
+     *
      * @param pageNum 페이지 번호
      * @param contentNum 보여줄 개수
      * @param smallCategoryName 소분류명
@@ -125,6 +129,7 @@ public class ProductServiceImpl implements ProductService {
 
     /**
      * 판매글 존재여부 검사 메소드
+     *
      * @param productIdx 판매글 번호
      */
     @Override
@@ -136,6 +141,7 @@ public class ProductServiceImpl implements ProductService {
 
     /**
      * 판매글 상세조회 메소드
+     *
      * @param productIdx 판매글 번호
      * @return 판매글 상세정보 (글번호, 작성자, 제목, 내용, 가격, 배송비,  글상태, 수정시간, 해당글의 모든 이미지 경로, 글번호에 속한 댓글번호, 대댓글번호)
      */
@@ -146,6 +152,7 @@ public class ProductServiceImpl implements ProductService {
 
     /**
      * 판매글 작성자 여부 확인 메소드
+     *
      * @param productIdx 글번호
      * @param member_id 로그인한 회원의 아이디
      */
@@ -158,8 +165,10 @@ public class ProductServiceImpl implements ProductService {
 
     /**
      * 판매글 수정 메소드
+     *
      * @param productUpdateRequest 업데이트할 정보
      * @param member_id 로그인한 회원의 아이디
+     * @return 등록한 판매글 번호
      */
     @Override
     public ProductResponse updateProduct(int productIdx, ProductUpdateRequest productUpdateRequest, String member_id) {
@@ -179,6 +188,7 @@ public class ProductServiceImpl implements ProductService {
 
     /**
      * 판매글 판매완료 여부 확인 메소드
+     *
      * @param productIdx 판매글 번호
      */
     @Override
@@ -190,6 +200,7 @@ public class ProductServiceImpl implements ProductService {
 
     /**
      * 판매글 판매완료 상태변경 메소드
+     *
      * @param productIdx 판매글 번호
      * @param member_id 로그인한 회원의 아이디
      */
@@ -200,6 +211,7 @@ public class ProductServiceImpl implements ProductService {
 
     /**
      * 판매글 삭제여부 확인 메소드
+     *
      * @param productIdx 판매글 번호
      */
     @Override
@@ -211,6 +223,7 @@ public class ProductServiceImpl implements ProductService {
 
     /**
      * 판매글 삭제 메소드
+     *
      * @param productIdx 판매글 번호
      * @param member_id 현재 접속한 회원의 아이디
      */
@@ -221,6 +234,7 @@ public class ProductServiceImpl implements ProductService {
 
     /**
      * 상품글 작성자 or 댓글 작성자 검사 메소드
+     *
      * @param productIdx 글번호
      * @param commentIdx 댓글번호
      * @param member_id 대댓글 작성 or 조회를 시도하는 회원의 아이디
@@ -234,6 +248,7 @@ public class ProductServiceImpl implements ProductService {
 
     /**
      * 상품글 작성자 or 대댓글 작성자 검사 메소드
+     *
      * @param productIdx 글번호
      * @param replyIdx 대댓글번호
      * @param member_id 대댓글 조회를 시도하는 회원의 아이디

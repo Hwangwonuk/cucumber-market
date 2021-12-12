@@ -16,6 +16,13 @@
         WHERE big_category_name = #{bigCategoryName}
     </select>
 
+    <select id="getBigCategoryNames"
+            resultType="com.cucumber.market.dto.category.BigCategoryNamesResponse">
+        SELECT big_category_name
+        FROM big_category
+        ORDER BY big_category_name ASC
+    </select>
+
     <select id="getSmallCategoryNames"
             resultType="com.cucumber.market.dto.category.SmallCategoryNamesResponse">
         SELECT small_category_name

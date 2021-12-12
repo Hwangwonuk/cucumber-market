@@ -11,9 +11,9 @@ public interface ProductService {
                                           List<MultipartFile> multipartFiles,
                                           String member_id) throws IOException;*/
 
-    ProductUploadResponse uploadProduct(ProductUploadRequest productUploadRequest);
+    void uploadProduct(ProductUploadRequest productUploadRequest);
 
-    ProductUploadResponse uploadProductImages(List<MultipartFile> images, String member_id) throws IOException;
+    ProductResponse uploadProductImages(List<MultipartFile> images, String member_id) throws IOException;
 
     List<FindProductResponse> findProductByPagination(int pageNum, int contentNum, String smallCategoryName, String title);
 
@@ -23,7 +23,7 @@ public interface ProductService {
 
     void checkProductWriter(int productIdx, String member_id);
 
-    ProductUploadResponse updateProduct(int productIdx, ProductUpdateRequest productUpdateRequest, String member_id);
+    ProductResponse updateProduct(int productIdx, ProductUpdateRequest productUpdateRequest, String member_id);
 
     void checkNotSoldOutProduct(int productIdx);
 

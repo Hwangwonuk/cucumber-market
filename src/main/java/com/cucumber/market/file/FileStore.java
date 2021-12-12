@@ -1,6 +1,6 @@
 package com.cucumber.market.file;
 
-import com.cucumber.market.dto.product.FileUploadForm;
+import com.cucumber.market.dto.file.FileUploadForm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;

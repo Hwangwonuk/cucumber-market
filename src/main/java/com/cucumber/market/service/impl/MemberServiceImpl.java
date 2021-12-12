@@ -90,12 +90,12 @@ public class MemberServiceImpl implements MemberService {
      * @param contentNum 한 페이지에 출력할 데이터 수
      */
     @Override
-    public List<Member> findAllMemberByPagination(Integer pageNum, Integer contentNum) {
+    public List<Member> findAllMemberByPagination(int pageNum, int contentNum) {
         // pageNum은 1부터 시작하는 것을 가정
         if (pageNum <= 0)
-            throw new PageNoPositiveException("페이지는 1 이상 이어야 합니다.");
+            throw new PageNotNaturalNumberException("페이지는 1 이상 이어야 합니다.");
 
-        Integer offset = (pageNum - 1) * contentNum;
+        int offset = (pageNum - 1) * contentNum;
         // offset으로 DB에서 몇번째 데이터만큼 건너뛸것인지 결정
         // contentNum으로 한 페이지에 몇개의 데이터를 보여줄지 결정
         // 만약 특정 페이지에 보여줄 데이터가 부족하다면 부족한대로 Response에 넘겨줌
@@ -131,7 +131,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void checkExistMemberId(String member_id) {
         if (memberMapper.checkDuplicateMemberId(member_id) == 0) {
-            throw new MemberNotFoundException("입력한 아이디의 회원이 존재하지 않습니다.");
+            throw new NotExistMemberException("입력한 아이디의 회원이 존재하지 않습니다.");
         }
     }
 

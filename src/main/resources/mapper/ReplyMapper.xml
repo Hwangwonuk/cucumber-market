@@ -22,7 +22,7 @@
         WHERE reply_idx = #{replyIdx} AND comment_idx = #{commentIdx}
     </select>
 
-    <select id="getReply" resultType="com.cucumber.market.dto.product.ContentResponse">
+    <select id="getReply" resultType="com.cucumber.market.dto.comment.ContentResponse">
         SELECT member_id, content, updatetime
         FROM reply
         WHERE reply_idx = #{replyIdx}

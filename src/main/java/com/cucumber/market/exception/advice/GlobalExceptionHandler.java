@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
 /*
  @ExceptionHandler 를 사용해서 예외를 깔끔하게 처리할 수 있지만, 정상 코드와 예외 처리 코드가 하나의 컨트롤러에 섞여 있게된다.
  @ControllerAdvice 또는 @RestControllerAdvice 를 사용하면 둘을 분리할 수 있다.
@@ -45,8 +46,8 @@ public class GlobalExceptionHandler {
     }
 
     // 정보를 찾지 못했을때 Exception
-    @ExceptionHandler(MemberNotFoundException.class)
-    public ResponseEntity<ExceptionResponse> memberNotFoundException(final MemberNotFoundException ex) {
+    @ExceptionHandler(NotExistMemberException.class)
+    public ResponseEntity<ExceptionResponse> memberNotFoundException(final NotExistMemberException ex) {
         log.error(ex.getMessage(), ex);
         ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
@@ -77,8 +78,8 @@ public class GlobalExceptionHandler {
     }
 
     // 입력한 분류명(Category)이 없을 때
-    @ExceptionHandler(CategoryNameNotFoundException.class)
-    public ResponseEntity<ExceptionResponse> categoryNameNotFoundException(final CategoryNameNotFoundException ex) {
+    @ExceptionHandler(NotExistCategoryNameException.class)
+    public ResponseEntity<ExceptionResponse> categoryNameNotFoundException(final NotExistCategoryNameException ex) {
         log.error(ex.getMessage(), ex);
         ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
@@ -105,12 +106,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionResponse> alreadyInActiveMemberException(final AlreadyInActiveMemberException ex) {
         log.error(ex.getMessage(), ex);
         ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
 
     // 조회 데이터의 페이지 번호가 자연수가 아닌 경우
-    @ExceptionHandler(PageNoPositiveException.class)
-    public ResponseEntity<ExceptionResponse> pageNegativeNotAvailableException(final PageNoPositiveException ex) {
+    @ExceptionHandler(PageNotNaturalNumberException.class)
+    public ResponseEntity<ExceptionResponse> pageNegativeNotAvailableException(final PageNotNaturalNumberException ex) {
         log.error(ex.getMessage(), ex);
         ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
@@ -145,7 +146,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionResponse> noWriterForCommentException(final NoWriterForCommentException ex) {
         log.error(ex.getMessage(), ex);
         ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
 
     // 해당 판매글이나 댓글의 작성자가 아닌데 대댓글을 등록하려는 경우
@@ -153,7 +154,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionResponse> noWriterForProductOrCommentException(final NoWriterForProductOrCommentException ex) {
         log.error(ex.getMessage(), ex);
         ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
 
     // 이미 삭제된 대댓글인데 삭제하려는 경우
@@ -177,7 +178,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionResponse> noWriterForProductException(final NoWriterForProductException ex) {
         log.error(ex.getMessage(), ex);
         ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
 
     // 이미 판매완료 처리된 판매글인데 판매완료 처리를 하려는 경우
@@ -189,8 +190,8 @@ public class GlobalExceptionHandler {
     }
 
     // 이미 삭제된 판매글인데 삭제하려는 경우
-    @ExceptionHandler(AlreadyDeleteProductException.class)
-    public ResponseEntity<ExceptionResponse> alreadyDeleteProductException(final AlreadyDeleteProductException ex) {
+    @ExceptionHandler(AlreadyDeletedProductException.class)
+    public ResponseEntity<ExceptionResponse> alreadyDeleteProductException(final AlreadyDeletedProductException ex) {
         log.error(ex.getMessage(), ex);
         ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
@@ -209,7 +210,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionResponse> notExistCommentException(final NotExistCommentException ex) {
         log.error(ex.getMessage(), ex);
         ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
     // 존재하지 않는 대댓글일 경우
@@ -217,7 +218,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionResponse> notExistReplyException(final NotExistReplyException ex) {
         log.error(ex.getMessage(), ex);
         ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
     // 댓글에 해당하지 않는 대댓글을 보려하는 경우
@@ -233,12 +234,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionResponse> notExistProductException(final NotExistProductException ex) {
         log.error(ex.getMessage(), ex);
         ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
     // 대분류에 속하지않는 소분류명 일때
-    @ExceptionHandler(BigCategoryNotIncludeSmallCategory.class)
-    public ResponseEntity<ExceptionResponse> bigCategoryNotIncludeSmallCategory(final BigCategoryNotIncludeSmallCategory ex) {
+    @ExceptionHandler(BigCategoryNotIncludeSmallCategoryException.class)
+    public ResponseEntity<ExceptionResponse> bigCategoryNotIncludeSmallCategory(final BigCategoryNotIncludeSmallCategoryException ex) {
         log.error(ex.getMessage(), ex);
         ExceptionResponse response = new ExceptionResponse(ex.getLocalizedMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);

@@ -1,6 +1,7 @@
 package com.cucumber.market.service.impl;
 
-import com.cucumber.market.dto.product.ContentResponse;
+import com.cucumber.market.dto.comment.ContentResponse;
+import com.cucumber.market.dto.product.ProductResponse;
 import com.cucumber.market.exception.AlreadyDeletedCommentException;
 import com.cucumber.market.exception.NoWriterForCommentException;
 import com.cucumber.market.exception.NotExistCommentException;
@@ -21,10 +22,15 @@ public class CommentServiceImpl implements CommentService {
      * @param productIdx 상품번호
      * @param content 댓글내용
      * @param member_id 로그인한 회원의 아이디
+     * @return
      */
     @Override
-    public void registerComment(int productIdx, String content, String member_id) {
+    public ProductResponse registerComment(int productIdx, String content, String member_id) {
         commentMapper.registerComment(productIdx, content, member_id);
+
+        return ProductResponse.builder()
+                .productIdx(productIdx)
+                .build();
     }
 
     /**

@@ -150,8 +150,8 @@ public class MemberController {
     @GetMapping
     @CheckAdmin
     @CheckSignIn
-    public ResponseEntity<List<Member>> findAllMemberByPagination(@RequestParam(defaultValue = "1") Integer pageNum,
-                                                                  @RequestParam(defaultValue = "10") Integer contentNum) {
+    public ResponseEntity<List<Member>> findAllMemberByPagination(@RequestParam(defaultValue = "1") int pageNum,
+                                                                  @RequestParam(defaultValue = "10") int contentNum) {
         return new ResponseEntity<>(memberService.findAllMemberByPagination(pageNum, contentNum), HttpStatus.OK);
     }
 

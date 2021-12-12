@@ -1,6 +1,7 @@
 package com.cucumber.market.service.impl;
 
-import com.cucumber.market.dto.product.ContentResponse;
+import com.cucumber.market.dto.comment.CommentResponse;
+import com.cucumber.market.dto.comment.ContentResponse;
 import com.cucumber.market.exception.AlreadyDeletedReplyException;
 import com.cucumber.market.exception.NoWriterForReplyException;
 import com.cucumber.market.exception.NotExistReplyException;
@@ -21,10 +22,15 @@ public class ReplyServiceImpl implements ReplyService {
      * @param commentIdx 댓글번호
      * @param content 등록할 내용
      * @param member_id 로그인한 회원의 아이디
+     * @return
      */
     @Override
-    public void registerReply(int commentIdx, String content, String member_id) {
+    public CommentResponse registerReply(int commentIdx, String content, String member_id) {
         replyMapper.registerReply(commentIdx, content, member_id);
+
+        return CommentResponse.builder()
+                .commentIdx(commentIdx)
+                .build();
     }
 
     /**

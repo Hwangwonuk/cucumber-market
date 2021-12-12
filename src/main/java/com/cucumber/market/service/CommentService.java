@@ -1,10 +1,11 @@
 package com.cucumber.market.service;
 
-import com.cucumber.market.dto.product.ContentResponse;
+import com.cucumber.market.dto.comment.ContentResponse;
+import com.cucumber.market.dto.product.ProductResponse;
 
 public interface CommentService {
 
-    void registerComment(int productIdx, String content, String member_id);
+    ProductResponse registerComment(int productIdx, String content, String member_id);
 
     ContentResponse getComment(int commentIdx);
 

@@ -1,6 +1,6 @@
 package com.cucumber.market.mapper;
 
-import com.cucumber.market.dto.product.ContentResponse;
+import com.cucumber.market.dto.comment.ContentResponse;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

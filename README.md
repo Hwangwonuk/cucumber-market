@@ -1,6 +1,6 @@
 # :file_folder: cucumber-market
-- 당근마켓, 번개장터와 같은 중고상품 거래 플랫폼 오이마켓을 개발하는 토이프로젝트     
-- 웹 UI는 카카오 오븐으로 대체하여 프론트엔드 부분은 생략하고 백엔드에 초점을 맞춰 개발에 집중
+- 당근마켓, 번개장터와 같은 **중고상품 거래 플랫폼** 오이마켓을 개발하는 토이프로젝트     
+- 웹 UI는 카카오 오븐으로 대체하여 프론트엔드 부분은 생략하고 **백엔드에 초점**을 맞춰 개발에 집중
 
 ## :pushpin: 개발중점   
 - 단순 기능 구현 뿐 아니라 코드의 **재사용성** 및 **유지보수성**을 고려하여 구현하는 것을 목표로 개발   
@@ -9,26 +9,32 @@
 - 라이브러리 및 기능 추가 시 이유있는 선택과 사용 목적 고려
 - key-value 형태로 구성된 **JSON**으로 모든 데이터 통신 
 - Runtime Exception **예외처리** 선정과 그 종류에 따른 **Http Status** 응답 고려
+- **대용량 트래픽**을 고려한 로그인 기능 구현 추가
 
 ## :wrench: 사용 기술
 ```
 Java11, IntelliJ, Spring Boot, Gradle, Lombok, Mybatis, MySQL, Redis, Springfox
 ```
 
-## :tv: UI
+## :tv: Web Application UI
 :point_right: [**cucumber-market ProtoType UI 카카오 오븐 링크**](https://ovenapp.io/view/nlfjeRbawILO48ugsXrRsyt6UI2Bdusk/)  
    
-**예시)**  
-<img src = "https://user-images.githubusercontent.com/86584999/145705214-6410f8b0-ef25-4517-972d-68329e6f3b28.PNG" width="45%" height="45%">
-<img src = "https://user-images.githubusercontent.com/86584999/145706031-3427ba29-a88e-4392-8dda-e1e1fa5ea1e5.PNG" width="45%" height="45%">
+**:point_down: 미리보기**  
+<img src = "https://user-images.githubusercontent.com/86584999/145708688-c8295288-df79-48e0-a125-9b855bc4f560.PNG" width="90%" height="45%">
 <img src = "https://user-images.githubusercontent.com/86584999/145706256-0811c927-a8e4-45b1-8071-cc0b61496879.PNG" width="90%" height="45%">
 
-## 아키텍처
-mysql 아키텍처 링크   
-Redis 아키텍처 링크   
-패키지 구조 아키텍처 링크(그림판)
+## :clapper: Architecture
+:point_right: [**MySQL 아키텍처 링크**](https://github.com/Hwangwonuk/cucumber-market/wiki/MySQL-Architecture)   
+:point_right: [**Redis 아키텍처 링크**](https://github.com/Hwangwonuk/cucumber-market/wiki/Redis-Architecture)   
+   
+- **Architecture**   
+<img src = "https://user-images.githubusercontent.com/86584999/145709767-3827528f-1c4a-4bb2-85bc-de9ac8922804.jpg">   
+   
+   
+- **Layer**   
+<img src = "https://user-images.githubusercontent.com/86584999/145710572-9df24562-2fd7-45fe-98b7-6345a6aaac34.png">   
 
-## ERD
+## :floppy_disk: ERD
 이미지
 * 자세한 사항 링크 -> Used RDBMS MySQL, 왜 이렇게 구성했는가 남겨놓기
 

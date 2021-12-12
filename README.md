@@ -35,8 +35,9 @@ Java11, IntelliJ, Spring Boot, Gradle, Lombok, Mybatis, MySQL, Redis, Springfox
 <img src = "https://user-images.githubusercontent.com/86584999/145710572-9df24562-2fd7-45fe-98b7-6345a6aaac34.png">   
 
 ## :floppy_disk: ERD
-:point_right: [**상세정보 보러가기**](https://github.com/Hwangwonuk/cucumber-market/wiki/ERD)
-<img src = "https://user-images.githubusercontent.com/86584999/145711826-ca84a90f-ee33-4977-a863-aeacce0cba30.png">  
+:point_right: [**상세정보 보러가기**](https://github.com/Hwangwonuk/cucumber-market/wiki/ERD)   
+
+<img src = "https://user-images.githubusercontent.com/86584999/145718047-cef57cfa-e28e-40e8-80c3-f92923320a27.png">  
 
 ## :computer: 주요 기능
 :point_right: [**각 기능별 비지니스 로직**](https://github.com/Hwangwonuk/cucumber-market/wiki/Business-Rule)   

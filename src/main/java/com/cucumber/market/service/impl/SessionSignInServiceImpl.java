@@ -25,6 +25,12 @@ public class SessionSignInServiceImpl implements SessionSignInService {
     @Value("${cucumber.default.url}")
     private String defaultUrl;
 
+    /**
+     * 로그인 메소드
+     *
+     * @param currentMemberInfo 회원 아이디, 관리자 여부
+     * @return 기본 페이지 URL
+     */
     @Override
     public MemberSignInResponse signInMember(CurrentMemberInfo currentMemberInfo) {
         if (getCurrentMemberInfo() != null) {
@@ -38,6 +44,11 @@ public class SessionSignInServiceImpl implements SessionSignInService {
                 .build();
     }
 
+    /**
+     * 로그아웃 메소드
+     *
+     * @return 로그인 페이지 URL
+     */
     @Override
     public MemberSignOutResponse signOutMember() {
         if (getCurrentMemberInfo() == null) {
@@ -50,6 +61,11 @@ public class SessionSignInServiceImpl implements SessionSignInService {
                 .build();
     }
 
+    /**
+     * 세션에서 현재 로그인한 회원 정보 조회하는 메소드
+     *
+     * @return 회원 아이디, 관리자 여부
+     */
     @Override
     public CurrentMemberInfo getCurrentMemberInfo() {
         return (CurrentMemberInfo) httpSession.getAttribute(SessionKeys.CURRENT_MEMBER);

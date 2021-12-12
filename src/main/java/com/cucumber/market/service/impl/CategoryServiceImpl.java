@@ -49,6 +49,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     /**
      * 모든 대분류명 조회 메소드
+     *
+     * @return 대분류 전체 목록
      */
     @Override
     public List<BigCategoryNamesResponse> getBigCategoryNames() {
@@ -59,6 +61,7 @@ public class CategoryServiceImpl implements CategoryService {
      * 대분류명에 해당하는 소분류명 찾기 메소드
      *
      * @param bigCategoryNameRequest 소분류를 불러올 대분류 이름
+     * @return 대분류에 해당하는 소분류 목록
      */
     @Override
     public List<SmallCategoryNamesResponse> getSmallCategoryNames(BigCategoryNameRequest bigCategoryNameRequest) {
@@ -81,6 +84,7 @@ public class CategoryServiceImpl implements CategoryService {
      * 대분류 이름 수정 메소드
      *
      * @param bigCategoryUpdateRequest 원래 대분류명, 변경할 대분류명
+     * @return 카테고리 페이지 URL
      */
     @Override
     public CategoryResponse updateBigCategory(BigCategoryUpdateRequest bigCategoryUpdateRequest) {
@@ -94,6 +98,7 @@ public class CategoryServiceImpl implements CategoryService {
      * 소분류 등록 메소드
      *
      * @param smallCategoryRegisterRequest 소분류 등록 시 저장할 이름
+     * @return 카테고리 페이지 URL
      */
     @Override
     public CategoryResponse registerSmallCategory(SmallCategoryRegisterRequest smallCategoryRegisterRequest) {
@@ -120,6 +125,7 @@ public class CategoryServiceImpl implements CategoryService {
      * 소분류 이름 수정 메소드
      *
      * @param smallCategoryUpdateRequest 대분류명, 원래 소분류명, 변경할 소분류명
+     * @return 카테고리 페이지 URL
      */
     @Override
     public CategoryResponse updateSmallCategory(SmallCategoryUpdateRequest smallCategoryUpdateRequest) {
@@ -143,6 +149,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     /**
      * 대분류에 속하는 소분류인지 검사 메소드
+     *
      * @param bigCategoryName 대분류명
      * @param smallCategoryName 소분류명
      */

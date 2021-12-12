@@ -19,10 +19,11 @@ public class CommentServiceImpl implements CommentService {
 
     /**
      * 댓글등록 메소드
+     *
      * @param productIdx 상품번호
      * @param content 댓글내용
      * @param member_id 로그인한 회원의 아이디
-     * @return
+     * @return 댓글이 등록된 판매글 번호
      */
     @Override
     public ProductResponse registerComment(int productIdx, String content, String member_id) {
@@ -35,6 +36,7 @@ public class CommentServiceImpl implements CommentService {
 
     /**
      * 댓글조회 메소드
+     *
      * @param commentIdx 댓글번호
      * @return 댓글 작성자 아이디, 내용
      */
@@ -45,6 +47,7 @@ public class CommentServiceImpl implements CommentService {
 
     /**
      * 댓글 존재여부 확인 메소드
+     *
      * @param commentIdx 댓글번호
      */
     @Override
@@ -56,6 +59,7 @@ public class CommentServiceImpl implements CommentService {
 
     /**
      * 판매글에 속하는 댓글인지 확인하는 메소드
+     *
      * @param productIdx 판매글 번호
      * @param commentIdx 댓글번호
      */
@@ -68,6 +72,7 @@ public class CommentServiceImpl implements CommentService {
 
     /**
      * 댓글삭제 여부검사 메소드
+     *
      * @param commentIdx 댓글번호
      */
     @Override
@@ -79,6 +84,7 @@ public class CommentServiceImpl implements CommentService {
 
     /**
      * 댓글 작성자 확인 메소드 (작성자가 아니라면 예외 발생)
+     *
      * @param commentIdx 댓글번호
      * @param member_id 로그인한 회원의 아이디
      */
@@ -91,8 +97,10 @@ public class CommentServiceImpl implements CommentService {
 
     /**
      * 댓글 작성자 확인 메소드 (시비 여부 확인)
+     *
      * @param commentIdx 댓글번호
      * @param member_id 로그인한 회원의 아이디
+     * @return 댓글 작성자 여부
      */
     @Override
     public Boolean isCommentWriter(int commentIdx, String member_id) {
@@ -104,6 +112,7 @@ public class CommentServiceImpl implements CommentService {
 
     /**
      * 댓글수정 메소드
+     *
      * @param commentIdx 댓글번호
      * @param content 수정할 내용
      */
@@ -114,6 +123,7 @@ public class CommentServiceImpl implements CommentService {
 
     /**
      * 댓글삭제 메소드
+     *
      * @param commentIdx 댓글번호
      * @param member_id 로그인한 회원의 아이디
      */

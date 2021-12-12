@@ -107,6 +107,8 @@ public class ProductController {
     public ResponseEntity<ProductResponse> updateProduct(@PathVariable("productIdx") int productIdx,
                                                          @Valid @RequestBody ProductUpdateRequest request,
                                                          @CurrentMember CurrentMemberInfo currentMemberInfo) {
+        productService.checkExistProduct(productIdx);
+        productService.checkNotDeleteProduct(productIdx);
         productService.checkProductWriter(productIdx, currentMemberInfo.getMember_id());
 
         return new ResponseEntity<>(productService.updateProduct(productIdx, request, currentMemberInfo.getMember_id()), HttpStatus.OK);
@@ -117,6 +119,7 @@ public class ProductController {
     @CheckSignIn
     public ResponseEntity<Void> soldOutProduct(@PathVariable("productIdx") int productIdx,
                                                @CurrentMember CurrentMemberInfo currentMemberInfo) {
+        productService.checkExistProduct(productIdx);
         productService.checkNotSoldOutProduct(productIdx);
         productService.checkNotDeleteProduct(productIdx);
         productService.checkProductWriter(productIdx, currentMemberInfo.getMember_id());
@@ -130,6 +133,7 @@ public class ProductController {
     @CheckSignIn
     public ResponseEntity<Void> deleteProduct(@PathVariable("productIdx") int productIdx,
                                               @CurrentMember CurrentMemberInfo currentMemberInfo) {
+        productService.checkExistProduct(productIdx);
         productService.checkNotDeleteProduct(productIdx);
         productService.checkProductWriter(productIdx, currentMemberInfo.getMember_id());
         productService.deleteProduct(productIdx, currentMemberInfo.getMember_id());
@@ -144,6 +148,7 @@ public class ProductController {
     @CheckSignIn
     public ResponseEntity<Void> registerHope(@PathVariable int productIdx,
                                              @CurrentMember CurrentMemberInfo currentMemberInfo) {
+        productService.checkExistProduct(productIdx);
         productService.checkNotDeleteProduct(productIdx);
         hopeService.checkDuplicateHope(productIdx, currentMemberInfo.getMember_id());
         hopeService.registerHope(productIdx, currentMemberInfo.getMember_id());
@@ -156,6 +161,7 @@ public class ProductController {
     @CheckSignIn
     public ResponseEntity<Void> cancelHope(@PathVariable int productIdx,
                                            @CurrentMember CurrentMemberInfo currentMemberInfo) {
+        productService.checkExistProduct(productIdx);
         productService.checkNotDeleteProduct(productIdx);
         hopeService.checkAlreadyHope(productIdx, currentMemberInfo.getMember_id());
         hopeService.cancelHope(productIdx, currentMemberInfo.getMember_id());
@@ -183,6 +189,7 @@ public class ProductController {
     public ResponseEntity<ContentResponse> getComment(@PathVariable int productIdx,
                                                       @PathVariable int commentIdx,
                                                       @CurrentMember CurrentMemberInfo currentMemberInfo) {
+        commentService.checkExistComment(commentIdx);
         commentService.checkNotDeleteComment(commentIdx);
         productService.checkProductOrCommentWriter(productIdx, commentIdx, currentMemberInfo.getMember_id());
         commentService.checkProductIncludeComment(productIdx, commentIdx);
@@ -196,6 +203,7 @@ public class ProductController {
     public ResponseEntity<Void> updateComment(@PathVariable int commentIdx,
                                               @Valid @RequestBody ContentRequest request,
                                               @CurrentMember CurrentMemberInfo currentMemberInfo) {
+        commentService.checkExistComment(commentIdx);
         commentService.checkNotDeleteComment(commentIdx);
         commentService.checkCommentWriter(commentIdx, currentMemberInfo.getMember_id());
         commentService.updateComment(commentIdx, request.getContent());
@@ -208,6 +216,7 @@ public class ProductController {
     @CheckSignIn
     public ResponseEntity<Void> deleteComment(@PathVariable int commentIdx,
                                               @CurrentMember CurrentMemberInfo currentMemberInfo) {
+        commentService.checkExistComment(commentIdx);
         commentService.checkNotDeleteComment(commentIdx);
         commentService.checkCommentWriter(commentIdx, currentMemberInfo.getMember_id());
         commentService.deleteComment(commentIdx, currentMemberInfo.getMember_id());
@@ -224,7 +233,9 @@ public class ProductController {
                                                          @PathVariable int commentIdx,
                                                          @Valid @RequestBody ContentRequest request,
                                                          @CurrentMember CurrentMemberInfo currentMemberInfo) {
+        productService.checkExistProduct(productIdx);
         productService.checkNotDeleteProduct(productIdx);
+        commentService.checkExistComment(commentIdx);
         commentService.checkNotDeleteComment(commentIdx);
         productService.checkProductOrCommentWriter(productIdx, commentIdx, currentMemberInfo.getMember_id());
 
@@ -238,6 +249,7 @@ public class ProductController {
                                                     @PathVariable int commentIdx,
                                                     @PathVariable int replyIdx,
                                                     @CurrentMember CurrentMemberInfo currentMemberInfo) {
+        replyService.checkExistReply(replyIdx);
         replyService.checkCommentIncludeReply(commentIdx, replyIdx);
         replyService.checkNotDeleteReply(replyIdx);
 
@@ -257,6 +269,7 @@ public class ProductController {
     public ResponseEntity<Void> updateReply(@PathVariable int replyIdx,
                                             @Valid @RequestBody ContentRequest request,
                                             @CurrentMember CurrentMemberInfo currentMemberInfo) {
+        replyService.checkExistReply(replyIdx);
         replyService.checkNotDeleteReply(replyIdx);
         replyService.checkReplyWriter(replyIdx, currentMemberInfo.getMember_id());
         replyService.updateReply(replyIdx, request.getContent());
@@ -269,6 +282,7 @@ public class ProductController {
     @CheckSignIn
     public ResponseEntity<Void> deleteReply(@PathVariable int replyIdx,
                                             @CurrentMember CurrentMemberInfo currentMemberInfo) {
+        replyService.checkExistReply(replyIdx);
         replyService.checkNotDeleteReply(replyIdx);
         replyService.checkReplyWriter(replyIdx, currentMemberInfo.getMember_id());
         replyService.deleteReply(replyIdx, currentMemberInfo.getMember_id());

@@ -10,6 +10,8 @@
 - key-value 형태로 구성된 **JSON**으로 모든 데이터 통신 
 - Runtime Exception **예외처리** 선정과 그 종류에 따른 **Http Status** 응답 고려
 - **대용량 트래픽**을 고려한 로그인 기능 구현 추가
+- 리소스를 고려한 의미있는 **도메인 설계**
+- **부하 분산 및 장애대응**을 위한 MySQL 쿼리 요청 분기(Replication) 및 Redis **Master - Slave** 환경구축
 
 ## :wrench: 사용 기술
 ```
@@ -31,7 +33,7 @@ Java11, IntelliJ, Spring Boot, Gradle, Lombok, Mybatis, MySQL, Redis, Springfox
 <img src = "https://user-images.githubusercontent.com/86584999/145709767-3827528f-1c4a-4bb2-85bc-de9ac8922804.jpg">   
    
    
-- **Layer**   
+## :books: Layer  
 <img src = "https://user-images.githubusercontent.com/86584999/145710572-9df24562-2fd7-45fe-98b7-6345a6aaac34.png">   
 
 ## :floppy_disk: ERD

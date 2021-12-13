@@ -70,7 +70,7 @@ Java11, IntelliJ, Spring Boot, Gradle, Lombok, Mybatis, MySQL, Redis, Springfox
 ## :warning: 프로젝트를 진행하며 겪은 Issue 및 학습한 내용
 * [**Scale UP VS Scale OUT** 개인블로그](https://wonuk.tistory.com/120?category=1021792)
 * [**레플리케이션, 클러스터링** 개인블로그](https://wonuk.tistory.com/123)
-* * [**Disk Based Database VS In Memory Database** 개인블로그](https://wonuk.tistory.com/130)
+* [**Disk Based Database VS In Memory Database** 개인블로그](https://wonuk.tistory.com/130)
 * [**다중 서버 환경에서 세션을 어떻게 관리할 것인가?** 개인블로그](https://wonuk.tistory.com/129)
 * [**Scale UP VS Scale OUT** 개인블로그](https://wonuk.tistory.com/120?category=1021792)
 * [**레플리케이션, 클러스터링** 개인블로그](https://wonuk.tistory.com/123)

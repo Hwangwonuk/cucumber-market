@@ -133,6 +133,7 @@ public class ProductServiceImpl implements ProductService {
      * @param productIdx 판매글 번호
      */
     @Override
+    @Transactional(readOnly = true)
     public void checkExistProduct(int productIdx) {
         if (productMapper.checkExistProduct(productIdx) == 0) {
             throw new NotExistProductException("글번호에 해당하는 판매글이 존재하지 않습니다.");
@@ -157,6 +158,7 @@ public class ProductServiceImpl implements ProductService {
      * @param member_id 로그인한 회원의 아이디
      */
     @Override
+    @Transactional(readOnly = true)
     public void checkProductWriter(int productIdx, String member_id) {
         if (productMapper.checkProductWriter(productIdx, member_id) == 0) {
             throw new NoWriterForProductException("해당 판매글의 작성자가 아닙니다.");
@@ -192,6 +194,7 @@ public class ProductServiceImpl implements ProductService {
      * @param productIdx 판매글 번호
      */
     @Override
+    @Transactional(readOnly = true)
     public void checkNotSoldOutProduct(int productIdx) {
         if (productMapper.checkNotSoldOutProduct(productIdx) == 1) {
             throw new AlreadySoldOutProductException("이미 삭제된 판매글입니다.");
@@ -215,6 +218,7 @@ public class ProductServiceImpl implements ProductService {
      * @param productIdx 판매글 번호
      */
     @Override
+    @Transactional(readOnly = true)
     public void checkNotDeleteProduct(int productIdx) {
         if (productMapper.checkNotDeleteProduct(productIdx) == 1) {
             throw new AlreadyDeletedProductException("이미 삭제된 판매글입니다.");
@@ -240,6 +244,7 @@ public class ProductServiceImpl implements ProductService {
      * @param member_id 대댓글 작성 or 조회를 시도하는 회원의 아이디
      */
     @Override
+    @Transactional(readOnly = true)
     public void checkProductOrCommentWriter(int productIdx, int commentIdx, String member_id) {
         if (productMapper.checkProductWriter(productIdx, member_id) == 0 && commentMapper.checkCommentWriter(commentIdx, member_id) == 0) {
             throw new NoWriterForProductOrCommentException("해당 글이나 댓글의 작성자가 아닙니다.");
@@ -254,6 +259,7 @@ public class ProductServiceImpl implements ProductService {
      * @param member_id 대댓글 조회를 시도하는 회원의 아이디
      */
     @Override
+    @Transactional(readOnly = true)
     public void checkProductOrReplyWriter(int productIdx, int replyIdx, String member_id) {
         if (productMapper.checkProductWriter(productIdx, member_id) == 0 && replyMapper.checkReplyWriter(replyIdx, member_id) == 0) {
             throw new NoWriterForProductOrCommentException("해당 글이나 댓글의 작성자가 아닙니다.");

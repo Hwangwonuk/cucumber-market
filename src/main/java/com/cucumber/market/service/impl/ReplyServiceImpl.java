@@ -10,6 +10,7 @@ import com.cucumber.market.mapper.ReplyMapper;
 import com.cucumber.market.service.ReplyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -40,6 +41,7 @@ public class ReplyServiceImpl implements ReplyService {
      * @param replyIdx 대댓글번호
      */
     @Override
+    @Transactional(readOnly = true)
     public void checkExistReply(int replyIdx) {
         if (replyMapper.checkExistReply(replyIdx) == 0) {
             throw new NotExistReplyException("해당 대댓글은 존재하지 않습니다.");
@@ -53,6 +55,7 @@ public class ReplyServiceImpl implements ReplyService {
      * @param replyIdx 대댓글번호
      */
     @Override
+    @Transactional(readOnly = true)
     public void checkCommentIncludeReply(int commentIdx, int replyIdx) {
         if (replyMapper.checkCommentIncludeReply(commentIdx, replyIdx) == 0) {
             throw new ProductNotIncludeReplyException("해당 댓글에 속하지 않는 대댓글입니다.");
@@ -76,6 +79,7 @@ public class ReplyServiceImpl implements ReplyService {
      * @param replyIdx 대댓글 번호
      */
     @Override
+    @Transactional(readOnly = true)
     public void checkNotDeleteReply(int replyIdx) {
         if (replyMapper.checkNotDeleteReply(replyIdx) == 1) {
             throw new AlreadyDeletedReplyException("해당 대댓글은 이미 삭제되었습니다.");
@@ -89,6 +93,7 @@ public class ReplyServiceImpl implements ReplyService {
      * @param member_id 로그인한 회원의 아이디
      */
     @Override
+    @Transactional(readOnly = true)
     public void checkReplyWriter(int replyIdx, String member_id) {
         if (replyMapper.checkReplyWriter(replyIdx, member_id) == 0) {
             throw new NoWriterForReplyException("해당 대댓글의 작성자가 아닙니다.");

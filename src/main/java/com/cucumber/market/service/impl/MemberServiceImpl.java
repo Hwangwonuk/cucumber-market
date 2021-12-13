@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -69,6 +70,7 @@ public class MemberServiceImpl implements MemberService {
      * @param member_id 현재 로그인한 회원의 아이디
      */
     @Override
+    @Transactional(readOnly = true)
     public MemberInfo getMemberInfo(String member_id) {
         return memberMapper.getMemberInfo(member_id);
     }
@@ -79,6 +81,7 @@ public class MemberServiceImpl implements MemberService {
      * @param member_id 세션에 저장된 아이디
      */
     @Override
+    @Transactional(readOnly = true)
     public CurrentMemberInfo getCurrentMemberInfo(String member_id) {
         return memberMapper.getCurrentMemberInfo(member_id);
     }
@@ -117,6 +120,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public void checkAlreadyAdmin(String member_id) {
         if (memberMapper.checkAlreadyAdmin(member_id) == 1) {
             throw new AlreadyAdminException("입력한 회원은 이미 관리자 입니다.");
@@ -129,6 +133,7 @@ public class MemberServiceImpl implements MemberService {
      * @param member_id 중복 검사할 회원 아이디
      */
     @Override
+    @Transactional(readOnly = true)
     public void checkExistMemberId(String member_id) {
         if (memberMapper.checkDuplicateMemberId(member_id) == 0) {
             throw new NotExistMemberException("입력한 아이디의 회원이 존재하지 않습니다.");
@@ -143,10 +148,11 @@ public class MemberServiceImpl implements MemberService {
      */
 
     @Override
+    @Transactional(readOnly = true)
     public void checkMatchIdAndPassword(String member_id, String password) {
         String encryptedPassword = SHA256Util.encryptSHA256(password);
         if (memberMapper.checkMatchIdAndPassword(member_id, encryptedPassword) == 0) {
-            throw new PasswordMismatchException("입력한 아이디와 비밀번호가 일치하지 않습니다.");
+            throw new PasswordMismatchException("비밀번호가 일치하지 않습니다.");
         }
     }
 
@@ -156,6 +162,7 @@ public class MemberServiceImpl implements MemberService {
      * @param member_id 입력한 아이디
      */
     @Override
+    @Transactional(readOnly = true)
     public void checkActivityMember(String member_id) {
         if (memberMapper.checkActivityMember(member_id) == 0) {
             throw new AlreadyInActiveMemberException("탈퇴한 계정의 아이디입니다.");

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -53,6 +54,7 @@ public class CategoryServiceImpl implements CategoryService {
      * @return 대분류 전체 목록
      */
     @Override
+    @Transactional(readOnly = true)
     public List<BigCategoryNamesResponse> getBigCategoryNames() {
         return categoryMapper.getBigCategoryNames();
     }
@@ -64,6 +66,7 @@ public class CategoryServiceImpl implements CategoryService {
      * @return 대분류에 해당하는 소분류 목록
      */
     @Override
+    @Transactional(readOnly = true)
     public List<SmallCategoryNamesResponse> getSmallCategoryNames(BigCategoryNameRequest bigCategoryNameRequest) {
         return categoryMapper.getSmallCategoryNames(bigCategoryNameRequest.getBigCategoryName());
     }

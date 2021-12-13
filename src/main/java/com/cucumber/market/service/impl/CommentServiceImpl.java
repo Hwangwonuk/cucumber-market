@@ -10,6 +10,7 @@ import com.cucumber.market.mapper.CommentMapper;
 import com.cucumber.market.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -41,6 +42,7 @@ public class CommentServiceImpl implements CommentService {
      * @return 댓글 작성자 아이디, 내용
      */
     @Override
+    @Transactional(readOnly = true)
     public ContentResponse getComment(int commentIdx) {
         return commentMapper.getComment(commentIdx);
     }

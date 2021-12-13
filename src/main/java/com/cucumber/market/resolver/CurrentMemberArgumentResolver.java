@@ -1,4 +1,4 @@
-package com.cucumber.market;
+package com.cucumber.market.resolver;
 
 import com.cucumber.market.annotation.CurrentMember;
 import com.cucumber.market.dto.member.CurrentMemberInfo;
@@ -10,7 +10,6 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-// TODO: 2021-12-07 전체 패키지 구조 변경
 @Component
 @RequiredArgsConstructor
 public class CurrentMemberArgumentResolver implements HandlerMethodArgumentResolver {

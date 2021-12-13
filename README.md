@@ -41,10 +41,18 @@ Java11, IntelliJ, Spring Boot, Gradle, Lombok, Mybatis, MySQL, Redis, Springfox
 
 <img src = "https://user-images.githubusercontent.com/86584999/145718047-cef57cfa-e28e-40e8-80c3-f92923320a27.png">  
 
+## :page_with_curl: Swagger
+**:point_down: Swagger 미리보기**
+
+<img src = "https://user-images.githubusercontent.com/86584999/145809566-f0551828-60de-45cc-9fde-f41e79e3d7f2.JPG">
+<img src = "https://user-images.githubusercontent.com/86584999/145809586-bcd7cdc8-4e8b-434c-9768-9260238c058d.JPG">
+<img src = "https://user-images.githubusercontent.com/86584999/145809600-3383f9c6-7d95-41df-be8b-c69ca4678472.JPG">
+
 ## :computer: 주요 기능
 :point_right: [**각 기능별 비지니스 로직**](https://github.com/Hwangwonuk/cucumber-market/wiki/Business-Rule)   
 :point_right: [**각 기능별 Use Case**](https://github.com/Hwangwonuk/cucumber-market/wiki/Use-Case)   
-   
+
+
 :busts_in_silhouette: **사용자**   
 - 회원가입, 탈퇴   
 - 로그인, 로그아웃   
@@ -60,5 +68,12 @@ Java11, IntelliJ, Spring Boot, Gradle, Lombok, Mybatis, MySQL, Redis, Springfox
 - 카테고리 관리   
 
 ## :warning: 프로젝트를 진행하며 겪은 Issue 및 학습한 내용
-링크
+* [**Scale UP VS Scale OUT** 개인블로그](https://wonuk.tistory.com/120?category=1021792)
+* [**레플리케이션, 클러스터링** 개인블로그](https://wonuk.tistory.com/123)
+* * [**Disk Based Database VS In Memory Database** 개인블로그](https://wonuk.tistory.com/130)
+* [**다중 서버 환경에서 세션을 어떻게 관리할 것인가?** 개인블로그](https://wonuk.tistory.com/129)
+* [**Scale UP VS Scale OUT** 개인블로그](https://wonuk.tistory.com/120?category=1021792)
+* [**레플리케이션, 클러스터링** 개인블로그](https://wonuk.tistory.com/123)
+* [**Redis란 무엇인가?** 개인블로그](https://wonuk.tistory.com/118)
+* [**Window10 환경에서 Redis 설치방법** 개인블로그](https://wonuk.tistory.com/117)
 

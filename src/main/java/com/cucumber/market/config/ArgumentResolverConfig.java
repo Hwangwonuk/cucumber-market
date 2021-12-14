@@ -1,6 +1,6 @@
 package com.cucumber.market.config;
 
-import com.cucumber.market.CurrentMemberArgumentResolver;
+import com.cucumber.market.resolver.CurrentMemberArgumentResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -44,7 +44,6 @@ HttpMessageConverter 사용 -> StringHttpMessageConverter 적용
 @RequestMapping("/members")
 public class MemberController {
 
-    // TODO: 2021-12-01 HandlerMethodArgumentResolver를 사용해서 특정 Request 객체에 대해 처리 (예 : 패스워드 암호화)
     /*
     * 의존성 주입(dependency injection)
       가장 유용한 방법은 생성자 주입 방법이다.

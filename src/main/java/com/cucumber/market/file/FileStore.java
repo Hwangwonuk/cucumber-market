@@ -1,6 +1,7 @@
 package com.cucumber.market.file;
 
 import com.cucumber.market.dto.file.FileUploadForm;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,7 +26,11 @@ public class FileStore {
             throws IOException {
         List<FileUploadForm> storeFileResult = new ArrayList<>();
         for (MultipartFile multipartFile : multipartFiles) {
-            if (!multipartFile.isEmpty()) {
+            // 파일 확장자명이 JPG거나 PNG인 경우에만 저장한다
+            if (!multipartFile.isEmpty() &&
+                FilenameUtils.getExtension(multipartFile.getOriginalFilename()) != null &&
+                (FilenameUtils.getExtension(multipartFile.getOriginalFilename()).equalsIgnoreCase("jpg") ||
+                FilenameUtils.getExtension(multipartFile.getOriginalFilename()).equalsIgnoreCase("png"))) {
                 storeFileResult.add(storeFile(pk, multipartFile));
             }
         }

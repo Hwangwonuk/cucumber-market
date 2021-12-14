@@ -68,6 +68,7 @@ Java11, IntelliJ, Spring Boot, Gradle, Lombok, Mybatis, MySQL, Redis, Springfox
 - 카테고리 관리   
 
 ## :warning: 프로젝트를 진행하며 겪은 Issue 및 학습한 내용
+* [**부하 분산을 위한 MySQL 쿼리요청 분기** 개인블로그](https://wonuk.tistory.com/131)
 * [**Scale UP VS Scale OUT** 개인블로그](https://wonuk.tistory.com/120?category=1021792)
 * [**레플리케이션, 클러스터링** 개인블로그](https://wonuk.tistory.com/123)
 * [**Disk Based Database VS In Memory Database** 개인블로그](https://wonuk.tistory.com/130)

@@ -69,12 +69,11 @@ Java11, IntelliJ, Spring Boot, Gradle, Lombok, Mybatis, MySQL, Redis, Springfox
 
 ## :warning: 프로젝트를 진행하며 겪은 Issue 및 학습한 내용
 * [**부하 분산을 위한 MySQL 쿼리요청 분기** 개인블로그](https://wonuk.tistory.com/131)
-* [**Scale UP VS Scale OUT** 개인블로그](https://wonuk.tistory.com/120?category=1021792)
-* [**레플리케이션, 클러스터링** 개인블로그](https://wonuk.tistory.com/123)
 * [**Disk Based Database VS In Memory Database** 개인블로그](https://wonuk.tistory.com/130)
 * [**다중 서버 환경에서 세션을 어떻게 관리할 것인가?** 개인블로그](https://wonuk.tistory.com/129)
 * [**Scale UP VS Scale OUT** 개인블로그](https://wonuk.tistory.com/120?category=1021792)
 * [**레플리케이션, 클러스터링** 개인블로그](https://wonuk.tistory.com/123)
 * [**Redis란 무엇인가?** 개인블로그](https://wonuk.tistory.com/118)
-* [**Window10 환경에서 Redis 설치방법** 개인블로그](https://wonuk.tistory.com/117)
-
+* [**MultiPartFile 바인딩 이슈** Pull Request](https://github.com/Hwangwonuk/cucumber-market/pull/19)
+* [**ArgumentResolver와 Springfox 충돌이슈** Pull Request](https://github.com/Hwangwonuk/cucumber-market/pull/10)
+* [**Lombok을 사용한 DTO객체 JSON 데이터 파싱  이슈**](https://github.com/Hwangwonuk/cucumber-market/pull/6)

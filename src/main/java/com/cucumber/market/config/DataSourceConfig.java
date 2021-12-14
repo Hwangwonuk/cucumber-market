@@ -22,11 +22,11 @@ import java.util.Map;
    @Configuration 클래스와 함께 사용
  */
 @Configuration
-@EnableTransactionManagement
+@EnableTransactionManagement // 애너테이션 기반 트랜잭션 기능 활성화
 @PropertySource(value = {"classpath:/application-dev.properties", "classpath:/application-prod.properties"})
 public class DataSourceConfig {
 
-    @Bean(name = "masterDataSource")
+    @Bean(name = "masterDataSource") // 지정된 prefix로 시작된 속성값만 사용
     @ConfigurationProperties(prefix = "spring.datasource.master")
     public DataSource masterDataSource() {
         return DataSourceBuilder.create().build();
@@ -45,6 +45,7 @@ public class DataSourceConfig {
         AbstractRoutingDataSource routingDataSource = new RoutingDataSource();
         Map<Object, Object> targetDataSources = new HashMap<>();
 
+        // targetDataSources Map 객체에 분기할 서버들의 DataSource 빈을 저장
         targetDataSources.put("master",masterDataSource);
         targetDataSources.put("slave", slaveDataSource);
 
@@ -55,7 +56,7 @@ public class DataSourceConfig {
     }
 
     @Bean(name = "proxyDataSource")
-    public DataSource proxyDataSource(@Qualifier(value = "routingDataSource") DataSource routingDataSource) {
+    public DataSource proxyDataSource(@Qualifier(value = "routingDataSource") DataSource routingDataSource) { // 빈 이름 중복을 막기위해 이름지정
 
         return new LazyConnectionDataSourceProxy(routingDataSource);
     }

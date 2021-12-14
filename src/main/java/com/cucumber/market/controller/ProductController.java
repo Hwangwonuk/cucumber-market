@@ -38,7 +38,7 @@ public class ProductController {
 
     private final ReplyService replyService;
 
-    // TODO: 2021-12-07 Springfox OpenAPI 3.0 MultiPartFile with JSON 적용 실패 이슈
+    // Springfox OpenAPI 3.0 MultiPartFile with JSON 적용 실패 이슈 관련 코드
     // JSON 형식으로 객체와 MultipartFile 파일을 RequestBody에 담으려 했으나 스웨거 테스트 하는 과정에서 이슈발생(깃허브 이슈등록)
 //    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
 //    @RequestBody(content = @Content(encoding = @Encoding(name = "productUploadRequest", contentType = "application/json")))
@@ -52,7 +52,6 @@ public class ProductController {
 
     // 판매글 관련
 
-    // TODO: 2021-12-07 이미지 파일업로드 보안정책 고려
     // 판매글 등록(썸네일, 상세이미지 포함)
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @CheckSignIn

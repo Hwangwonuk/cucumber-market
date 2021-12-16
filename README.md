@@ -51,8 +51,8 @@
 
 <img src = "https://user-images.githubusercontent.com/86584999/145718047-cef57cfa-e28e-40e8-80c3-f92923320a27.png">  
 
-## :page_with_curl: Swagger
-**:point_down: Swagger 미리보기**
+## :page_with_curl: Springfox OpenAPI 3.0
+**:point_down: Springfox(Swagger) 미리보기**
 
 <img src = "https://user-images.githubusercontent.com/86584999/145809566-f0551828-60de-45cc-9fde-f41e79e3d7f2.JPG">
 <img src = "https://user-images.githubusercontent.com/86584999/145809586-bcd7cdc8-4e8b-434c-9768-9260238c058d.JPG">
@@ -86,4 +86,5 @@
 * [**Redis란 무엇인가?** 개인블로그](https://wonuk.tistory.com/118)
 * [**MultiPartFile 바인딩 이슈** Pull Request](https://github.com/Hwangwonuk/cucumber-market/pull/19)
 * [**ArgumentResolver와 Springfox 충돌이슈** Pull Request](https://github.com/Hwangwonuk/cucumber-market/pull/10)
-* [**Lombok을 사용한 DTO객체 JSON 데이터 파싱  이슈**](https://github.com/Hwangwonuk/cucumber-market/pull/6)
+* [**Lombok을 사용한 DTO객체 JSON 데이터 파싱  이슈** Pull Request](https://github.com/Hwangwonuk/cucumber-market/pull/6)
+* [**SpringBoot와 Springfox 버전 호환 이슈** wiki](https://github.com/Hwangwonuk/cucumber-market/wiki/Spring-Boot%EC%99%80-Springfox-%EB%B2%84%EC%A0%84-%ED%98%B8%ED%99%98-%EC%9D%B4%EC%8A%88)

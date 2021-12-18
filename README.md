@@ -87,4 +87,4 @@
 * [**MultiPartFile 바인딩 이슈** Pull Request](https://github.com/Hwangwonuk/cucumber-market/pull/19)
 * [**ArgumentResolver와 Springfox 충돌이슈** Pull Request](https://github.com/Hwangwonuk/cucumber-market/pull/10)
 * [**Lombok을 사용한 DTO객체 JSON 데이터 파싱  이슈** Pull Request](https://github.com/Hwangwonuk/cucumber-market/pull/6)
-* [**SpringBoot와 Springfox 버전 호환 이슈** wiki](https://github.com/Hwangwonuk/cucumber-market/wiki/Spring-Boot%EC%99%80-Springfox-%EB%B2%84%EC%A0%84-%ED%98%B8%ED%99%98-%EC%9D%B4%EC%8A%88)
+* [**SpringBoot와 Springfox 버전 호환 이슈** wiki](https://github.com/Hwangwonuk/cucumber-market/wiki/Spring-Boot%EC%99%80-Springfox-%EB%B2%84%EC%A0%84-%ED%98%B8%ED%99%98-%EC%9D%B4%EC%8A%88) 

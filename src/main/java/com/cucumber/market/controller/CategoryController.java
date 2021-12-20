@@ -47,7 +47,7 @@ public class CategoryController {
     @PostMapping("/small")
     @CheckSignIn
     @CheckAdmin
-    public ResponseEntity<CategoryResponse> signUpMember(@Valid @RequestBody SmallCategoryRegisterRequest request) {
+    public ResponseEntity<CategoryResponse> registerSmallCategory(@Valid @RequestBody SmallCategoryRegisterRequest request) {
         categoryService.checkExistBigCategoryName(request.getBigCategoryName());
         categoryService.checkDuplicateSmallCategoryName(request.getSmallCategoryName());
         return new ResponseEntity<>(categoryService.registerSmallCategory(request), HttpStatus.FOUND);

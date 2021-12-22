@@ -1,6 +1,7 @@
 package com.cucumber.market.controller;
 
 import com.cucumber.market.dto.category.BigCategoryNameRequest;
+import com.cucumber.market.dto.category.BigCategoryUpdateRequest;
 import com.cucumber.market.dto.category.CategoryResponse;
 import com.cucumber.market.resolver.CurrentMemberArgumentResolver;
 import com.cucumber.market.service.CategoryService;
@@ -114,5 +115,34 @@ class CategoryControllerTest {
 
         verify(categoryService).checkDuplicateBigCategoryName(any(String.class));
         verify(categoryService).registerBigCategory(any(BigCategoryNameRequest.class));
+    }
+
+    @Test
+    public void updateBigCategoryTestWithSuccess() throws Exception {
+        Map<String, String> input = new HashMap<>();
+        input.put("oldBigCategoryName", "대분류11");
+        input.put("newBigCategoryName", "대분류13");
+
+        CategoryResponse categoryResponse = CategoryResponse.builder()
+                .redirectUrl("www.cucumber-market.com/categories")
+                .build();
+        when(categoryService.updateBigCategory(any(BigCategoryUpdateRequest.class))).thenReturn(categoryResponse);
+
+        mockMvc.perform(
+                        patch("/categories/big")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(input)))
+                .andDo(print())
+                .andExpect(status().isFound())
+                .andExpect(content().
+                        json(
+                                "{" +
+                                        "\"redirectUrl\" : \"www.cucumber-market.com/categories\"" +
+                                        "}")
+                );
+
+        verify(categoryService).checkExistBigCategoryName(any(String.class));
+        verify(categoryService).updateBigCategory(any(BigCategoryUpdateRequest.class));
     }
 }

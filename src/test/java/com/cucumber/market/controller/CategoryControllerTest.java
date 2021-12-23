@@ -1,6 +1,7 @@
 package com.cucumber.market.controller;
 
 import com.cucumber.market.dto.category.BigCategoryNameRequest;
+import com.cucumber.market.dto.category.BigCategoryNamesResponse;
 import com.cucumber.market.dto.category.BigCategoryUpdateRequest;
 import com.cucumber.market.dto.category.CategoryResponse;
 import com.cucumber.market.resolver.CurrentMemberArgumentResolver;
@@ -19,7 +20,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -106,12 +109,7 @@ class CategoryControllerTest {
                 )
                 .andDo(print())
                 .andExpect(status().isFound())
-                .andExpect(content().
-                        json(
-                                "{" +
-                                        "\"redirectUrl\" : \"www.cucumber-market.com/categories\"" +
-                                        "}")
-                );
+                .andExpect(content().json(objectMapper.writeValueAsString(categoryResponse)));
 
         verify(categoryService).checkDuplicateBigCategoryName(any(String.class));
         verify(categoryService).registerBigCategory(any(BigCategoryNameRequest.class));
@@ -135,14 +133,26 @@ class CategoryControllerTest {
                                 .content(objectMapper.writeValueAsString(input)))
                 .andDo(print())
                 .andExpect(status().isFound())
-                .andExpect(content().
-                        json(
-                                "{" +
-                                        "\"redirectUrl\" : \"www.cucumber-market.com/categories\"" +
-                                        "}")
-                );
+                .andExpect(content().json(objectMapper.writeValueAsString(categoryResponse)));
 
         verify(categoryService).checkExistBigCategoryName(any(String.class));
         verify(categoryService).updateBigCategory(any(BigCategoryUpdateRequest.class));
+    }
+
+    @Test
+    public void getBigCategoryNamesTest() throws Exception {
+        List<BigCategoryNamesResponse> bigCategoryNamesResponseList = new ArrayList<>();
+        bigCategoryNamesResponseList.add(BigCategoryNamesResponse.builder().bigCategoryName("대분류11").build());
+        bigCategoryNamesResponseList.add(BigCategoryNamesResponse.builder().bigCategoryName("대분류12").build());
+        bigCategoryNamesResponseList.add(BigCategoryNamesResponse.builder().bigCategoryName("대분류13").build());
+
+        when(categoryService.getBigCategoryNames()).thenReturn(bigCategoryNamesResponseList);
+
+        mockMvc.perform(get("/categories/big"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(bigCategoryNamesResponseList)));
+
+        verify(categoryService).getBigCategoryNames();
     }
 }

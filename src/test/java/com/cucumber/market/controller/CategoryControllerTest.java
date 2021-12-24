@@ -1,9 +1,6 @@
 package com.cucumber.market.controller;
 
-import com.cucumber.market.dto.category.BigCategoryNameRequest;
-import com.cucumber.market.dto.category.BigCategoryNamesResponse;
-import com.cucumber.market.dto.category.BigCategoryUpdateRequest;
-import com.cucumber.market.dto.category.CategoryResponse;
+import com.cucumber.market.dto.category.*;
 import com.cucumber.market.resolver.CurrentMemberArgumentResolver;
 import com.cucumber.market.service.CategoryService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -154,5 +151,32 @@ class CategoryControllerTest {
                 .andExpect(content().json(objectMapper.writeValueAsString(bigCategoryNamesResponseList)));
 
         verify(categoryService).getBigCategoryNames();
+    }
+
+    @Test
+    public void registerSmallCategoryTest() throws Exception {
+        Map<String, String> input = new HashMap<>();
+        input.put("bigCategoryName", "대분류11");
+        input.put("smallCategoryName", "소분류11");
+
+        CategoryResponse categoryResponse = CategoryResponse.builder()
+                .redirectUrl("www.cucumber-market.com/categories")
+                .build();
+        when(categoryService.registerSmallCategory(any(SmallCategoryRegisterRequest.class))).thenReturn(categoryResponse);
+
+        mockMvc.perform(
+                        post("/categories/small")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(input))
+                        // Map으로 만든 input을 json형식의 String으로 만들기 위해 objectMapper를 사용
+                )
+                .andDo(print())
+                .andExpect(status().isFound())
+                .andExpect(content().json(objectMapper.writeValueAsString(categoryResponse)));
+
+        verify(categoryService).checkExistBigCategoryName(any(String.class));
+        verify(categoryService).checkDuplicateSmallCategoryName(any(String.class));
+        verify(categoryService).registerSmallCategory(any(SmallCategoryRegisterRequest.class));
     }
 }

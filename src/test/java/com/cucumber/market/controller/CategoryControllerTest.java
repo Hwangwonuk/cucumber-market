@@ -179,4 +179,31 @@ class CategoryControllerTest {
         verify(categoryService).checkDuplicateSmallCategoryName(any(String.class));
         verify(categoryService).registerSmallCategory(any(SmallCategoryRegisterRequest.class));
     }
+
+    @Test
+    public void updateSmallCategoryTestWithSuccess() throws Exception {
+        Map<String, String> input = new HashMap<>();
+        input.put("bigCategoryName", "대분류11");
+        input.put("oldSmallCategoryName", "소분류11");
+        input.put("newSmallCategoryName", "소분류13");
+
+        CategoryResponse categoryResponse = CategoryResponse.builder()
+                .redirectUrl("www.cucumber-market.com/categories")
+                .build();
+        when(categoryService.updateSmallCategory(any(SmallCategoryUpdateRequest.class))).thenReturn(categoryResponse);
+
+        mockMvc.perform(
+                        patch("/categories/small")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(input)))
+                .andDo(print())
+                .andExpect(status().isFound())
+                .andExpect(content().json(objectMapper.writeValueAsString(categoryResponse)));
+
+        verify(categoryService).checkExistBigCategoryName(any(String.class));
+        verify(categoryService).checkExistSmallCategoryName(any(String.class));
+        verify(categoryService).checkDuplicateSmallCategoryName(any(String.class));
+        verify(categoryService).updateSmallCategory(any(SmallCategoryUpdateRequest.class));
+    }
 }

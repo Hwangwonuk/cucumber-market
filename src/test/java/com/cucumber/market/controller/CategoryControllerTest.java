@@ -206,4 +206,23 @@ class CategoryControllerTest {
         verify(categoryService).checkDuplicateSmallCategoryName(any(String.class));
         verify(categoryService).updateSmallCategory(any(SmallCategoryUpdateRequest.class));
     }
+
+    @Test
+    public void getSmallCategoryNamesTest() throws Exception {
+        List<SmallCategoryNamesResponse> smallCategoryNamesResponseList = new ArrayList<>();
+        smallCategoryNamesResponseList.add(SmallCategoryNamesResponse.builder().smallCategoryName("소분류11").build());
+        smallCategoryNamesResponseList.add(SmallCategoryNamesResponse.builder().smallCategoryName("소분류12").build());
+        smallCategoryNamesResponseList.add(SmallCategoryNamesResponse.builder().smallCategoryName("소분류13").build());
+
+        when(categoryService.getSmallCategoryNames(any(BigCategoryNameRequest.class))).thenReturn(smallCategoryNamesResponseList);
+
+        mockMvc.perform(get("/categories/small")
+                        .param("bigCategoryName", "대분류11"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(smallCategoryNamesResponseList)));
+
+        verify(categoryService).checkExistBigCategoryName(any(String.class));
+        verify(categoryService).getSmallCategoryNames(any(BigCategoryNameRequest.class));
+    }
 }

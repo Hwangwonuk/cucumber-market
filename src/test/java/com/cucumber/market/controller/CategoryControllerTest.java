@@ -4,18 +4,14 @@ import com.cucumber.market.dto.category.*;
 import com.cucumber.market.resolver.CurrentMemberArgumentResolver;
 import com.cucumber.market.service.CategoryService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,13 +40,6 @@ class CategoryControllerTest {
 
     @MockBean
     CurrentMemberArgumentResolver currentMemberArgumentResolver;
-
-    MockHttpSession mockHttpSession;
-
-    @BeforeEach
-    public void before() {
-        mockHttpSession = new MockHttpSession();
-    }
 
     @Test
     public void registerBigCategoryTest() throws Exception {

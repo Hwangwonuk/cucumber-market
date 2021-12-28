@@ -36,13 +36,13 @@
 <img src = "https://user-images.githubusercontent.com/86584999/145706256-0811c927-a8e4-45b1-8071-cc0b61496879.PNG" width="90%" height="45%">
 
 ## :clapper: Architecture
+:point_right: [**전체 아키텍처 링크**](https://github.com/Hwangwonuk/cucumber-market/wiki/MySQL-Architecture)   
 :point_right: [**MySQL 아키텍처 링크**](https://github.com/Hwangwonuk/cucumber-market/wiki/MySQL-Architecture)   
 :point_right: [**Redis 아키텍처 링크**](https://github.com/Hwangwonuk/cucumber-market/wiki/Redis-Architecture)   
    
 - **Architecture**   
-<img src = "https://user-images.githubusercontent.com/86584999/145709767-3827528f-1c4a-4bb2-85bc-de9ac8922804.jpg">   
-   
-   
+![1](https://user-images.githubusercontent.com/86584999/147556575-6bf1eb37-2c69-450e-81ec-abdd34b871a2.jpg)
+
 ## :books: Layer  
 <img src = "https://user-images.githubusercontent.com/86584999/145710572-9df24562-2fd7-45fe-98b7-6345a6aaac34.png">   
 
@@ -78,12 +78,7 @@
 - 카테고리 관리   
 
 ## :warning: 프로젝트를 진행하며 겪은 Issue 및 학습한 내용
-* [**부하 분산을 위한 MySQL 쿼리요청 분기** 개인블로그](https://wonuk.tistory.com/131)
-* [**Disk Based Database VS In Memory Database** 개인블로그](https://wonuk.tistory.com/130)
-* [**다중 서버 환경에서 세션을 어떻게 관리할 것인가?** 개인블로그](https://wonuk.tistory.com/129)
-* [**Scale UP VS Scale OUT** 개인블로그](https://wonuk.tistory.com/120?category=1021792)
-* [**레플리케이션, 클러스터링** 개인블로그](https://wonuk.tistory.com/123)
-* [**Redis란 무엇인가?** 개인블로그](https://wonuk.tistory.com/118)
+* [**프로젝트 관련 학습내용** 개인블로그](https://wonuk.tistory.com/category/%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8/%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%20%EA%B4%80%EB%A0%A8)
 * [**MultiPartFile 바인딩 이슈** Pull Request](https://github.com/Hwangwonuk/cucumber-market/pull/19)
 * [**ArgumentResolver와 Springfox 충돌이슈** Pull Request](https://github.com/Hwangwonuk/cucumber-market/pull/10)
 * [**Lombok을 사용한 DTO객체 JSON 데이터 파싱  이슈** Pull Request](https://github.com/Hwangwonuk/cucumber-market/pull/6)

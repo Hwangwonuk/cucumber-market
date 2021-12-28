@@ -1,5 +1,6 @@
 package com.cucumber.market.controller;
 
+import com.cucumber.market.dto.product.FindDetailProductResponse;
 import com.cucumber.market.dto.product.FindProductResponse;
 import com.cucumber.market.resolver.CurrentMemberArgumentResolver;
 import com.cucumber.market.service.*;
@@ -80,5 +81,33 @@ public class ProductControllerTest {
                 .andExpect(content().json(objectMapper.writeValueAsString(findProductResponseList)));
 
         verify(categoryService).checkExistSmallCategoryName(any(String.class));
+    }
+
+    @Test
+    public void findDetailProductTest() throws Exception {
+        FindDetailProductResponse findDetailProductResponse = FindDetailProductResponse
+                .builder()
+                .productIdx("1")
+                .member_id("pepsi123")
+                .title("제목")
+                .content("내용")
+                .price("12900")
+                .deliveryPrice("3000")
+                .status("a")
+                .updateTime("2021-12-14 23:43:02")
+                .images("null")
+                .comments("3,4,5")
+                .replies("3/6,3/7,4/8,4/9,4/10")
+                .build();
+
+        when(productService.findDetailProduct(any(int.class))).thenReturn(findDetailProductResponse);
+
+        mockMvc.perform(get("/products/{productIdx}", 1))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(findDetailProductResponse)));
+
+        verify(productService).checkExistProduct(any(int.class));
+        verify(productService).checkNotDeleteProduct(any(int.class));
     }
 }

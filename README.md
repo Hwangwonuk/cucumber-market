@@ -36,7 +36,7 @@
 <img src = "https://user-images.githubusercontent.com/86584999/145706256-0811c927-a8e4-45b1-8071-cc0b61496879.PNG" width="90%" height="45%">
 
 ## :clapper: Architecture
-:point_right: [**전체 아키텍처 링크**](https://github.com/Hwangwonuk/cucumber-market/wiki/MySQL-Architecture)   
+:point_right: [**전체 아키텍처 링크**](https://github.com/Hwangwonuk/cucumber-market/wiki/Architecture)   
 :point_right: [**MySQL 아키텍처 링크**](https://github.com/Hwangwonuk/cucumber-market/wiki/MySQL-Architecture)   
 :point_right: [**Redis 아키텍처 링크**](https://github.com/Hwangwonuk/cucumber-market/wiki/Redis-Architecture)   
    
@@ -82,4 +82,7 @@
 * [**MultiPartFile 바인딩 이슈** Pull Request](https://github.com/Hwangwonuk/cucumber-market/pull/19)
 * [**ArgumentResolver와 Springfox 충돌이슈** Pull Request](https://github.com/Hwangwonuk/cucumber-market/pull/10)
 * [**Lombok을 사용한 DTO객체 JSON 데이터 파싱  이슈** Pull Request](https://github.com/Hwangwonuk/cucumber-market/pull/6)
-* [**SpringBoot와 Springfox 버전 호환 이슈** wiki](https://github.com/Hwangwonuk/cucumber-market/wiki/Spring-Boot%EC%99%80-Springfox-%EB%B2%84%EC%A0%84-%ED%98%B8%ED%99%98-%EC%9D%B4%EC%8A%88) 
+* [**SpringBoot와 Springfox 버전 호환 이슈** wiki](https://github.com/Hwangwonuk/cucumber-market/wiki/Spring-Boot%EC%99%80-Springfox-%EB%B2%84%EC%A0%84-%ED%98%B8%ED%99%98-%EC%9D%B4%EC%8A%88)   
+* [**테스트 코드 Json Parsing 에러** Issue](https://github.com/Hwangwonuk/cucumber-market/issues/30)   
+* [**테스트 코드 실행시 body가 null로 인식되는 문제** Issue](https://github.com/Hwangwonuk/cucumber-market/issues/28)   
+* [**logback 라이브러리의 취약점 대응** Issue](https://github.com/Hwangwonuk/cucumber-market/issues/26)   

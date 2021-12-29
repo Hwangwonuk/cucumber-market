@@ -1,8 +1,5 @@
 package com.cucumber.market.controller;
 
-import com.cucumber.market.dto.category.BigCategoryNameRequest;
-import com.cucumber.market.dto.category.BigCategoryUpdateRequest;
-import com.cucumber.market.dto.category.CategoryResponse;
 import com.cucumber.market.dto.comment.ContentResponse;
 import com.cucumber.market.dto.product.*;
 import com.cucumber.market.resolver.CurrentMemberArgumentResolver;
@@ -13,11 +10,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.*;
 
@@ -128,7 +122,9 @@ public class ProductControllerTest {
 
         when(commentService.getComment(any(int.class))).thenReturn(contentResponse);
 
-        mockMvc.perform(get("/products/{productIdx}/comments/{commentIdx}", 1, 2))
+        mockMvc.perform(get("/products/{productIdx}/comments/{commentIdx}", 1, 2)
+                        .param("member_id", "123")
+                        .param("isAdmin", "true"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(contentResponse)));

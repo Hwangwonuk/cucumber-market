@@ -1,7 +1,10 @@
 package com.cucumber.market.controller;
 
-import com.cucumber.market.dto.product.FindDetailProductResponse;
-import com.cucumber.market.dto.product.FindProductResponse;
+import com.cucumber.market.dto.category.BigCategoryNameRequest;
+import com.cucumber.market.dto.category.BigCategoryUpdateRequest;
+import com.cucumber.market.dto.category.CategoryResponse;
+import com.cucumber.market.dto.comment.ContentResponse;
+import com.cucumber.market.dto.product.*;
 import com.cucumber.market.resolver.CurrentMemberArgumentResolver;
 import com.cucumber.market.service.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,15 +13,18 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -109,5 +115,27 @@ public class ProductControllerTest {
 
         verify(productService).checkExistProduct(any(int.class));
         verify(productService).checkNotDeleteProduct(any(int.class));
+    }
+
+    @Test
+    public void getCommentTest() throws Exception {
+        ContentResponse contentResponse = ContentResponse
+                .builder()
+                .member_id("iiii")
+                .content("내용111")
+                .updateTime("2021-12-14 23:43:02")
+                .build();
+
+        when(commentService.getComment(any(int.class))).thenReturn(contentResponse);
+
+        mockMvc.perform(get("/products/{productIdx}/comments/{commentIdx}", 1, 2))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(contentResponse)));
+
+        verify(commentService).checkExistComment(any(int.class));
+        verify(commentService).checkNotDeleteComment(any(int.class));
+        verify(productService).checkProductOrCommentWriter(any(int.class), any(int.class), any(String.class));
+        verify(commentService).checkProductIncludeComment(any(int.class), any(int.class));
     }
 }

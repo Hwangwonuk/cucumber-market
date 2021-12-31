@@ -1,5 +1,7 @@
 package com.cucumber.market.controller;
 
+import com.cucumber.market.dto.category.CategoryResponse;
+import com.cucumber.market.dto.category.SmallCategoryUpdateRequest;
 import com.cucumber.market.dto.comment.ContentResponse;
 import com.cucumber.market.dto.product.*;
 import com.cucumber.market.resolver.CurrentMemberArgumentResolver;
@@ -10,14 +12,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -133,5 +135,27 @@ public class ProductControllerTest {
         verify(commentService).checkNotDeleteComment(any(int.class));
         verify(productService).checkProductOrCommentWriter(any(int.class), any(int.class), any(String.class));
         verify(commentService).checkProductIncludeComment(any(int.class), any(int.class));
+    }
+
+    @Test
+    public void updateCommentTest() throws Exception {
+        Map<String, String> input = new HashMap<>();
+        input.put("content", "댓글내용");
+
+        doNothing().when(commentService).updateComment(any(int.class), any(String.class));
+
+        mockMvc.perform(
+                        patch("/products/comments/{commentIdx}/update", 1)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(input))
+                                .param("member_id", "123")
+                                .param("isAdmin", "true"))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        verify(commentService).checkExistComment(any(int.class));
+        verify(commentService).checkNotDeleteComment(any(int.class));
+        verify(commentService).checkCommentWriter(any(int.class), any(String.class));
     }
 }

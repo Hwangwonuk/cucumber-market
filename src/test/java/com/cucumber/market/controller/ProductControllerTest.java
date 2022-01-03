@@ -158,4 +158,23 @@ public class ProductControllerTest {
         verify(commentService).checkNotDeleteComment(any(int.class));
         verify(commentService).checkCommentWriter(any(int.class), any(String.class));
     }
+
+    @Test
+    public void deleteCommentTest() throws Exception {
+        doNothing().when(commentService).deleteComment(any(int.class), any(String.class));
+
+        mockMvc.perform(
+                        patch("/products/comments/{commentIdx}/delete", 1)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .param("member_id", "123")
+                                .param("isAdmin", "true"))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        verify(commentService).checkExistComment(any(int.class));
+        verify(commentService).checkNotDeleteComment(any(int.class));
+        verify(commentService).checkCommentWriter(any(int.class), any(String.class));
+    }
+
 }

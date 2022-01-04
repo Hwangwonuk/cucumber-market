@@ -114,6 +114,32 @@ public class ProductControllerTest {
     }
 
     @Test
+    public void registerCommentTest() throws Exception {
+        Map<String, String> input = new HashMap<>();
+        input.put("content", "댓글내용");
+
+        ProductResponse productResponse = ProductResponse
+                .builder()
+                .productIdx(1)
+                .build();
+
+        when(commentService.registerComment(any(int.class), any(String.class), any(String.class))).thenReturn(productResponse);
+
+        mockMvc.perform(post("/products/{productIdx}/comment", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .param("member_id", "123")
+                        .param("isAdmin", "true")
+                        .content(objectMapper.writeValueAsString(input)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(productResponse)));
+
+        verify(productService).checkExistProduct(any(int.class));
+        verify(productService).checkNotDeleteProduct(any(int.class));
+    }
+
+    @Test
     public void getCommentTest() throws Exception {
         ContentResponse contentResponse = ContentResponse
                 .builder()

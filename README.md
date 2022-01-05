@@ -24,6 +24,7 @@
 | **RDBMS** | MySQL 8.0.x |
 | **SQL Mapper** | Mybatis |
 | **Session Server** | Redis |
+| **Web Server** | Nginx |
 | **CI/CD** | Jenkins |
 | **Container** | Docker |
 | **Build Tool** | Gradle 7.3  |

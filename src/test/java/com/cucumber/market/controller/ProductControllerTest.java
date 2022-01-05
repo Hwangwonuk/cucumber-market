@@ -114,6 +114,25 @@ public class ProductControllerTest {
     }
 
     @Test
+    public void soldOutProductTest() throws Exception {
+        doNothing().when(productService).soldOutProduct(any(int.class), any(String.class));
+
+        mockMvc.perform(
+                        patch("/products/{productIdx}/soldOut", 1)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .param("member_id", "123")
+                                .param("isAdmin", "true"))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        verify(productService).checkExistProduct(any(int.class));
+        verify(productService).checkNotSoldOutProduct(any(int.class));
+        verify(productService).checkNotDeleteProduct(any(int.class));
+        verify(productService).checkProductWriter(any(int.class), any(String.class));
+    }
+
+    @Test
     public void registerCommentTest() throws Exception {
         Map<String, String> input = new HashMap<>();
         input.put("content", "댓글내용");

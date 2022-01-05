@@ -44,7 +44,7 @@
 :point_right: [**Redis 아키텍처 링크**](https://github.com/Hwangwonuk/cucumber-market/wiki/Redis-Architecture)   
    
 - **Architecture**   
-![1](https://user-images.githubusercontent.com/86584999/147556575-6bf1eb37-2c69-450e-81ec-abdd34b871a2.jpg)
+![1](https://user-images.githubusercontent.com/86584999/148209679-fe3d122d-8699-46c3-879f-726d7b711705.jpg)
 
 ## :books: Layer  
 <img src = "https://user-images.githubusercontent.com/86584999/145710572-9df24562-2fd7-45fe-98b7-6345a6aaac34.png">   

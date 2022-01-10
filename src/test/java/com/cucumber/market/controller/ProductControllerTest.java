@@ -1,9 +1,9 @@
 package com.cucumber.market.controller;
 
-import com.cucumber.market.dto.category.CategoryResponse;
-import com.cucumber.market.dto.category.SmallCategoryUpdateRequest;
 import com.cucumber.market.dto.comment.ContentResponse;
-import com.cucumber.market.dto.product.*;
+import com.cucumber.market.dto.product.FindDetailProductResponse;
+import com.cucumber.market.dto.product.FindProductResponse;
+import com.cucumber.market.dto.product.ProductResponse;
 import com.cucumber.market.resolver.CurrentMemberArgumentResolver;
 import com.cucumber.market.service.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,7 +16,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;

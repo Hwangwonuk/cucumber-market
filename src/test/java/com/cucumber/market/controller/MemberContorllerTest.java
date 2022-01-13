@@ -1,6 +1,9 @@
 package com.cucumber.market.controller;
 
+import com.cucumber.market.dto.category.BigCategoryUpdateRequest;
+import com.cucumber.market.dto.category.CategoryResponse;
 import com.cucumber.market.dto.member.MemberInfo;
+import com.cucumber.market.dto.member.MemberSignOutResponse;
 import com.cucumber.market.resolver.CurrentMemberArgumentResolver;
 import com.cucumber.market.service.MemberService;
 import com.cucumber.market.service.SessionSignInService;
@@ -55,6 +58,22 @@ public class MemberContorllerTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .param("member_id", "123")
                         .param("isAdmin", "true"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void signOutMemberTest() throws Exception {
+
+        MemberSignOutResponse memberSignOutResponse = MemberSignOutResponse.builder()
+                .redirectUrl("www.cucumber-market.com")
+                .build();
+
+        when(sessionSignInService.signOutMember()).thenReturn(memberSignOutResponse);
+
+        mockMvc.perform(get("/members/signOut")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
     }

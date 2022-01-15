@@ -1,11 +1,7 @@
 package com.cucumber.market.controller;
 
-import com.cucumber.market.dto.category.BigCategoryUpdateRequest;
-import com.cucumber.market.dto.category.CategoryResponse;
-import com.cucumber.market.dto.member.MemberInfo;
-import com.cucumber.market.dto.member.MemberSignOutResponse;
-import com.cucumber.market.dto.member.MemberSignUpRequest;
-import com.cucumber.market.dto.member.MemberSignUpResponse;
+import com.cucumber.market.dto.member.*;
+import com.cucumber.market.dto.product.ProductResponse;
 import com.cucumber.market.resolver.CurrentMemberArgumentResolver;
 import com.cucumber.market.service.MemberService;
 import com.cucumber.market.service.SessionSignInService;
@@ -19,11 +15,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -92,6 +90,36 @@ public class MemberContorllerTest {
                         .param("isAdmin", "true"))
                 .andDo(print())
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void updateMemberInfoTest() throws Exception {
+        Map<String, String> input = new HashMap<>();
+        input.put("member_id", "id123");
+        input.put("oldPassword", "oldPassword123");
+        input.put("newPassword", "newPassword123");
+        input.put("name", "이름123");
+        input.put("phone", "01023412345");
+        input.put("address", "주소123");
+
+        MemberUpdateInfoResponse memberUpdateInfoResponse = MemberUpdateInfoResponse
+                .builder()
+                .redirectUrl("www.cucumber-market.com/myInfo")
+                .build();
+
+        when(memberService.updateMemberInfo(any(MemberUpdateInfoRequest.class), any(CurrentMemberInfo.class))).thenReturn(memberUpdateInfoResponse);
+
+        mockMvc.perform(patch("/members/myInfo")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .param("member_id", "id123")
+                        .param("isAdmin", "true")
+                        .content(objectMapper.writeValueAsString(input)))
+                .andDo(print())
+                .andExpect(status().isFound())
+                .andExpect(content().json(objectMapper.writeValueAsString(memberUpdateInfoResponse)));
+
+        verify(memberService).checkMatchIdAndPassword(any(String.class), any(String.class));
     }
 
     @Test

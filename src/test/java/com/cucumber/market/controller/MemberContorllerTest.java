@@ -123,6 +123,32 @@ public class MemberContorllerTest {
     }
 
     @Test
+    public void inactivateMemberTest() throws Exception {
+        Map<String, String> input = new HashMap<>();
+        input.put("member_id", "id123");
+        input.put("password", "password123");
+
+        MemberSignOutResponse memberSignOutResponse = MemberSignOutResponse.builder()
+                .redirectUrl("www.cucumber-market.com")
+                .build();
+
+        when(sessionSignInService.signOutMember()).thenReturn(memberSignOutResponse);
+
+        mockMvc.perform(patch("/members/inactivate")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .param("member_id", "id123")
+                        .param("isAdmin", "true")
+                        .content(objectMapper.writeValueAsString(input)))
+                .andDo(print())
+                .andExpect(status().isFound());
+
+        verify(memberService).checkMatchIdAndPassword(any(String.class), any(String.class));
+        verify(memberService).checkActivityMember(any(String.class));
+        verify(memberService).inactivateMember(any(MemberIdPasswordRequest.class), any(CurrentMemberInfo.class));
+    }
+
+    @Test
     public void signOutMemberTest() throws Exception {
 
         MemberSignOutResponse memberSignOutResponse = MemberSignOutResponse.builder()

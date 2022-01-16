@@ -1,7 +1,6 @@
 package com.cucumber.market.controller;
 
 import com.cucumber.market.dto.member.*;
-import com.cucumber.market.dto.product.ProductResponse;
 import com.cucumber.market.resolver.CurrentMemberArgumentResolver;
 import com.cucumber.market.service.MemberService;
 import com.cucumber.market.service.SessionSignInService;
@@ -28,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(MemberController.class)
-public class MemberContorllerTest {
+public class MemberControllerTest {
     @Autowired
     MockMvc mockMvc;
 
@@ -89,7 +88,8 @@ public class MemberContorllerTest {
                         .param("member_id", "123")
                         .param("isAdmin", "true"))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(memberInfo)));
     }
 
     @Test
@@ -141,11 +141,37 @@ public class MemberContorllerTest {
                         .param("isAdmin", "true")
                         .content(objectMapper.writeValueAsString(input)))
                 .andDo(print())
-                .andExpect(status().isFound());
+                .andExpect(status().isFound())
+                .andExpect(content().json(objectMapper.writeValueAsString(memberSignOutResponse)));
 
         verify(memberService).checkMatchIdAndPassword(any(String.class), any(String.class));
         verify(memberService).checkActivityMember(any(String.class));
         verify(memberService).inactivateMember(any(MemberIdPasswordRequest.class), any(CurrentMemberInfo.class));
+    }
+
+    @Test
+    public void signInMemberTest() throws Exception {
+        Map<String, String> input = new HashMap<>();
+        input.put("member_id", "id123");
+        input.put("password", "password123");
+
+        MemberSignInResponse memberSignInResponse = MemberSignInResponse.builder()
+                .redirectUrl("www.cucumber-market.com")
+                .build();
+
+        when(sessionSignInService.signInMember(any(CurrentMemberInfo.class))).thenReturn(memberSignInResponse);
+
+        mockMvc.perform(post("/members/signIn")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(input)))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        verify(memberService).checkExistMemberId(any(String.class));
+        verify(memberService).checkMatchIdAndPassword(any(String.class), any(String.class));
+        verify(memberService).checkActivityMember(any(String.class));
+        verify(memberService).getCurrentMemberInfo(any(String.class));
     }
 
     @Test
@@ -161,6 +187,7 @@ public class MemberContorllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(memberSignOutResponse)));
     }
 }

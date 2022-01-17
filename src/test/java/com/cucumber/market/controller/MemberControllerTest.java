@@ -14,7 +14,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -189,5 +191,32 @@ public class MemberControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(memberSignOutResponse)));
+    }
+
+    @Test
+    public void findAllMemberByPagination() throws Exception {
+        List<Member> members = new ArrayList<Member>();
+        Member member = Member.builder()
+                .member_id("id123")
+                .name("이름")
+                .phone("01021342134")
+                .address("주소")
+                .isactive("y")
+                .isadmin("y")
+                .createtime("2022-01-17")
+                .updatetime("2022-01-17")
+                .build();
+        members.add(member);
+
+        when(memberService.findAllMemberByPagination(any(int.class), any(int.class))).thenReturn(members);
+
+        mockMvc.perform(get("/members")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .param("pageNum", "1")
+                        .param("contentNum", "10"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(members)));
     }
 }

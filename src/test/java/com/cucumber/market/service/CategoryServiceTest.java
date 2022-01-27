@@ -88,6 +88,21 @@ public class CategoryServiceTest {
     }
 
     @Test
+    @DisplayName("Request에 입력된 대분류가 존재할 경우 조회 가능")
+    void successCheckExistBigCategoryName() {
+        // given
+        when(categoryMapper.checkDuplicateBigCategoryName(bigCategoryNameRequest.getBigCategoryName())).thenReturn(1);
+
+        // when + then
+        categoryServiceImpl.checkExistBigCategoryName(bigCategoryNameRequest.getBigCategoryName());
+
+        // verify문 설명
+        // categoryServiceImpl.checkDuplicateBigCategoryName() 메서드 내부적으로
+        // categoryMapper.checkDuplicateBigCategoryName() 메서드를 호출했는지 검증
+        verify(categoryMapper).checkDuplicateBigCategoryName(bigCategoryNameRequest.getBigCategoryName());
+    }
+
+    @Test
     @DisplayName("저장된 모든 대분류를 조회하는데에 성공")
     void successGetBigCategoryNames() {
         // given
@@ -108,4 +123,6 @@ public class CategoryServiceTest {
         // categoryMapper.getBigCategoryNames() 메서드를 호출했는지 검증
         verify(categoryMapper).getBigCategoryNames();
     }
+
+
 }

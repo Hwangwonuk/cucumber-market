@@ -19,6 +19,7 @@ package com.cucumber.market.service;
  */
 
 import com.cucumber.market.dto.category.*;
+import com.cucumber.market.exception.NotExistCategoryNameException;
 import com.cucumber.market.mapper.CategoryMapper;
 import com.cucumber.market.service.impl.CategoryServiceImpl;
 import org.junit.jupiter.api.Assertions;
@@ -97,7 +98,26 @@ public class CategoryServiceTest {
         categoryServiceImpl.checkExistBigCategoryName(bigCategoryNameRequest.getBigCategoryName());
 
         // verify문 설명
-        // categoryServiceImpl.checkDuplicateBigCategoryName() 메서드 내부적으로
+        // categoryServiceImpl.checkExistBigCategoryName() 메서드 내부적으로
+        // categoryMapper.checkDuplicateBigCategoryName() 메서드를 호출했는지 검증
+        verify(categoryMapper).checkDuplicateBigCategoryName(bigCategoryNameRequest.getBigCategoryName());
+    }
+
+    @Test
+    @DisplayName("Request에 입력된 대분류가 존재하지 않을 경우 대분류 등록 실패")
+    void throwExceptionCheckExistBigCategoryName() {
+        // given
+        when(categoryMapper.checkDuplicateBigCategoryName(bigCategoryNameRequest.getBigCategoryName())).thenReturn(0);
+
+        // when + then
+        Assertions.assertThrows(NotExistCategoryNameException.class,
+                () -> {
+                    categoryServiceImpl.checkExistBigCategoryName(bigCategoryNameRequest.getBigCategoryName());
+                }
+        );
+
+        // verify문 설명
+        // categoryServiceImpl.checkExistBigCategoryName() 메서드 내부적으로
         // categoryMapper.checkDuplicateBigCategoryName() 메서드를 호출했는지 검증
         verify(categoryMapper).checkDuplicateBigCategoryName(bigCategoryNameRequest.getBigCategoryName());
     }

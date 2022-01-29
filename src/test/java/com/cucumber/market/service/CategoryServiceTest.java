@@ -49,11 +49,18 @@ public class CategoryServiceTest {
 
     private BigCategoryNameRequest bigCategoryNameRequest;
 
+    private SmallCategoryRegisterRequest smallCategoryRegisterRequest;
+
     @BeforeEach
     void init() {
         // given
         bigCategoryNameRequest = BigCategoryNameRequest.builder()
                 .bigCategoryName("대분류등록")
+                .build();
+
+        smallCategoryRegisterRequest = SmallCategoryRegisterRequest.builder()
+                .bigCategoryName("대분류등록")
+                .smallCategoryName("소분류등록")
                 .build();
     }
 
@@ -104,7 +111,7 @@ public class CategoryServiceTest {
     }
 
     @Test
-    @DisplayName("Request에 입력된 대분류가 존재하지 않을 경우 대분류 등록 실패")
+    @DisplayName("Request에 입력된 대분류가 존재하지 않을 경우 대분류 조회 실패")
     void throwExceptionCheckExistBigCategoryName() {
         // given
         when(categoryMapper.checkDuplicateBigCategoryName(bigCategoryNameRequest.getBigCategoryName())).thenReturn(0);
@@ -144,5 +151,15 @@ public class CategoryServiceTest {
         verify(categoryMapper).getBigCategoryNames();
     }
 
+    @Test
+    @DisplayName("Request에 대분류가 입력된 경우 대분류 등록 성공")
+    void successRegisterSmallCategory() {
+        // when + then
+        Assertions.assertDoesNotThrow(() -> categoryServiceImpl.registerSmallCategory(smallCategoryRegisterRequest));
 
+        // verify문 설명
+        // categoryServiceImpl.registerBigCategory() 메서드 내부적으로
+        // categoryMapper.registerBigCategory() 메서드를 호출했는지 검증
+        verify(categoryMapper).registerSmallCategory(smallCategoryRegisterRequest);
+    }
 }

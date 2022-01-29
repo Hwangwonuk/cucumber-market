@@ -152,14 +152,38 @@ public class CategoryServiceTest {
     }
 
     @Test
-    @DisplayName("Request에 대분류가 입력된 경우 대분류 등록 성공")
+    @DisplayName("Request에 입력된 대분류에 해당되는 모든 소분류를 조회하는데에 성공")
+    void successGetSmallCategoryNames() {
+        // given
+        List<SmallCategoryNamesResponse> smallCategoryNames = new ArrayList<>();
+        smallCategoryNames.add(SmallCategoryNamesResponse.builder()
+                .smallCategoryName("소분류등록")
+                .build());
+        when(categoryMapper.getSmallCategoryNames(bigCategoryNameRequest.getBigCategoryName())).thenReturn(smallCategoryNames);
+
+        // when
+        List<SmallCategoryNamesResponse> actualSmallCategoryNames = categoryServiceImpl.getSmallCategoryNames(bigCategoryNameRequest);
+
+        // then
+        Assertions.assertEquals(smallCategoryNames, actualSmallCategoryNames);
+
+        // verify문 설명
+        // categoryServiceImpl.getSmallCategoryNames() 메서드 내부적으로
+        // categoryMapper.getSmallCategoryNames() 메서드를 호출했는지 검증
+        verify(categoryMapper).getSmallCategoryNames(any(String.class));
+    }
+
+    @Test
+    @DisplayName("Request에 소분류가 입력된 경우 소분류 등록 성공")
     void successRegisterSmallCategory() {
         // when + then
         Assertions.assertDoesNotThrow(() -> categoryServiceImpl.registerSmallCategory(smallCategoryRegisterRequest));
 
         // verify문 설명
-        // categoryServiceImpl.registerBigCategory() 메서드 내부적으로
-        // categoryMapper.registerBigCategory() 메서드를 호출했는지 검증
+        // categoryServiceImpl.registerSmallCategory() 메서드 내부적으로
+        // categoryMapper.registerSmallCategory() 메서드를 호출했는지 검증
         verify(categoryMapper).registerSmallCategory(smallCategoryRegisterRequest);
     }
+
+
 }

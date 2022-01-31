@@ -185,5 +185,22 @@ public class CategoryServiceTest {
         verify(categoryMapper).registerSmallCategory(smallCategoryRegisterRequest);
     }
 
+    @Test
+    @DisplayName("Request에 입력된 소분류가 이미 중복된 이름일 경우 소분류 등록 실패")
+    void throwExceptionCheckDuplicateSmallCategoryName() {
+        // given
+        when(categoryMapper.checkDuplicateSmallCategoryName(smallCategoryRegisterRequest.getSmallCategoryName())).thenReturn(1);
 
+        // when + then
+        Assertions.assertThrows(DataIntegrityViolationException.class,
+                () -> {
+                    categoryServiceImpl.checkDuplicateSmallCategoryName(smallCategoryRegisterRequest.getSmallCategoryName());
+                }
+        );
+
+        // verify문 설명
+        // categoryServiceImpl.checkDuplicateBigCategoryName() 메서드 내부적으로
+        // categoryMapper.checkDuplicateBigCategoryName() 메서드를 호출했는지 검증
+        verify(categoryMapper).checkDuplicateSmallCategoryName(smallCategoryRegisterRequest.getSmallCategoryName());
+    }
 }
